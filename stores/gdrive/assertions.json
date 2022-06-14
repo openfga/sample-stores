@@ -1,0 +1,66 @@
+[
+  {
+    "tuple_key": {
+      "object": "doc:2021-roadmap",
+      "relation": "write",
+      "user": "anne"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "doc:2021-roadmap",
+      "relation": "change_owner",
+      "user": "beth"
+    },
+    "expectation": false
+  },
+  {
+    "tuple_key": {
+      "object": "doc:2021-roadmap",
+      "relation": "read",
+      "user": "charles"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "doc:2021-roadmap",
+      "relation": "write",
+      "user": "charles"
+    },
+    "expectation": false
+  },
+  {
+    "tuple_key": {
+      "object": "doc:2021-roadmap",
+      "relation": "read",
+      "user": "daniel"
+    },
+    "expectation": false
+  },
+  {
+    "tuple_key": {
+      "object": "doc:public-roadmap",
+      "relation": "read",
+      "user": "daniel"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "doc:public-roadmap",
+      "relation": "write",
+      "user": "anne"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "doc:public-roadmap",
+      "relation": "write",
+      "user": "charles"
+    },
+    "expectation": false
+  }
+]

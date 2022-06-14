@@ -1,0 +1,77 @@
+{
+  "type_definitions": [
+    {
+      "type": "workspace",
+      "relations": {
+        "channels_admin": {
+          "union": {
+            "child": [
+              {
+                "this": {}
+              },
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "legacy_admin"
+                }
+              }
+            ]
+          }
+        },
+        "guest": {
+          "this": {}
+        },
+        "legacy_admin": {
+          "this": {}
+        },
+        "member": {
+          "union": {
+            "child": [
+              {
+                "this": {}
+              },
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "legacy_admin"
+                }
+              },
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "channels_admin"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "channel",
+      "relations": {
+        "commenter": {
+          "union": {
+            "child": [
+              {
+                "this": {}
+              },
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "writer"
+                }
+              }
+            ]
+          }
+        },
+        "parent_workspace": {
+          "this": {}
+        },
+        "writer": {
+          "this": {}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "type_definitions": [
+    {
+      "type": "plan",
+      "relations": {
+        "subscriber": {
+          "this": {}
+        },
+        "subscriber_member": {
+          "tupleToUserset": {
+            "tupleset": {
+              "object": "",
+              "relation": "subscriber"
+            },
+            "computedUserset": {
+              "object": "",
+              "relation": "member"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "organization",
+      "relations": {
+        "member": {
+          "this": {}
+        }
+      }
+    },
+    {
+      "type": "feature",
+      "relations": {
+        "access": {
+          "tupleToUserset": {
+            "tupleset": {
+              "object": "",
+              "relation": "associated_plan"
+            },
+            "computedUserset": {
+              "object": "",
+              "relation": "subscriber_member"
+            }
+          }
+        },
+        "associated_plan": {
+          "this": {}
+        }
+      }
+    }
+  ]
+}

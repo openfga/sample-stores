@@ -1,0 +1,34 @@
+[
+  {
+    "tuple_key": {
+      "object": "device:1",
+      "relation": "it_admin",
+      "user": "anne"
+    },
+    "expectation": false
+  },
+  {
+    "tuple_key": {
+      "object": "device:1",
+      "relation": "recorded_video_viewer",
+      "user": "anne"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "device:2",
+      "relation": "device_renamer",
+      "user": "dianne"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "device:2",
+      "relation": "device_renamer",
+      "user": "charles"
+    },
+    "expectation": false
+  }
+]

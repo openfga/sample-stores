@@ -1,0 +1,68 @@
+{
+  "type_definitions": [
+    {
+      "type": "device_group",
+      "relations": {
+        "it_admin": {
+          "this": {}
+        },
+        "security_guard": {
+          "this": {}
+        }
+      }
+    },
+    {
+      "type": "device",
+      "relations": {
+        "device_renamer": {
+          "computedUserset": {
+            "object": "",
+            "relation": "it_admin"
+          }
+        },
+        "it_admin": {
+          "this": {}
+        },
+        "live_video_viewer": {
+          "union": {
+            "child": [
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "it_admin"
+                }
+              },
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "security_guard"
+                }
+              }
+            ]
+          }
+        },
+        "recorded_video_viewer": {
+          "union": {
+            "child": [
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "it_admin"
+                }
+              },
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "security_guard"
+                }
+              }
+            ]
+          }
+        },
+        "security_guard": {
+          "this": {}
+        }
+      }
+    }
+  ]
+}

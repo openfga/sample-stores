@@ -1,0 +1,67 @@
+[
+  {
+    "user": "workspace:sandcastle",
+    "relation": "parent_workspace",
+    "object": "channel:general"
+  },
+  {
+    "user": "emily",
+    "relation": "writer",
+    "object": "channel:general"
+  },
+  {
+    "user": "workspace:sandcastle",
+    "relation": "parent_workspace",
+    "object": "channel:marketing_internal"
+  },
+  {
+    "user": "bob",
+    "relation": "writer",
+    "object": "channel:marketing_internal"
+  },
+  {
+    "user": "emily",
+    "relation": "writer",
+    "object": "channel:marketing_internal"
+  },
+  {
+    "user": "workspace:sandcastle",
+    "relation": "parent_workspace",
+    "object": "channel:proj_marketing_campaign"
+  },
+  {
+    "user": "david",
+    "relation": "writer",
+    "object": "channel:proj_marketing_campaign"
+  },
+  {
+    "user": "workspace:sandcastle#member",
+    "relation": "writer",
+    "object": "channel:proj_marketing_campaign"
+  },
+  {
+    "user": "bob",
+    "relation": "channels_admin",
+    "object": "workspace:sandcastle"
+  },
+  {
+    "user": "david",
+    "relation": "guest",
+    "object": "workspace:sandcastle"
+  },
+  {
+    "user": "amy",
+    "relation": "legacy_admin",
+    "object": "workspace:sandcastle"
+  },
+  {
+    "user": "catherine",
+    "relation": "member",
+    "object": "workspace:sandcastle"
+  },
+  {
+    "user": "emily",
+    "relation": "member",
+    "object": "workspace:sandcastle"
+  }
+]

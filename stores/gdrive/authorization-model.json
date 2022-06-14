@@ -1,0 +1,136 @@
+{
+  "type_definitions": [
+    {
+      "type": "group",
+      "relations": {
+        "member": {
+          "this": {}
+        }
+      }
+    },
+    {
+      "type": "folder",
+      "relations": {
+        "create_file": {
+          "computedUserset": {
+            "object": "",
+            "relation": "owner"
+          }
+        },
+        "owner": {
+          "this": {}
+        },
+        "parent": {
+          "this": {}
+        },
+        "viewer": {
+          "union": {
+            "child": [
+              {
+                "this": {}
+              },
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "owner"
+                }
+              },
+              {
+                "tupleToUserset": {
+                  "tupleset": {
+                    "object": "",
+                    "relation": "parent"
+                  },
+                  "computedUserset": {
+                    "object": "",
+                    "relation": "viewer"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "doc",
+      "relations": {
+        "change_owner": {
+          "computedUserset": {
+            "object": "",
+            "relation": "owner"
+          }
+        },
+        "owner": {
+          "this": {}
+        },
+        "parent": {
+          "this": {}
+        },
+        "read": {
+          "union": {
+            "child": [
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "viewer"
+                }
+              },
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "owner"
+                }
+              },
+              {
+                "tupleToUserset": {
+                  "tupleset": {
+                    "object": "",
+                    "relation": "parent"
+                  },
+                  "computedUserset": {
+                    "object": "",
+                    "relation": "viewer"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "share": {
+          "computedUserset": {
+            "object": "",
+            "relation": "owner"
+          }
+        },
+        "viewer": {
+          "this": {}
+        },
+        "write": {
+          "union": {
+            "child": [
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "owner"
+                }
+              },
+              {
+                "tupleToUserset": {
+                  "tupleset": {
+                    "object": "",
+                    "relation": "parent"
+                  },
+                  "computedUserset": {
+                    "object": "",
+                    "relation": "owner"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

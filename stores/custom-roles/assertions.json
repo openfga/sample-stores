@@ -1,0 +1,74 @@
+[
+  {
+    "tuple_key": {
+      "object": "org:contoso",
+      "relation": "role_creator",
+      "user": "carlos"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "asset:website-hero-image",
+      "relation": "view",
+      "user": "anne"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "asset:website-hero-image",
+      "relation": "edit",
+      "user": "beth"
+    },
+    "expectation": false
+  },
+  {
+    "tuple_key": {
+      "object": "asset:homepage",
+      "relation": "edit",
+      "user": "beth"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "asset:homepage",
+      "relation": "edit",
+      "user": "carlos"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "asset:homepage",
+      "relation": "edit",
+      "user": "daniel"
+    },
+    "expectation": false
+  },
+  {
+    "tuple_key": {
+      "object": "asset:homepage",
+      "relation": "view",
+      "user": "daniel"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "asset:homepage",
+      "relation": "view",
+      "user": "edith"
+    },
+    "expectation": false
+  },
+  {
+    "tuple_key": {
+      "object": "asset-category:website-media",
+      "relation": "asset_creator",
+      "user": "edith"
+    },
+    "expectation": true
+  }
+]
