@@ -1,4 +1,4 @@
-OpenFGA API
+OpenFGA Sample Stores
 github.com/openfga/sample-stores
 Copyright 2022 Okta, Inc.
 
