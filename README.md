@@ -1,6 +1,9 @@
 # OpenFGA Sample Stores
 
-This repo contains some OpenFGA sample stores.
+[![Discord Server](https://img.shields.io/discord/759188666072825867?color=7289da&logo=discord "Discord Server")](https://discord.com/channels/759188666072825867/930524706854031421)
+[![Twitter](https://img.shields.io/twitter/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on Twitter")](https://twitter.com/openfga)
+
+This repo contains some OpenFGA [sample stores configurations](#sample-stores).
 
 ## Table of Contents
 
