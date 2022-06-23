@@ -10,7 +10,7 @@
   {
     "tuple_key": {
       "object": "device:1",
-      "relation": "recorded_video_viewer",
+      "relation": "can_view_recorded_video",
       "user": "anne"
     },
     "expectation": true
@@ -18,7 +18,7 @@
   {
     "tuple_key": {
       "object": "device:2",
-      "relation": "device_renamer",
+      "relation": "can_rename_device",
       "user": "dianne"
     },
     "expectation": true
@@ -26,7 +26,7 @@
   {
     "tuple_key": {
       "object": "device:2",
-      "relation": "device_renamer",
+      "relation": "can_rename_device",
       "user": "charles"
     },
     "expectation": false
