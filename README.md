@@ -36,7 +36,8 @@ To try this out, you need the following tools installed:
 
 1. Ensure you have [openfga](https://github.com/openfga/openfga) up and running.
 ```
-docker run -p 127.0.0.1:8080:8080 openfga/openfga run
+docker pull openfga/openfga # Ensure you have the latest openfga version
+docker run -p 127.0.0.1:8080:8080 openfga/openfga run # run openfga server
 ```
 
 2. Clone this repository
@@ -44,9 +45,10 @@ docker run -p 127.0.0.1:8080:8080 openfga/openfga run
 git clone https://github.com/openfga/sample-stores.git openfga-sample-stores && cd openfga-sample-stores
 ```
 
-3. Navigate into the sample store you choose (e.g. `github`)
+3. Navigate into the [sample store](#sample-stores) you choose (e.g. `github`, `custom-roles`, etc..)
 ```
-cd stores/github
+SAMPLE_STORE=github
+cd stores/$SAMPLE_STORE_NAME
 ```
 
 4. Loading data into your store
