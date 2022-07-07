@@ -11,7 +11,7 @@
     {
       "type": "folder",
       "relations": {
-        "create_file": {
+        "can_create_file": {
           "computedUserset": {
             "object": "",
             "relation": "owner"
@@ -55,7 +55,7 @@
     {
       "type": "doc",
       "relations": {
-        "change_owner": {
+        "can_change_owner": {
           "computedUserset": {
             "object": "",
             "relation": "owner"
@@ -67,7 +67,7 @@
         "parent": {
           "this": {}
         },
-        "read": {
+        "can_read": {
           "union": {
             "child": [
               {
@@ -97,16 +97,34 @@
             ]
           }
         },
-        "share": {
-          "computedUserset": {
-            "object": "",
-            "relation": "owner"
+        "can_share": {
+          "union": {
+            "child": [
+              {
+                "computedUserset": {
+                  "object": "",
+                  "relation": "owner"
+                }
+              },
+              {
+                "tupleToUserset": {
+                  "tupleset": {
+                    "object": "",
+                    "relation": "parent"
+                  },
+                  "computedUserset": {
+                    "object": "",
+                    "relation": "owner"
+                  }
+                }
+              }
+            ]
           }
         },
         "viewer": {
           "this": {}
         },
-        "write": {
+        "can_write": {
           "union": {
             "child": [
               {

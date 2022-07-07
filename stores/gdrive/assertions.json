@@ -2,7 +2,7 @@
   {
     "tuple_key": {
       "object": "doc:2021-roadmap",
-      "relation": "write",
+      "relation": "can_write",
       "user": "anne"
     },
     "expectation": true
@@ -10,7 +10,7 @@
   {
     "tuple_key": {
       "object": "doc:2021-roadmap",
-      "relation": "change_owner",
+      "relation": "can_change_owner",
       "user": "beth"
     },
     "expectation": false
@@ -18,7 +18,7 @@
   {
     "tuple_key": {
       "object": "doc:2021-roadmap",
-      "relation": "read",
+      "relation": "can_read",
       "user": "charles"
     },
     "expectation": true
@@ -26,7 +26,7 @@
   {
     "tuple_key": {
       "object": "doc:2021-roadmap",
-      "relation": "write",
+      "relation": "can_write",
       "user": "charles"
     },
     "expectation": false
@@ -34,7 +34,7 @@
   {
     "tuple_key": {
       "object": "doc:2021-roadmap",
-      "relation": "read",
+      "relation": "can_read",
       "user": "daniel"
     },
     "expectation": false
@@ -42,7 +42,7 @@
   {
     "tuple_key": {
       "object": "doc:public-roadmap",
-      "relation": "read",
+      "relation": "can_read",
       "user": "daniel"
     },
     "expectation": true
@@ -50,7 +50,7 @@
   {
     "tuple_key": {
       "object": "doc:public-roadmap",
-      "relation": "write",
+      "relation": "can_write",
       "user": "anne"
     },
     "expectation": true
@@ -58,7 +58,7 @@
   {
     "tuple_key": {
       "object": "doc:public-roadmap",
-      "relation": "write",
+      "relation": "can_write",
       "user": "charles"
     },
     "expectation": false

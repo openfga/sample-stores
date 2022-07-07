@@ -14,7 +14,7 @@
     {
       "type": "device",
       "relations": {
-        "device_renamer": {
+        "can_rename_device": {
           "computedUserset": {
             "object": "",
             "relation": "it_admin"
@@ -23,7 +23,7 @@
         "it_admin": {
           "this": {}
         },
-        "live_video_viewer": {
+        "can_view_live_video": {
           "union": {
             "child": [
               {
@@ -41,7 +41,7 @@
             ]
           }
         },
-        "recorded_video_viewer": {
+        "can_view_recorded_video": {
           "union": {
             "child": [
               {
