@@ -30,17 +30,17 @@
     "object": "feature:sso"
   },
   {
-    "user": "anne",
+    "user": "user:anne",
     "relation": "member",
     "object": "organization:alpha"
   },
   {
-    "user": "beth",
+    "user": "user:beth",
     "relation": "member",
     "object": "organization:brayer"
   },
   {
-    "user": "charles",
+    "user": "user:charles",
     "relation": "member",
     "object": "organization:cups"
   },

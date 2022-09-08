@@ -3,7 +3,7 @@
     "tuple_key": {
       "object": "repo:openfga/openfga",
       "relation": "reader",
-      "user": "anne"
+      "user": "user:anne"
     },
     "expectation": true
   },
@@ -11,7 +11,7 @@
     "tuple_key": {
       "object": "repo:openfga/openfga",
       "relation": "triager",
-      "user": "anne"
+      "user": "user:anne"
     },
     "expectation": false
   },
@@ -19,7 +19,7 @@
     "tuple_key": {
       "object": "repo:openfga/openfga",
       "relation": "admin",
-      "user": "diane"
+      "user": "user:diane"
     },
     "expectation": true
   },
@@ -27,7 +27,7 @@
     "tuple_key": {
       "object": "repo:openfga/openfga",
       "relation": "reader",
-      "user": "erik"
+      "user": "user:erik"
     },
     "expectation": true
   },
@@ -35,7 +35,7 @@
     "tuple_key": {
       "object": "repo:openfga/openfga",
       "relation": "writer",
-      "user": "charles"
+      "user": "user:charles"
     },
     "expectation": true
   },
@@ -43,7 +43,7 @@
     "tuple_key": {
       "object": "repo:openfga/openfga",
       "relation": "admin",
-      "user": "beth"
+      "user": "user:beth"
     },
     "expectation": false
   }

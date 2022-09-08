@@ -1,13 +1,13 @@
 [
   {
-    "user": "erik",
+    "user": "user:erik",
     "relation": "member",
-    "object": "org:openfga"
+    "object": "organization:openfga"
   },
   {
-    "user": "org:openfga#member",
+    "user": "organization:openfga#member",
     "relation": "repo_admin",
-    "object": "org:openfga"
+    "object": "organization:openfga"
   },
   {
     "user": "team:openfga/core#member",
@@ -15,22 +15,22 @@
     "object": "repo:openfga/openfga"
   },
   {
-    "user": "org:openfga",
+    "user": "organization:openfga",
     "relation": "owner",
     "object": "repo:openfga/openfga"
   },
   {
-    "user": "anne",
+    "user": "user:anne",
     "relation": "reader",
     "object": "repo:openfga/openfga"
   },
   {
-    "user": "beth",
+    "user": "user:beth",
     "relation": "writer",
     "object": "repo:openfga/openfga"
   },
   {
-    "user": "charles",
+    "user": "user:charles",
     "relation": "member",
     "object": "team:openfga/core"
   },
@@ -40,7 +40,7 @@
     "object": "team:openfga/core"
   },
   {
-    "user": "diane",
+    "user": "user:diane",
     "relation": "member",
     "object": "team:openfga/backend"
   }

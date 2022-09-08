@@ -46,6 +46,8 @@ These users have the following roles and permissions:
 ### Model
 
 ```python
+# There are users
+type user
 # There are devices
 type device
   relations

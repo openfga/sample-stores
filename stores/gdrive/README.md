@@ -62,6 +62,8 @@
 ### Model
 
 ```python
+# There are users
+type user
 # there are group
 type group
   relations

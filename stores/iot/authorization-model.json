@@ -1,6 +1,10 @@
 {
   "type_definitions": [
     {
+      "type": "user",
+      "relations": {}
+    },
+    {
       "type": "device_group",
       "relations": {
         "it_admin": {

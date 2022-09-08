@@ -81,6 +81,8 @@ There are users, workspaces and channels.
 ### Model
 
 ```python
+# There are users
+type user
 # There are workspaces
 type workspace
   relations

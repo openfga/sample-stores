@@ -68,6 +68,7 @@ There are users, organizations, teams and assets.
 
 ### Model
 ```python
+type user
 type org
   relations
     define owner as self
@@ -111,15 +112,15 @@ You can see a representation of this model in the JSON syntax accepted by the Op
 
 | User                              | Relation      | Object                         | Description                                                                                           |
 |-----------------------------------|---------------|--------------------------------|-------------------------------------------------------------------------------------------------------|
-| carlos                            | owner         | org:contoso                    | Carlos is an owner of the Contoso organization                                                        |
-| anne                              | member        | org:contoso                    | Anne is a member of the Contoso organization                                                          |
-| beth                              | member        | org:contoso                    | Beth is a member of the Contoso organization                                                          |
-| carlos                            | member        | org:contoso                    | Carlos is a member of the Contoso organization                                                        |
-| daniel                            | member        | org:contoso                    | Daniel is a member of the Contoso organization                                                        |
-| edith                             | member        | org:branding-contractor-1      | Edith is a member of the Branding Contractor 1 organization                                           |
-| anne                              | member        | team:design                    | Anne is a member of the Design team                                                                   |
-| beth                              | member        | team:marketing                 | Beth is a member of the Marketing team                                                                |
-| daniel                            | member        | team:qa                        | Daniel is a member of the QA team                                                                     |
+| user:carlos                       | owner         | org:contoso                    | Carlos is an owner of the Contoso organization                                                        |
+| user:anne                         | member        | org:contoso                    | Anne is a member of the Contoso organization                                                          |
+| user:beth                         | member        | org:contoso                    | Beth is a member of the Contoso organization                                                          |
+| user:carlos                       | member        | org:contoso                    | Carlos is a member of the Contoso organization                                                        |
+| user:daniel                       | member        | org:contoso                    | Daniel is a member of the Contoso organization                                                        |
+| user:edith                        | member        | org:branding-contractor-1      | Edith is a member of the Branding Contractor 1 organization                                           |
+| user:anne                         | member        | team:design                    | Anne is a member of the Design team                                                                   |
+| user:beth                         | member        | team:marketing                 | Beth is a member of the Marketing team                                                                |
+| user:daniel                       | member        | team:qa                        | Daniel is a member of the QA team                                                                     |
 | org:contoso                       | org           | asset-category:website-content | The "Website Content" asset category is in the Contoso organization                                   |
 | org:contoso                       | org           | asset-category:website-media   | The "Website Media" asset category is in the Contoso organization                                     |
 | org:branding-contractor-1#member  | assignee      | role:media-asset-creator       | Members of the Branding Contractor 1 organization are assigned the "Media Asset Creator" role         |
@@ -141,17 +142,17 @@ These are represented in this file: [tuples.json](./tuples.json).
 
 ### Assertions
 
-| User   | Relation      | Object                       | Allowed? |
-|--------|---------------|------------------------------|----------|
-| carlos | role_creator  | org:contoso                  | Yes      |
-| anne   | view          | asset:website-hero-image     | Yes      |
-| beth   | edit          | asset:website-hero-image     | No       |
-| beth   | edit          | asset:homepage               | Yes      |
-| carlos | edit          | asset:homepage               | Yes      |
-| daniel | edit          | asset:homepage               | No       |
-| daniel | view          | asset:homepage               | Yes      |
-| edith  | view          | asset:homepage               | No       |
-| edith  | asset_creator | asset-category:website-media | Yes      |
+| User        | Relation      | Object                       | Allowed? |
+|-------------|---------------|------------------------------|----------|
+| user:carlos | role_creator  | org:contoso                  | Yes      |
+| user:anne   | view          | asset:website-hero-image     | Yes      |
+| user:beth   | edit          | asset:website-hero-image     | No       |
+| user:beth   | edit          | asset:homepage               | Yes      |
+| user:carlos | edit          | asset:homepage               | Yes      |
+| user:daniel | edit          | asset:homepage               | No       |
+| user:daniel | view          | asset:homepage               | Yes      |
+| user:edith  | view          | asset:homepage               | No       |
+| user:edith  | asset_creator | asset-category:website-media | Yes      |
 
 These are represented in this file: [assertions.json](./assertions.json).
 

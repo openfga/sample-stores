@@ -3,7 +3,7 @@
     "tuple_key": {
       "object": "workspace:sandcastle",
       "relation": "channels_admin",
-      "user": "amy"
+      "user": "user:amy"
     },
     "expectation": true
   },
@@ -11,7 +11,7 @@
     "tuple_key": {
       "object": "workspace:sandcastle",
       "relation": "channels_admin",
-      "user": "david"
+      "user": "user:david"
     },
     "expectation": false
   },
@@ -19,7 +19,7 @@
     "tuple_key": {
       "object": "channel:marketing_internal",
       "relation": "writer",
-      "user": "emily"
+      "user": "user:emily"
     },
     "expectation": true
   },
@@ -27,7 +27,7 @@
     "tuple_key": {
       "object": "channel:marketing_internal",
       "relation": "writer",
-      "user": "david"
+      "user": "user:david"
     },
     "expectation": false
   },
@@ -35,7 +35,7 @@
     "tuple_key": {
       "object": "channel:proj_marketing_campaign",
       "relation": "writer",
-      "user": "david"
+      "user": "user:david"
     },
     "expectation": true
   },
@@ -43,7 +43,7 @@
     "tuple_key": {
       "object": "channel:general",
       "relation": "writer",
-      "user": "bob"
+      "user": "user:bob"
     },
     "expectation": false
   }

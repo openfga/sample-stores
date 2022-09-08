@@ -1,33 +1,33 @@
 [
   {
     "tuple_key": {
-      "object": "device:1",
+      "user": "user:anne",
       "relation": "it_admin",
-      "user": "anne"
+      "object": "device:1"
     },
     "expectation": false
   },
   {
     "tuple_key": {
-      "object": "device:1",
+      "user": "user:anne",
       "relation": "can_view_recorded_video",
-      "user": "anne"
+      "object": "device:1"
     },
     "expectation": true
   },
   {
     "tuple_key": {
-      "object": "device:2",
+      "user": "user:dianne",
       "relation": "can_rename_device",
-      "user": "dianne"
+      "object": "device:2"
     },
     "expectation": true
   },
   {
     "tuple_key": {
-      "object": "device:2",
+      "user": "user:charles",
       "relation": "can_rename_device",
-      "user": "charles"
+      "object": "device:2"
     },
     "expectation": false
   }
