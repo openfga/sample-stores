@@ -10,6 +10,17 @@
         "member": {
           "this": {}
         }
+      },
+      "metadata": {
+        "relations": {
+          "member": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              }
+            ]
+          }
+        }
       }
     },
     {
@@ -17,6 +28,25 @@
       "relations": {
         "assignee": {
           "this": {}
+        }
+      },
+      "metadata": {
+        "relations": {
+          "assignee": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              },
+              {
+                "type": "team",
+                "object": "member"
+              },
+              {
+                "type": "org",
+                "object": "member"
+              }
+            ]
+          }
         }
       }
     },
@@ -176,6 +206,96 @@
             ]
           }
         }
+      },
+      "metadata": {
+        "relations": {
+          "asset_category_creator": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "asset_commenter": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "asset_creator": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "asset_editor": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "asset_viewer": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "member": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              }
+            ]
+          },
+          "owner": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              }
+            ]
+          },
+          "role_assigner": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "role_creator": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "team_assigner": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "team_creator": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          }
+        }
       }
     },
     {
@@ -280,6 +400,49 @@
             ]
           }
         }
+      },
+      "metadata": {
+        "relations": {
+          "asset_creator": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "commenter": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "editor": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "org": {
+            "directly_related_user_types": [
+              {
+                "type": "org"
+              }
+            ]
+          },
+          "viewer": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          }
+        }
       }
     },
     {
@@ -359,6 +522,41 @@
                     "relation": "viewer"
                   }
                 }
+              }
+            ]
+          }
+        }
+      },
+      "metadata": {
+        "relations": {
+          "category": {
+            "directly_related_user_types": [
+              {
+                "type": "category"
+              }
+            ]
+          },
+          "comment": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "edit": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
+              }
+            ]
+          },
+          "view": {
+            "directly_related_user_types": [
+              {
+                "type": "role",
+                "object": "assignee"
               }
             ]
           }

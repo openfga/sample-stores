@@ -18,6 +18,18 @@
         "submitter": {
           "this": {}
         }
+      },
+      "metadata": {
+        "relations": {
+          "approver": {
+            "directly_related_user_types": []
+          },
+          "submitter": {
+            "directly_related_user_types": [{
+                "type": "user"
+            }]
+          }
+        }
       }
     },
     {
@@ -47,6 +59,15 @@
                 }
               }
             ]
+          }
+        }
+      },
+      "metadata": {
+        "relations": {
+          "manager": {
+            "directly_related_user_types": [{
+                "type": "user"
+            }]
           }
         }
       }

@@ -13,6 +13,24 @@
         "security_guard": {
           "this": {}
         }
+      },
+      "metadata": {
+        "relations": {
+          "it_admin": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              }
+            ]
+          },
+          "security_guard": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              }
+            ]
+          }
+        }
       }
     },
     {
@@ -65,6 +83,41 @@
         },
         "security_guard": {
           "this": {}
+        }
+      },
+      "metadata": {
+        "relations": {
+          "can_rename_device": {
+            "directly_related_user_types": []
+          },
+          "it_admin": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              },
+              {
+                "type": "device_group",
+                "relation": "it_admin"
+              }
+            ]
+          },
+          "can_view_live_video": {
+            "directly_related_user_types": []
+          },
+          "can_view_recorded_video": {
+            "directly_related_user_types": []
+          },
+          "security_guard": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              },
+              {
+                "type": "device_group",
+                "relation": "security_guard"
+              }
+            ]
+          }
         }
       }
     }

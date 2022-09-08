@@ -10,6 +10,15 @@
         "member": {
           "this": {}
         }
+      },
+      "metadata": {
+        "relations": {
+          "member": {
+            "directly_related_user_types": [{
+                "type": "user"
+            }]
+          }
+        }
       }
     },
     {
@@ -52,6 +61,30 @@
                 }
               }
             ]
+          }
+        }
+      },
+      "metadata": {
+        "relations": {
+          "can_create_file": { "directly_related_user_types": [] },
+          "owner": {
+            "directly_related_user_types": [{
+                "type": "user"
+            }]
+          },
+          "parent": {
+            "directly_related_user_types": [{
+                "type": "folder"
+            }]
+          },
+          "viewer": {
+            "allow_public": true,
+            "directly_related_user_types": [{
+                "type": "user"
+            }, {
+                "type": "group",
+                "relation": "member"
+            }]
           }
         }
       }
@@ -151,6 +184,32 @@
               }
             ]
           }
+        }
+      },
+      "metadata": {
+        "relations": {
+          "can_change_owner": { "directly_related_user_types": [] },
+          "owner": {
+            "directly_related_user_types": [{
+                "type": "user"
+            }]
+          },
+          "parent": {
+            "directly_related_user_types": [{
+                "type": "folder"
+            }]
+          },
+          "can_read": { "directly_related_user_types": [] },
+          "can_share": { "directly_related_user_types": [] },
+          "viewer": {
+            "directly_related_user_types": [{
+                "type": "user"
+            }, {
+                "type": "group",
+                "relation": "member"
+            }]
+          },
+          "can_write": { "directly_related_user_types": [] }
         }
       }
     }

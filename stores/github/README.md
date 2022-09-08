@@ -105,7 +105,7 @@ You can see a representation of this model in the JSON syntax accepted by the Op
 | organization:openfga#member | repo_admin | organization:openfga | Members of the OpenFGA organization have a repository admin base permission on the organization |
 | user:erik                   | member     | organization:openfga | Erik is a member of the OpenFGA organization                                                    |
 | team:openfga/core#member    | admin      | repo:openfga/openfga | The openfga/core team members are admins on the openfga/openfga repository                      |
-| user:anne                   | reader     | repo:openfga/openfga | Anne is a reader on the on the openfga/openfga repository                                       |
+| user:anne                   | reader     | repo:openfga/openfga | Anne is a reader on the openfga/openfga repository                                              |
 | user:beth                   | writer     | repo:openfga/openfga | Beth is a writer on the openfga/openfga repository                                              |
 | user:charles                | member     | team:openfga/core    | Charles is a member of the openfga/core team                                                    |
 | team:openfga/backend#member | member     | team:openfga/core    | Members of the openfga/backend team are members of the openfga/core team                        |

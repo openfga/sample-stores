@@ -22,6 +22,20 @@
             }
           }
         }
+      },
+      "metadata": {
+        "relations": {
+          "subscriber": {
+            "directly_related_user_types": [
+              {
+                "type": "organization"
+              }
+            ]
+          },
+          "subscriber_member": {
+            "directly_related_user_types": []
+          }
+        }
       }
     },
     {
@@ -29,6 +43,17 @@
       "relations": {
         "member": {
           "this": {}
+        }
+      },
+      "metadata": {
+        "relations": {
+          "member": {
+            "directly_related_user_types": [
+              {
+                "type": "user"
+              }
+            ]
+          }
         }
       }
     },
@@ -49,6 +74,20 @@
         },
         "associated_plan": {
           "this": {}
+        }
+      },
+      "metadata": {
+        "relations": {
+          "can_access": {
+            "directly_related_user_types": []
+          },
+          "associated_plan": {
+            "directly_related_user_types": [
+              {
+                "type": "plan"
+              }
+            ]
+          }
         }
       }
     }
