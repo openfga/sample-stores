@@ -78,7 +78,6 @@
             }]
           },
           "viewer": {
-            "allow_public": true,
             "directly_related_user_types": [{
                 "type": "user"
             }, {
