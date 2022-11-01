@@ -89,7 +89,7 @@ type feature
     # features have associated plans
     define associated_plan as self
     # users with access to a feature are those who have "subscriber member" status on the associated plan
-    define access as subscriber_member from associated_plan
+    define can_access as subscriber_member from associated_plan
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
@@ -114,17 +114,17 @@ type feature
 
 ### Assertions
 
-| User         | Object            | Relation | Allowed? |
-|--------------|-------------------|----------|----------|
-| user:anne    | feature:issues    | access   | Yes      |
-| user:anne    | feature:draft_prs | access   | No       |
-| user:anne    | feature:sso       | access   | No       |
-| user:beth    | feature:issues    | access   | Yes      |
-| user:beth    | feature:draft_prs | access   | Yes      |
-| user:beth    | feature:sso       | access   | No       |
-| user:charles | feature:issues    | access   | Yes      |
-| user:charles | feature:draft_prs | access   | Yes      |
-| user:charles | feature:sso       | access   | Yes      |
+| User         | Object            | Relation   | Allowed? |
+|--------------|-------------------|------------|----------|
+| user:anne    | feature:issues    | can_access | Yes      |
+| user:anne    | feature:draft_prs | can_access | No       |
+| user:anne    | feature:sso       | can_access | No       |
+| user:beth    | feature:issues    | can_access | Yes      |
+| user:beth    | feature:draft_prs | can_access | Yes      |
+| user:beth    | feature:sso       | can_access | No       |
+| user:charles | feature:issues    | can_access | Yes      |
+| user:charles | feature:draft_prs | can_access | Yes      |
+| user:charles | feature:sso       | can_access | Yes      |
 
 ## Try It Out
 
