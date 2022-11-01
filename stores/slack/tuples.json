@@ -5,7 +5,7 @@
     "object": "channel:general"
   },
   {
-    "user": "emily",
+    "user": "user:emily",
     "relation": "writer",
     "object": "channel:general"
   },
@@ -15,12 +15,12 @@
     "object": "channel:marketing_internal"
   },
   {
-    "user": "bob",
+    "user": "user:bob",
     "relation": "writer",
     "object": "channel:marketing_internal"
   },
   {
-    "user": "emily",
+    "user": "user:emily",
     "relation": "writer",
     "object": "channel:marketing_internal"
   },
@@ -30,7 +30,7 @@
     "object": "channel:proj_marketing_campaign"
   },
   {
-    "user": "david",
+    "user": "user:david",
     "relation": "writer",
     "object": "channel:proj_marketing_campaign"
   },
@@ -40,27 +40,27 @@
     "object": "channel:proj_marketing_campaign"
   },
   {
-    "user": "bob",
+    "user": "user:bob",
     "relation": "channels_admin",
     "object": "workspace:sandcastle"
   },
   {
-    "user": "david",
+    "user": "user:david",
     "relation": "guest",
     "object": "workspace:sandcastle"
   },
   {
-    "user": "amy",
+    "user": "user:amy",
     "relation": "legacy_admin",
     "object": "workspace:sandcastle"
   },
   {
-    "user": "catherine",
+    "user": "user:catherine",
     "relation": "member",
     "object": "workspace:sandcastle"
   },
   {
-    "user": "emily",
+    "user": "user:emily",
     "relation": "member",
     "object": "workspace:sandcastle"
   }

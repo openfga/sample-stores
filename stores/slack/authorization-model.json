@@ -1,6 +1,10 @@
 {
   "type_definitions": [
     {
+      "type": "user",
+      "relations": {}
+    },
+    {
       "type": "workspace",
       "relations": {
         "channels_admin": {

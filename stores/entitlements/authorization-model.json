@@ -1,6 +1,10 @@
 {
   "type_definitions": [
     {
+      "type": "user",
+      "relations": {}
+    },
+    {
       "type": "plan",
       "relations": {
         "subscriber": {
@@ -31,7 +35,7 @@
     {
       "type": "feature",
       "relations": {
-        "access": {
+        "can_access": {
           "tupleToUserset": {
             "tupleset": {
               "object": "",

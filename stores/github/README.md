@@ -57,12 +57,14 @@ There are users, organizations, teams and repositories
 ### Model
 
 ```python
+# There are users
+type user
 # there are organizations
-type org
+type organization
   relations
     # Organizations can have users who own them
     define owner as self
-    # Organizations can have members (any owner of the org is automatically a member)
+    # Organizations can have members (any owner of the organization is automatically a member)
     define member as self or owner
     # Organizations has a set of permissions, such as repository admin, writer and reader
     define repo_admin as self
@@ -78,15 +80,15 @@ type repo
   relations
     # repositories have organizations who own them
     define owner as self
-    # repository have admins, they can be assigned or inherited (anyone who has the repository admin role on the owner org is an owner on the repo)
+    # repository have admins, they can be assigned or inherited (anyone who has the repository admin role on the owner organization is an owner on the repo)
     define admin as self or repo_admin from owner
     # maintainers on a repo are anyone who is directly assigned or anyone who is an owner on the repo
     define maintainer as self or admin
-    # repo writers are users who are directly assigned, anyone who is a maintainer or anyone who has the repository writer role on the owner org
+    # repo writers are users who are directly assigned, anyone who is a maintainer or anyone who has the repository writer role on the owner organization
     define writer as self or maintainer or repo_writer from own
     # triagers on a repo are anyone who is directly assigned or anyone who is a writer on the repo
     define triager as self or writerer
-    # repo readers are users who are directly assigned, anyone who is a triafer or anyone who has the repository reader role on the owner org
+    # repo readers are users who are directly assigned, anyone who is a triafer or anyone who has the repository reader role on the owner organization
     define reader as self or triager or repo_reader from owner
 ```
 
@@ -99,28 +101,28 @@ You can see a representation of this model in the JSON syntax accepted by the Op
 
 | User                        | Relation   | Object               | Description                                                                                     |
 |-----------------------------|------------|----------------------|-------------------------------------------------------------------------------------------------|
-| org:openfga                 | owner      | repo:openfga/openfga | The OpenFGA organization is the owner of the openfga/openfga repository                         |
-| org:openfga#member          | repo_admin | org:openfga          | Members of the OpenFGA organization have a repository admin base permission on the organization |
-| erik                        | member     | org:openfga          | Erik is a member of the OpenFGA organization                                                    |
+| organization:openfga        | owner      | repo:openfga/openfga | The OpenFGA organization is the owner of the openfga/openfga repository                         |
+| organization:openfga#member | repo_admin | organization:openfga | Members of the OpenFGA organization have a repository admin base permission on the organization |
+| user:erik                   | member     | organization:openfga | Erik is a member of the OpenFGA organization                                                    |
 | team:openfga/core#member    | admin      | repo:openfga/openfga | The openfga/core tean members are admins on the openfga/openfga repository                      |
-| anne                        | reader     | repo:openfga/openfga | Anne is a reader on the on the openfga/openfga repository                                       |
-| beth                        | writer     | repo:openfga/openfga | Beth is a writer on the openfga/openfga repository                                              |
-| charles                     | member     | team:openfga/core    | Charles is a member of the openfga/core team                                                    |
+| user:anne                   | reader     | repo:openfga/openfga | Anne is a reader on the on the openfga/openfga repository                                       |
+| user:beth                   | writer     | repo:openfga/openfga | Beth is a writer on the openfga/openfga repository                                              |
+| user:charles                | member     | team:openfga/core    | Charles is a member of the openfga/core team                                                    |
 | team:openfga/backend#member | member     | team:openfga/core    | Members of the openfga/backend team are members of the openfga/core team                        |
-| diane                       | member     | team:openfga/backend | Diane is a member of the openfga/backend team                                                   |
+| user:diane                  | member     | team:openfga/backend | Diane is a member of the openfga/backend team                                                   |
 
 These are represented in this file: [tuples.json](./tuples.json).
 
 ### Assertions
 
-| User    | Relation | Object               | Allowed? |
-|---------|----------|----------------------|----------|
-| anne    | reader   | repo:openfga/openfga | Yes      |
-| anne    | triager  | repo:openfga/openfga | No       |
-| diane   | admin    | repo:openfga/openfga | Yes      |
-| erik    | reader   | repo:openfga/openfga | Yes      |
-| charles | writer   | repo:openfga/openfga | Yes      |
-| beth    | admin    | repo:openfga/openfga | No       |
+| User         | Relation | Object               | Allowed? |
+|--------------|----------|----------------------|----------|
+| user:anne    | reader   | repo:openfga/openfga | Yes      |
+| user:anne    | triager  | repo:openfga/openfga | No       |
+| user:diane   | admin    | repo:openfga/openfga | Yes      |
+| user:erik    | reader   | repo:openfga/openfga | Yes      |
+| user:charles | writer   | repo:openfga/openfga | Yes      |
+| user:beth    | admin    | repo:openfga/openfga | No       |
 
 These are represented in this file: [assertions.json](./assertions.json).
 

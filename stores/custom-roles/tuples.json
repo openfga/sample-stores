@@ -55,7 +55,7 @@
     "object": "asset:website-hero-image"
   },
   {
-    "user": "edith",
+    "user": "user:edith",
     "relation": "member",
     "object": "org:branding-contractor-1"
   },
@@ -65,27 +65,27 @@
     "object": "org:contoso"
   },
   {
-    "user": "anne",
+    "user": "user:anne",
     "relation": "member",
     "object": "org:contoso"
   },
   {
-    "user": "beth",
+    "user": "user:beth",
     "relation": "member",
     "object": "org:contoso"
   },
   {
-    "user": "carlos",
+    "user": "user:carlos",
     "relation": "member",
     "object": "org:contoso"
   },
   {
-    "user": "daniel",
+    "user": "user:daniel",
     "relation": "member",
     "object": "org:contoso"
   },
   {
-    "user": "carlos",
+    "user": "user:carlos",
     "relation": "owner",
     "object": "org:contoso"
   },
@@ -110,17 +110,17 @@
     "object": "role:media-asset-manager"
   },
   {
-    "user": "anne",
+    "user": "user:anne",
     "relation": "member",
     "object": "team:design"
   },
   {
-    "user": "beth",
+    "user": "user:beth",
     "relation": "member",
     "object": "team:marketing"
   },
   {
-    "user": "daniel",
+    "user": "user:daniel",
     "relation": "member",
     "object": "team:qa"
   }

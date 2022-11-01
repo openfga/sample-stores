@@ -5,7 +5,7 @@
     "object": "doc:2021-roadmap"
   },
   {
-    "user": "beth",
+    "user": "user:beth",
     "relation": "viewer",
     "object": "doc:2021-roadmap"
   },
@@ -20,7 +20,7 @@
     "object": "doc:public-roadmap"
   },
   {
-    "user": "anne",
+    "user": "user:anne",
     "relation": "owner",
     "object": "folder:product-2021"
   },
@@ -30,17 +30,17 @@
     "object": "folder:product-2021"
   },
   {
-    "user": "anne",
+    "user": "user:anne",
     "relation": "member",
     "object": "group:contoso"
   },
   {
-    "user": "beth",
+    "user": "user:beth",
     "relation": "member",
     "object": "group:contoso"
   },
   {
-    "user": "charles",
+    "user": "user:charles",
     "relation": "member",
     "object": "group:fabrikam"
   }

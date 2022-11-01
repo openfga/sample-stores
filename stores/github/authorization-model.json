@@ -1,6 +1,10 @@
 {
   "type_definitions": [
     {
+      "type": "user",
+      "relations": {}
+    },
+    {
       "type": "team",
       "relations": {
         "member": {
@@ -122,7 +126,7 @@
       }
     },
     {
-      "type": "org",
+      "type": "organization",
       "relations": {
         "member": {
           "union": {

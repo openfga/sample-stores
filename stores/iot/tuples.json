@@ -1,21 +1,21 @@
 [
   {
-    "user": "beth",
+    "user": "user:beth",
     "relation": "it_admin",
     "object": "device:1"
   },
   {
-    "user": "dianne",
+    "user": "user:dianne",
     "relation": "it_admin",
     "object": "device:1"
   },
   {
-    "user": "anne",
+    "user": "user:anne",
     "relation": "security_guard",
     "object": "device:1"
   },
   {
-    "user": "charles",
+    "user": "user:charles",
     "relation": "security_guard",
     "object": "device:1"
   },
@@ -40,12 +40,12 @@
     "object": "device:3"
   },
   {
-    "user": "dianne",
+    "user": "user:dianne",
     "relation": "it_admin",
     "object": "device_group:group1"
   },
   {
-    "user": "charles",
+    "user": "user:charles",
     "relation": "security_guard",
     "object": "device_group:group1"
   }

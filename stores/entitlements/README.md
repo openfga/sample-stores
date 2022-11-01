@@ -69,6 +69,8 @@ There are three plans, offering some features:
 ### Model
 
 ```python
+# There are users
+type user
 # There are organizations
 type organization
   relations
@@ -87,7 +89,7 @@ type feature
     # features have associated plans
     define associated_plan as self
     # users with access to a feature are those who have "subscriber member" status on the associated plan
-    define access as subscriber_member from associated_plan
+    define can_access as subscriber_member from associated_plan
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
@@ -95,34 +97,34 @@ type feature
 
 ### Tuples
 
-| User                | Relation        | Object              | Description |
-|---------------------|-----------------|---------------------|-------------|
-| plan:enterprise     | associated_plan | feature:draft_prs   | aa          |
-| plan:team           | associated_plan | feature:draft_prs   | aa          |
-| plan:enterprise     | associated_plan | feature:issues      | aa          |
-| plan:free           | associated_plan | feature:issues      | aa          |
-| plan:team           | associated_plan | feature:issues      | aa          |
-| plan:enterprise     | associated_plan | feature:sso         | aa          |
-| anne                | member          | organization:alpha  | aa          |
-| beth                | member          | organization:brayer | aa          |
-| charles             | member          | organization:cups   | aa          |
-| organization:cups   | subscriber      | plan:enterprise     | aa          |
-| organization:alpha  | subscriber      | plan:free           | aa          |
-| organization:brayer | subscriber      | plan:team           | aa          |
+| User                | Relation        | Object              | Description                                                   |
+|---------------------|-----------------|---------------------|---------------------------------------------------------------|
+| plan:enterprise     | associated_plan | feature:draft_prs   | The Enterprise plan grants access to the Draft PRs feature    |
+| plan:team           | associated_plan | feature:draft_prs   | The Team plan grants access to the Draft PRs feature          |
+| plan:enterprise     | associated_plan | feature:issues      | The Enterprise plan grants access to the Issues feature       |
+| plan:free           | associated_plan | feature:issues      | The Free plan grants access to the Issues feature             |
+| plan:team           | associated_plan | feature:issues      | The Team plan grants access to the Issues feature             |
+| plan:enterprise     | associated_plan | feature:sso         | The Enterprise plan grants access to the SSO feature          |
+| user:anne           | member          | organization:alpha  | Anne is a member of the Alpha organization                    |
+| user:beth           | member          | organization:brayer | Beth is a member of the Brayer organization                   |
+| user:charles        | member          | organization:cups   | Charles is a member of the Cups organization                  |
+| organization:cups   | subscriber      | plan:enterprise     | The Cups organization has subscribed to the Enterprise plan   |
+| organization:alpha  | subscriber      | plan:free           | The Alpha organization has subscribed to the Enterprise plan  |
+| organization:brayer | subscriber      | plan:team           | The Brayer organization has subscribed to the Enterprise plan |
 
 ### Assertions
 
-| User    | Object            | Relation | Allowed? |
-|---------|-------------------|----------|----------|
-| anne    | feature:issues    | access   | Yes      |
-| anne    | feature:draft_prs | access   | No       |
-| anne    | feature:sso       | access   | No       |
-| beth    | feature:issues    | access   | Yes      |
-| beth    | feature:draft_prs | access   | Yes      |
-| beth    | feature:sso       | access   | No       |
-| charles | feature:issues    | access   | Yes      |
-| charles | feature:draft_prs | access   | Yes      |
-| charles | feature:sso       | access   | Yes      |
+| User         | Object            | Relation   | Allowed? |
+|--------------|-------------------|------------|----------|
+| user:anne    | feature:issues    | can_access | Yes      |
+| user:anne    | feature:draft_prs | can_access | No       |
+| user:anne    | feature:sso       | can_access | No       |
+| user:beth    | feature:issues    | can_access | Yes      |
+| user:beth    | feature:draft_prs | can_access | Yes      |
+| user:beth    | feature:sso       | can_access | No       |
+| user:charles | feature:issues    | can_access | Yes      |
+| user:charles | feature:draft_prs | can_access | Yes      |
+| user:charles | feature:sso       | can_access | Yes      |
 
 ## Try It Out
 

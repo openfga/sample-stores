@@ -2,72 +2,72 @@
   {
     "tuple_key": {
       "object": "feature:issues",
-      "relation": "access",
-      "user": "anne"
+      "relation": "can_access",
+      "user": "user:anne"
     },
     "expectation": true
   },
   {
     "tuple_key": {
       "object": "feature:draft_prs",
-      "relation": "access",
-      "user": "anne"
+      "relation": "can_access",
+      "user": "user:anne"
     },
     "expectation": false
   },
   {
     "tuple_key": {
       "object": "feature:sso",
-      "relation": "access",
-      "user": "anne"
-    },
-    "expectation": false
-  },
-  {
-    "tuple_key": {
-      "object": "feature:issues",
-      "relation": "access",
-      "user": "beth"
-    },
-    "expectation": true
-  },
-  {
-    "tuple_key": {
-      "object": "feature:draft_prs",
-      "relation": "access",
-      "user": "beth"
-    },
-    "expectation": true
-  },
-  {
-    "tuple_key": {
-      "object": "feature:sso",
-      "relation": "access",
-      "user": "beth"
+      "relation": "can_access",
+      "user": "user:anne"
     },
     "expectation": false
   },
   {
     "tuple_key": {
       "object": "feature:issues",
-      "relation": "access",
-      "user": "charles"
+      "relation": "can_access",
+      "user": "user:beth"
     },
     "expectation": true
   },
   {
     "tuple_key": {
       "object": "feature:draft_prs",
-      "relation": "access",
-      "user": "charles"
+      "relation": "can_access",
+      "user": "user:beth"
     },
     "expectation": true
   },
   {
     "tuple_key": {
       "object": "feature:sso",
-      "relation": "access",
-      "user": "charles"
+      "relation": "can_access",
+      "user": "user:beth"
+    },
+    "expectation": false
+  },
+  {
+    "tuple_key": {
+      "object": "feature:issues",
+      "relation": "can_access",
+      "user": "user:charles"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "feature:draft_prs",
+      "relation": "can_access",
+      "user": "user:charles"
+    },
+    "expectation": true
+  },
+  {
+    "tuple_key": {
+      "object": "feature:sso",
+      "relation": "can_access",
+      "user": "user:charles"
     },
     "expectation": true
   }
