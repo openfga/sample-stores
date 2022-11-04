@@ -53,16 +53,18 @@ For more on modeling, check out:
 # there are employees
 type employee
   relations
-    # employees have managers; an employee's manager is anyone who is their direct manager as well as their managers' managers
-    define manager as self or manager from manager
+    # employees have managers; an employee's manager is anyone who is their direct manager
+    define manager as self
+    # employees can be managed by their direct managers as well as whoever can manage their direct managers
+    define can_manage as manager or can_manage from manager
 # there are reports
 type report
   relations
     # reports have submitters; a report's submitter is anyone who has submitted the report
     define submitter as self
-    # reports have approvers; a report's approver is anyone who's a manager of a submitter
+    # reports have approvers; a report's approver is anyone who can manage the submitter of the report
     # note that an employee cannot be directly be assigned to be an approver (self is not allowed)
-    define approver as manager from submitter
+    define approver as can_manage from submitter
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
@@ -84,11 +86,11 @@ These are represented in this file: [tuples.json](./tuples.json).
 
 ### Assertions
 
-| User            | Relation | Object               | Allowed? |
-|-----------------|----------|----------------------|----------|
-| employee:matt   | manager  | employee:daniel      | Yes      |
-| employee:emily  | approver | report:daniel-chair1 | Yes      |
-| employee:daniel | approver | report:daniel-chair1 | No       |
+| User            | Relation   | Object               | Allowed? |
+|-----------------|------------|----------------------|----------|
+| employee:matt   | can_manage | employee:daniel      | Yes      |
+| employee:emily  | approver   | report:daniel-chair1 | Yes      |
+| employee:daniel | approver   | report:daniel-chair1 | No       |
 
 These are represented in this file: [assertions.json](./assertions.json).
 

@@ -11,7 +11,7 @@
             },
             "computedUserset": {
               "object": "",
-              "relation": "manager"
+              "relation": "can_manage"
             }
           }
         },
@@ -24,10 +24,15 @@
       "type": "employee",
       "relations": {
         "manager": {
+          "this": {}
+        },
+        "can_manage": {
           "union": {
             "child": [
               {
-                "this": {}
+                "computedUserset": {
+                  "relation": "manager"
+                }
               },
               {
                 "tupleToUserset": {
@@ -37,7 +42,7 @@
                   },
                   "computedUserset": {
                     "object": "",
-                    "relation": "manager"
+                    "relation": "can_manage"
                   }
                 }
               }

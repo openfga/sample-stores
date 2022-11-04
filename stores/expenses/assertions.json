@@ -2,7 +2,7 @@
   {
     "tuple_key": {
       "object": "employee:daniel",
-      "relation": "manager",
+      "relation": "can_manage",
       "user": "employee:matt"
     },
     "expectation": true
