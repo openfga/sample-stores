@@ -85,10 +85,10 @@ type repo
     # maintainers on a repo are anyone who is directly assigned or anyone who is an owner on the repo
     define maintainer as self or admin
     # repo writers are users who are directly assigned, anyone who is a maintainer or anyone who has the repository writer role on the owner organization
-    define writer as self or maintainer or repo_writer from own
+    define writer as self or maintainer or repo_writer from owner
     # triagers on a repo are anyone who is directly assigned or anyone who is a writer on the repo
-    define triager as self or writerer
-    # repo readers are users who are directly assigned, anyone who is a triafer or anyone who has the repository reader role on the owner organization
+    define triager as self or writer
+    # repo readers are users who are directly assigned, anyone who is a triager or anyone who has the repository reader role on the owner organization
     define reader as self or triager or repo_reader from owner
 ```
 
@@ -104,7 +104,7 @@ You can see a representation of this model in the JSON syntax accepted by the Op
 | organization:openfga        | owner      | repo:openfga/openfga | The OpenFGA organization is the owner of the openfga/openfga repository                         |
 | organization:openfga#member | repo_admin | organization:openfga | Members of the OpenFGA organization have a repository admin base permission on the organization |
 | user:erik                   | member     | organization:openfga | Erik is a member of the OpenFGA organization                                                    |
-| team:openfga/core#member    | admin      | repo:openfga/openfga | The openfga/core tean members are admins on the openfga/openfga repository                      |
+| team:openfga/core#member    | admin      | repo:openfga/openfga | The openfga/core team members are admins on the openfga/openfga repository                      |
 | user:anne                   | reader     | repo:openfga/openfga | Anne is a reader on the on the openfga/openfga repository                                       |
 | user:beth                   | writer     | repo:openfga/openfga | Beth is a writer on the openfga/openfga repository                                              |
 | user:charles                | member     | team:openfga/core    | Charles is a member of the openfga/core team                                                    |
