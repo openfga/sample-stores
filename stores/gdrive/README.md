@@ -43,7 +43,7 @@
 - The "Product 2021" folder contains the "Public Roadmap" document
 - The "Product 2021" folder contains the "2021 Roadmap" document
 - Members of the Fabrikam group are viewers of the "Product 2021" folder
-- Anne is a viewer of the "Product 2021" folder
+- Anne is an owner of the "Product 2021" folder
 - Beth is a viewer of the "2021 Roadmap" document
 - Everyone is a viewer of the "Public Roadmap" document
 
@@ -117,7 +117,7 @@ You can see a representation of this model in the JSON syntax accepted by the Op
 | folder:product-2021   | parent   | doc:public-roadmap  | The "Product 2021" folder contains the "Public Roadmap" document       |
 | folder:product-2021   | parent   | doc:2021-roadmap    | The "Product 2021" folder contains the "2021 Roadmap" document         |
 | group:fabrikam#member | viewer   | folder:product-2021 | Members of the Fabrikam group are viewers of the "Product 2021" folder |
-| anne                  | owner    | folder:product-2021 | Anne is a viewer of the "Product 2021" folder                          |
+| anne                  | owner    | folder:product-2021 | Anne is an owner of the "Product 2021" folder                          |
 | beth                  | viewer   | doc:2021-roadmap    | Beth is a viewer of the "2021 Roadmap" document                        |
 | *                     | viewer   | doc:public-roadmap  | Everyone is a viewer of the "Public Roadmap" document                  |
 
