@@ -45,7 +45,7 @@
 - Members of the Fabrikam group are viewers of the "Product 2021" folder
 - Anne is an owner of the "Product 2021" folder
 - Beth is a viewer of the "2021 Roadmap" document
-- Everyone is a viewer of the "Public Roadmap" document
+- Every user is a viewer of the "Public Roadmap" document
 
 ### Expected Outcomes
 
@@ -130,7 +130,7 @@ You can see a representation of this model in the JSON syntax accepted by the Op
 | group:fabrikam#member | viewer   | folder:product-2021 | Members of the Fabrikam group are viewers of the "Product 2021" folder |
 | anne                  | owner    | folder:product-2021 | Anne is an owner of the "Product 2021" folder                          |
 | beth                  | viewer   | doc:2021-roadmap    | Beth is a viewer of the "2021 Roadmap" document                        |
-| *                     | viewer   | doc:public-roadmap  | Everyone is a viewer of the "Public Roadmap" document                  |
+| user:*                | viewer   | doc:public-roadmap  | Every user is a viewer of the "Public Roadmap" document                |
 
 These are represented in this file: [tuples.json](./tuples.json).
 
