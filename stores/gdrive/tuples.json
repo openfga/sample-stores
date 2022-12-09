@@ -15,7 +15,7 @@
     "object": "doc:public-roadmap"
   },
   {
-    "user": "*",
+    "user": "user:*",
     "relation": "viewer",
     "object": "doc:public-roadmap"
   },

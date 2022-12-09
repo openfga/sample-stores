@@ -81,28 +81,34 @@ There are users, workspaces and channels.
 ### Model
 
 ```python
+model
+  # We are using the 1.1 schema with type restrictions
+  schema 1.1
+
 # There are users
 type user
+
 # There are workspaces
 type workspace
   relations
     # users can have the legacy admin role on workspaces
-    define legacy_admin as self
+    define legacy_admin: [user]
     # users can have the new channels admin role on workspaces (anyone with a legacy admin role also gets all the channels admin role access) 
-    define channels_admin as self or legacy_admin
+    define channels_admin: [user] or legacy_admin
     # users can have the member role on workspaces, admins automatically get all access granted to members
-    define member as self or legacy_admin or channels_admin
+    define member: [user] or legacy_admin or channels_admin
     # users can have the guest role on workspaces
-    define guest as self
+    define guest: [user]
+
 # There are channels
 type channel
   relations
     # channels have a parent workspace
-    define parent_workspace as self
+    define parent_workspace: [workspace]
     # users can be writers on channels
-    define writer as self
+    define writer: [user]
     # users can be viewers on channels, writers inherit any access viewers have
-    define viewer as self or writer
+    define commenter: [user] or writer
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above

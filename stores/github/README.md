@@ -57,39 +57,46 @@ There are users, organizations, teams and repositories
 ### Model
 
 ```python
+model
+  # We are using the 1.1 schema with type restrictions
+  schema 1.1
+
 # There are users
 type user
+
 # there are organizations
 type organization
   relations
     # Organizations can have users who own them
-    define owner as self
+    define owner: [user]
     # Organizations can have members (any owner of the organization is automatically a member)
-    define member as self or owner
-    # Organizations has a set of permissions, such as repository admin, writer and reader
-    define repo_admin as self
-    define repo_reader as self
-    define repo_writer as self
+    define member: [user] or owner
+    # Organizations has a set of base permissions, such as repository admin, writer and reader
+    define repo_admin: [user, organization#member]
+    define repo_reader: [user, organization#member]
+    define repo_writer: [user, organization#member]
+
 # there are teams
 type team
   relations
     # teams have members
-    define member as self
+    define member: [user, team#member]
+
 # there are repositories
 type repo
   relations
     # repositories have organizations who own them
-    define owner as self
+    define owner: [organization]
     # repository have admins, they can be assigned or inherited (anyone who has the repository admin role on the owner organization is an owner on the repo)
-    define admin as self or repo_admin from owner
+    define admin: [user, team#member] or repo_admin from owner
     # maintainers on a repo are anyone who is directly assigned or anyone who is an owner on the repo
-    define maintainer as self or admin
+    define maintainer: [user, team#member] or admin
     # repo writers are users who are directly assigned, anyone who is a maintainer or anyone who has the repository writer role on the owner organization
-    define writer as self or maintainer or repo_writer from owner
+    define writer: [user, team#member] or maintainer or repo_writer from owner
     # triagers on a repo are anyone who is directly assigned or anyone who is a writer on the repo
-    define triager as self or writer
+    define triager: [user, team#member] or writer
     # repo readers are users who are directly assigned, anyone who is a triager or anyone who has the repository reader role on the owner organization
-    define reader as self or triager or repo_reader from owner
+    define reader: [user, team#member] or triager or repo_reader from owner
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
