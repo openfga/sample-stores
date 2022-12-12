@@ -533,7 +533,7 @@
           "category": {
             "directly_related_user_types": [
               {
-                "type": "category"
+                "type": "asset-category"
               }
             ]
           },

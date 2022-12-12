@@ -100,7 +100,7 @@ type asset-category
     define viewer: [role] or commenter or asset_viewer from org
 type asset
   relations
-    define category: [category]
+    define category: [asset-category]
     define comment: [role] or edit or commenter from category
     define edit: [role] or editor from category
     define view: [role] or comment or viewer from category
