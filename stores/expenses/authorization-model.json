@@ -35,7 +35,7 @@
         "relations": {
           "manager": {
             "directly_related_user_types": [{
-                "type": "user"
+                "type": "employee"
             }]
           }
         }
@@ -64,7 +64,7 @@
         "relations": {
           "submitter": {
             "directly_related_user_types": [{
-                "type": "user"
+                "type": "employee"
             }]
           },
           "approver": {

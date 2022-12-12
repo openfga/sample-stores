@@ -58,7 +58,7 @@ model
 type employee
   relations
     # employees have managers; an employee's manager is anyone who is their direct manager
-    define manager: [user]
+    define manager: [employee]
     # employees can be managed by their direct managers as well as whoever can manage their direct managers
     define can_manage as manager or can_manage from manager
 
@@ -66,7 +66,7 @@ type employee
 type report
   relations
     # reports have submitters; a report's submitter is anyone who has submitted the report
-    define submitter: [user]
+    define submitter: [employee]
     # reports have approvers; a report's approver is anyone who can manage the submitter of the report
     # note that an employee cannot be directly be assigned to be an approver
     define approver: can_manage from submitter
