@@ -1,25 +1,6 @@
 {
+  "schema_version": "1.1",
   "type_definitions": [
-    {
-      "type": "report",
-      "relations": {
-        "approver": {
-          "tupleToUserset": {
-            "tupleset": {
-              "object": "",
-              "relation": "submitter"
-            },
-            "computedUserset": {
-              "object": "",
-              "relation": "can_manage"
-            }
-          }
-        },
-        "submitter": {
-          "this": {}
-        }
-      }
-    },
     {
       "type": "employee",
       "relations": {
@@ -47,6 +28,47 @@
                 }
               }
             ]
+          }
+        }
+      },
+      "metadata": {
+        "relations": {
+          "manager": {
+            "directly_related_user_types": [{
+                "type": "employee"
+            }]
+          }
+        }
+      }
+    },
+    {
+      "type": "report",
+      "relations": {
+        "submitter": {
+          "this": {}
+        },
+        "approver": {
+          "tupleToUserset": {
+            "tupleset": {
+              "object": "",
+              "relation": "submitter"
+            },
+            "computedUserset": {
+              "object": "",
+              "relation": "can_manage"
+            }
+          }
+        }
+      },
+      "metadata": {
+        "relations": {
+          "submitter": {
+            "directly_related_user_types": [{
+                "type": "employee"
+            }]
+          },
+          "approver": {
+            "directly_related_user_types": []
           }
         }
       }

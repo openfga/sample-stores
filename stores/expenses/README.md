@@ -50,21 +50,26 @@ For more on modeling, check out:
 
 ### Model
 ```python
+model
+  # We are using the 1.1 schema with type restrictions
+  schema 1.1
+
 # there are employees
 type employee
   relations
     # employees have managers; an employee's manager is anyone who is their direct manager
-    define manager as self
+    define manager: [employee]
     # employees can be managed by their direct managers as well as whoever can manage their direct managers
     define can_manage as manager or can_manage from manager
+
 # there are reports
 type report
   relations
     # reports have submitters; a report's submitter is anyone who has submitted the report
-    define submitter as self
+    define submitter: [employee]
     # reports have approvers; a report's approver is anyone who can manage the submitter of the report
-    # note that an employee cannot be directly be assigned to be an approver (self is not allowed)
-    define approver as can_manage from submitter
+    # note that an employee cannot be directly be assigned to be an approver
+    define approver: can_manage from submitter
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above

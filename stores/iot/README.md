@@ -46,28 +46,34 @@ These users have the following roles and permissions:
 ### Model
 
 ```python
+model
+  # We are using the 1.1 schema with type restrictions
+  schema 1.1
+
 # There are users
 type user
+
+# There are device groups
+type device_group
+  relations
+    # Users can be IT admins on a group of devices
+    define it_admin: [user]
+    # Users can be Security Guards on a group of devices
+    define security_guard: [user]
+
 # There are devices
 type device
   relations
     # Users can be IT admins on a device
-    define it_admin as self
+    define it_admin: [user, device_group#it_admin]
     # Users can be Security Guards on a device
-    define security_guard as self
+    define security_guard: [user, device_group#security_guard]
     # IT Admins can rename devices
-    define can_rename_device as it_admin
+    define can_rename_device: it_admin
     # Both IT Admins & Security Guards can view live video feeds
-    define can_view_live_video as it_admin or security_guard
+    define can_view_live_video: it_admin or security_guard
     # Both IT Admins & Security Guards can view recorded video
-    define can_view_recorded_video as it_admin or security_guard
-# There are groups of devices
-type device_group
-  relations
-    # Users can be IT admins on a group of devices
-    define it_admin as self
-    # Users can be Security Guards on a group of devices
-    define security_guard as self
+    define can_view_recorded_video: it_admin or security_guard
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above

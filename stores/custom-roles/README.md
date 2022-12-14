@@ -68,39 +68,42 @@ There are users, organizations, teams and assets.
 
 ### Model
 ```python
+model
+  # We are using the 1.1 schema with type restrictions
+  schema 1.1
 type user
-type org
-  relations
-    define owner as self
-    define member as self or owner
-    define asset_creator as self or owner
-    define asset_editor as self or owner
-    define role_assigner as self or owner
-    define role_creator as self or owner
-    define team_assigner as self or owner
-    define team_creator as self or owner
-    define asset_viewer as self or asset_commenter
-    define asset_category_creator as self or owner
-    define asset_commenter as self or asset_editor
 type team
   relations
-    define member as self
+    define member: [user]
 type role
   relations
-    define assignee as self
+    define assignee: [user,team,org]
+type org
+  relations
+    define asset_category_creator: [role] or owner
+    define asset_commenter: [role] or asset_editor
+    define asset_creator: [role] or owner
+    define asset_editor: [role] or owner
+    define asset_viewer: [role] or asset_commenter
+    define member: [user] or owner
+    define owner: [user]
+    define role_assigner: [role] or owner
+    define role_creator: [role] or owner
+    define team_assigner: [role] or owner
+    define team_creator: [role] or owner
 type asset-category
   relations
-    define org as self
-    define asset_creator as self or asset_creator from org
-    define editor as self or asset_editor from org
-    define commenter as self or editor or asset_commenter from org
-    define viewer as self or commenter or asset_viewer from org
+    define asset_creator: [role] or asset_creator from org
+    define commenter: [role] or editor or asset_commenter from org
+    define editor: [role] or asset_editor from org
+    define org: [org]
+    define viewer: [role] or commenter or asset_viewer from org
 type asset
   relations
-    define category as self
-    define edit as self or editor from category
-    define comment as self or edit or commenter from category
-    define view as self or comment or viewer from category
+    define category: [asset-category]
+    define comment: [role] or edit or commenter from category
+    define edit: [role] or editor from category
+    define view: [role] or comment or viewer from category
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above

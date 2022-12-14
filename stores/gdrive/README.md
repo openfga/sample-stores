@@ -45,7 +45,7 @@
 - Members of the Fabrikam group are viewers of the "Product 2021" folder
 - Anne is an owner of the "Product 2021" folder
 - Beth is a viewer of the "2021 Roadmap" document
-- Everyone is a viewer of the "Public Roadmap" document
+- Every user is a viewer of the "Public Roadmap" document
 
 ### Expected Outcomes
 
@@ -62,44 +62,55 @@
 ### Model
 
 ```python
+model
+  # We are using the 1.1 schema with type restrictions
+  schema 1.1
+  
 # There are users
 type user
-# there are group
+
+# there are groups
 type group
   relations
-    # a group can have members
-    define member as self
+    # a group can have members who are of type user
+    define member: [user]
+
 # there are folders
 type folder
   relations
-    # folders can have owners
-    define owner as self
+    # folders can have owners (of type user)
+    define owner: [user]
     # folders can have parent folders
-    define parent as self
+    define parent: [folder]
     # folders can have viewers; viewers are:
-    # - those with whom the folder has been directly shared (self)
+    # - those with whom the folder has been directly shared, these can be
+    #   - objects of type user
+    #   - all users (the special `type:*` syntax means all objects of that type)
+    #   - members of groups (`group#member` is specifying that sets of users who are related to groups as members can be related as viewers),
+    #     e.g. group:marketing#member, means members of the marketing group
     # - those who are ownwers of the folder (owner)
     # - those who are viewers of the parent of the folder (viewer from parent)
-    define viewer as self or owner or viewer from parent
-    # folders have the create file permissions; only owners can have this permission and it cannot be directly granted (no self)
-    define can_create_file as owner
+    define viewer: [user, user:*, group#member] or owner or viewer from parent
+    # folders have the create file permissions; only owners can have this permission and it cannot be directly granted
+    define can_create_file: owner
+    
 # there are documents
 type doc
   relations
-    # documents have owners
-    define owner as self
+    # documents have owners (of type user)
+    define owner: [user]
     # documents have parent folders
-    define parent as self
+    define parent: [folder]
     # documents have viewers
-    define viewer as self
-    # documents have the change owner permission; only owners can have this permission and it cannot be directly granted (no self)
-    define can_change_owner as owner
-    # documents have the share permission; only owners or the owners of the parent folder (owner from parent) have this permissions and it cannot be directly granted (no self)
-    define can_share as owner or owner from parent
-    # documents have the write permission; only owners or the owners of the parent folder (owner from parent) have this permissions and it cannot be directly granted (no self)
-    define can_write as owner or owner from parent
-    # documents have the read permission; only direct viewers, direct owners or viewers of the parent folder have this permissions and it cannot be directly granted (no self)
-    define can_read as viewer or owner or viewer from parent
+    define viewer: [user, user:*, group#member]
+    # documents have the change owner permission; only owners can have this permission and it cannot be directly granted
+    define can_change_owner: owner
+    # documents have the share permission; only owners or the owners of the parent folder (owner from parent) have this permissions and it cannot be directly granted
+    define can_share: owner or owner from parent
+    # documents have the write permission; only owners or the owners of the parent folder (owner from parent) have this permissions and it cannot be directly granted
+    define can_write: owner or owner from parent
+    # documents have the read permission; only direct viewers, direct owners or viewers of the parent folder have this permissions and it cannot be directly granted
+    define can_read: viewer or owner or viewer from parent
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
@@ -119,7 +130,7 @@ You can see a representation of this model in the JSON syntax accepted by the Op
 | group:fabrikam#member | viewer   | folder:product-2021 | Members of the Fabrikam group are viewers of the "Product 2021" folder |
 | anne                  | owner    | folder:product-2021 | Anne is an owner of the "Product 2021" folder                          |
 | beth                  | viewer   | doc:2021-roadmap    | Beth is a viewer of the "2021 Roadmap" document                        |
-| *                     | viewer   | doc:public-roadmap  | Everyone is a viewer of the "Public Roadmap" document                  |
+| user:*                | viewer   | doc:public-roadmap  | Every user is a viewer of the "Public Roadmap" document                |
 
 These are represented in this file: [tuples.json](./tuples.json).
 

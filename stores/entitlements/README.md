@@ -69,27 +69,34 @@ There are three plans, offering some features:
 ### Model
 
 ```python
+model
+  # We are using the 1.1 schema with type restrictions
+  schema 1.1
+
 # There are users
 type user
+
 # There are organizations
 type organization
   relations
-    # organizations have members
-    define member as self
-# There are plans
+    # organizations have members (who can only be users)
+    define member: [user]
+
+# there are subscription plans
 type plan
   relations
     # plans have subscriber organizations
-    define subscriber as self
+    define subscriber: [organization]
     # any member of an organization subscribed to a plan becomes a "subscriber member"
-    define subscriber_member as member from subscriber
+    define subscriber_member: member from subscriber
+
 # There are features
 type feature
   relations
     # features have associated plans
-    define associated_plan as self
+    define associated_plan: [plan]
     # users with access to a feature are those who have "subscriber member" status on the associated plan
-    define can_access as subscriber_member from associated_plan
+    define can_access: subscriber_member from associated_plan
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
