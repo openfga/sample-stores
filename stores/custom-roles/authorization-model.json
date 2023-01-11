@@ -40,11 +40,11 @@
               },
               {
                 "type": "team",
-                "object": "member"
+                "relation": "member"
               },
               {
                 "type": "org",
-                "object": "member"
+                "relation": "member"
               }
             ]
           }
@@ -214,7 +214,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -222,7 +222,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -230,7 +230,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -238,7 +238,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -246,7 +246,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -268,7 +268,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -276,7 +276,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -284,7 +284,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -292,7 +292,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           }
@@ -408,7 +408,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -416,7 +416,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -424,7 +424,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -439,7 +439,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           }
@@ -541,7 +541,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -549,7 +549,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           },
@@ -557,7 +557,7 @@
             "directly_related_user_types": [
               {
                 "type": "role",
-                "object": "assignee"
+                "relation": "assignee"
               }
             ]
           }
