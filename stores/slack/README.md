@@ -106,9 +106,9 @@ type channel
     # channels have a parent workspace
     define parent_workspace: [workspace]
     # users can be writers on channels
-    define writer: [user]
+    define writer: [user,workspace#member]
     # users can be viewers on channels, writers inherit any access viewers have
-    define commenter: [user] or writer
+    define commenter: [user,workspace#member] or writer
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above

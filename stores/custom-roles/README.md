@@ -77,33 +77,33 @@ type team
     define member: [user]
 type role
   relations
-    define assignee: [user,team,org]
+    define assignee: [user,team#member,org#member]
 type org
   relations
-    define asset_category_creator: [role] or owner
-    define asset_commenter: [role] or asset_editor
-    define asset_creator: [role] or owner
-    define asset_editor: [role] or owner
-    define asset_viewer: [role] or asset_commenter
+    define asset_category_creator: [role#assignee] or owner
+    define asset_commenter: [role#assignee] or asset_editor
+    define asset_creator: [role#assignee] or owner
+    define asset_editor: [role#assignee] or owner
+    define asset_viewer: [role#assignee] or asset_commenter
     define member: [user] or owner
     define owner: [user]
-    define role_assigner: [role] or owner
-    define role_creator: [role] or owner
-    define team_assigner: [role] or owner
-    define team_creator: [role] or owner
+    define role_assigner: [role#assignee] or owner
+    define role_creator: [role#assignee] or owner
+    define team_assigner: [role#assignee] or owner
+    define team_creator: [role#assignee] or owner
 type asset-category
   relations
-    define asset_creator: [role] or asset_creator from org
-    define commenter: [role] or editor or asset_commenter from org
-    define editor: [role] or asset_editor from org
+    define asset_creator: [role#assignee] or asset_creator from org
+    define commenter: [role#assignee] or editor or asset_commenter from org
+    define editor: [role#assignee] or asset_editor from org
     define org: [org]
-    define viewer: [role] or commenter or asset_viewer from org
+    define viewer: [role#assignee] or commenter or asset_viewer from org
 type asset
   relations
     define category: [asset-category]
-    define comment: [role] or edit or commenter from category
-    define edit: [role] or editor from category
-    define view: [role] or comment or viewer from category
+    define comment: [role#assignee] or edit or commenter from category
+    define edit: [role#assignee] or editor from category
+    define view: [role#assignee] or comment or viewer from category
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above

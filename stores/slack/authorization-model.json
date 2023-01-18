@@ -115,6 +115,10 @@
             "directly_related_user_types": [
               {
                 "type": "user"
+              },
+              {
+                "type": "workspace",
+                "relation": "member"
               }
             ]
           },
@@ -129,6 +133,10 @@
             "directly_related_user_types": [
               {
                 "type": "user"
+              },
+              {
+                "type": "workspace",
+                "relation": "member"
               }
             ]
           }
