@@ -11,8 +11,6 @@
   - [Expected Outcomes](#expected-outcomes)
 - [Modeling in OpenFGA](#modeling-in-openfga)
   - [Model](#model)
-  - [Tuples](#tuples)
-  - [Assertions](#assertions)
 - [Try It Out](#try-it-out)
 
 ## Use-Case
@@ -77,38 +75,12 @@ type device
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
->       To switch between the two syntaxes, you can use the [@openfga/syntax-transformer npm package](https://www.npmjs.com/package/@openfga/syntax-transformer) or the [Auth0 FGA Playground](https://play.fga.dev)
+>       To switch between the two syntaxes, you can use the [FGA CLI](https://github.com/openfga/cli)
 
-You can see a representation of this model in the JSON syntax accepted by the OpenFGA API in [authorization-model.json](./authorization-model.json).
-
-### Tuples
-
-| User                               | Relation       | Object              | Description                                                       |
-|------------------------------------|----------------|---------------------|-------------------------------------------------------------------|
-| beth                               | it_admin       | device:1            | Beth is an IT Admin on Device 1                                   |
-| dianne                             | it_admin       | device:1            | Dianne is an IT Admin on Device 1                                 |
-| anne                               | security_guard | device:1            | Anne is a Security Guard on Device 1                              |
-| charles                            | security_guard | device:1            | Charles is a Security Guard on Device 1                           |
-| device_group:group1#it_admin       | it_admin       | device:2            | IT Admins on Device Group 1 are IT Admins on Device 2             |
-| device_group:group1#security_guard | security_guard | device:2            | Security Guards on Device Group 1 are Security Guards on Device 2 |
-| device_group:group1#it_admin       | it_admin       | device:3            | IT Admins on Device Group 1 are IT Admins on Device 3             |
-| device_group:group1#security_guard | security_guard | device:3            | Security Guards on Device Group 1 are Security Guards on Device 3 |
-| dianne                             | it_admin       | device_group:group1 | Diane is a Security Guard on Device Group 1                       |
-| charles                            | security_guard | device_group:group1 | Charles is a Security Guard on Device Group 1                     |
-
-These are represented in this file: [tuples.json](./tuples.json).
-
-### Assertions
-
-| User    | Relation                | Object   | Allowed? |
-|---------|-------------------------|----------|----------|
-| anne    | it_admin                | device:1 | No       |
-| anne    | can_view_recorded_video | device:1 | Yes      |
-| dianne  | can_rename_device       | device:2 | Yes      |
-| charles | can_rename_device       | device:2 | No       |
-
-These are represented in this file: [assertions.json](./assertions.json).
+See the tuples and tests in the [store.yaml](./store.yaml) file.
 
 ## Try It Out
 
-Use `iot` as the SAMPLE_STORE, and follow the rest of the instructions on [Try it out section in the main README](https://github.com/openfga/sample-stores#try-it-out).
+1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
+
+2. In the `iot` directory, run `fga model test --tests store.yaml`

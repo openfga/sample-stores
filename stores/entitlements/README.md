@@ -11,8 +11,6 @@
   - [Expected Outcomes](#expected-outcomes)
 - [Modeling in OpenFGA](#modeling-in-openfga)
   - [Model](#model)
-  - [Tuples](#tuples)
-  - [Assertions](#assertions)
 - [Try It Out](#try-it-out)
 
 ## Use-Case
@@ -100,39 +98,12 @@ type feature
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
->       To switch between the two syntaxes, you can use the [@openfga/syntax-transformer npm package](https://www.npmjs.com/package/@openfga/syntax-transformer) or the [Auth0 FGA Playground](https://play.fga.dev)
+>       To switch between the two syntaxes, you can use the [FGA CLI](https://github.com/openfga/cli)
 
-### Tuples
-
-| User                | Relation        | Object              | Description                                                   |
-|---------------------|-----------------|---------------------|---------------------------------------------------------------|
-| plan:enterprise     | associated_plan | feature:draft_prs   | The Enterprise plan grants access to the Draft PRs feature    |
-| plan:team           | associated_plan | feature:draft_prs   | The Team plan grants access to the Draft PRs feature          |
-| plan:enterprise     | associated_plan | feature:issues      | The Enterprise plan grants access to the Issues feature       |
-| plan:free           | associated_plan | feature:issues      | The Free plan grants access to the Issues feature             |
-| plan:team           | associated_plan | feature:issues      | The Team plan grants access to the Issues feature             |
-| plan:enterprise     | associated_plan | feature:sso         | The Enterprise plan grants access to the SSO feature          |
-| user:anne           | member          | organization:alpha  | Anne is a member of the Alpha organization                    |
-| user:beth           | member          | organization:brayer | Beth is a member of the Brayer organization                   |
-| user:charles        | member          | organization:cups   | Charles is a member of the Cups organization                  |
-| organization:cups   | subscriber      | plan:enterprise     | The Cups organization has subscribed to the Enterprise plan   |
-| organization:alpha  | subscriber      | plan:free           | The Alpha organization has subscribed to the Enterprise plan  |
-| organization:brayer | subscriber      | plan:team           | The Brayer organization has subscribed to the Enterprise plan |
-
-### Assertions
-
-| User         | Object            | Relation   | Allowed? |
-|--------------|-------------------|------------|----------|
-| user:anne    | feature:issues    | can_access | Yes      |
-| user:anne    | feature:draft_prs | can_access | No       |
-| user:anne    | feature:sso       | can_access | No       |
-| user:beth    | feature:issues    | can_access | Yes      |
-| user:beth    | feature:draft_prs | can_access | Yes      |
-| user:beth    | feature:sso       | can_access | No       |
-| user:charles | feature:issues    | can_access | Yes      |
-| user:charles | feature:draft_prs | can_access | Yes      |
-| user:charles | feature:sso       | can_access | Yes      |
+See the tuples and tests in the [store.yaml](./store.yaml) file.
 
 ## Try It Out
 
-Use `entitlements` as the SAMPLE_STORE, and follow the rest of the instructions on [Try it out section in the main README](https://github.com/openfga/sample-stores#try-it-out).
+1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
+
+2. In the `entitlements` directory, run `fga model test --tests store.yaml`

@@ -11,8 +11,6 @@
   - [Expected Outcomes](#expected-outcomes)
 - [Modeling in OpenFGA](#modeling-in-openfga)
   - [Model](#model)
-  - [Tuples](#tuples)
-  - [Assertions](#assertions)
 - [Try It Out](#try-it-out)
 
 ## Use-Case
@@ -107,58 +105,12 @@ type asset
 ```
 
 > Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
->       To switch between the two syntaxes, you can use the [@openfga/syntax-transformer npm package](https://www.npmjs.com/package/@openfga/syntax-transformer) or the [Auth0 FGA Playground](https://play.fga.dev)
+>       To switch between the two syntaxes, you can use the [FGA CLI](https://github.com/openfga/cli)
 
-You can see a representation of this model in the JSON syntax accepted by the OpenFGA API in [authorization-model.json](./authorization-model.json).
-
-### Tuples
-
-| User                              | Relation      | Object                         | Description                                                                                           |
-|-----------------------------------|---------------|--------------------------------|-------------------------------------------------------------------------------------------------------|
-| user:carlos                       | owner         | org:contoso                    | Carlos is an owner of the Contoso organization                                                        |
-| user:anne                         | member        | org:contoso                    | Anne is a member of the Contoso organization                                                          |
-| user:beth                         | member        | org:contoso                    | Beth is a member of the Contoso organization                                                          |
-| user:carlos                       | member        | org:contoso                    | Carlos is a member of the Contoso organization                                                        |
-| user:daniel                       | member        | org:contoso                    | Daniel is a member of the Contoso organization                                                        |
-| user:edith                        | member        | org:branding-contractor-1      | Edith is a member of the Branding Contractor 1 organization                                           |
-| user:anne                         | member        | team:design                    | Anne is a member of the Design team                                                                   |
-| user:beth                         | member        | team:marketing                 | Beth is a member of the Marketing team                                                                |
-| user:daniel                       | member        | team:qa                        | Daniel is a member of the QA team                                                                     |
-| org:contoso                       | org           | asset-category:website-content | The "Website Content" asset category is in the Contoso organization                                   |
-| org:contoso                       | org           | asset-category:website-media   | The "Website Media" asset category is in the Contoso organization                                     |
-| org:branding-contractor-1#member  | assignee      | role:media-asset-creator       | Members of the Branding Contractor 1 organization are assigned the "Media Asset Creator" role         |
-| role:content-qa#assignee          | asset_viewer  | org:contoso                    | Assignees of the "Content QA" role are asset viewers on the Contoso organization                      |
-| role:content-manager#assignee     | asset_creator | asset-category:website-content | Assignees of the "Content Manager" role are can create assets in the "Website Content" asset category |
-| role:content-manager#assignee     | editor        | asset-category:website-content | Assignees of the "Content Manager" role are editors on the "Website Content" asset category           |
-| role:media-asset-manager#assignee | viewer        | asset-category:website-content | Assignees of the "Media Asset Manager" role are viewers on the "Website Content" asset category       |
-| role:media-asset-creator#assignee | asset_creator | asset-category:website-media   | Assignees of the "Content QA" role can create assets on the "Website Media" asset category            |
-| role:media-asset-manager#assignee | asset_creator | asset-category:website-media   | Assignees of the "Media Asset Manager" role can create assets on the "Website Media" asset category   |
-| role:media-asset-manager#assignee | editor        | asset-category:website-media   | Assignees of the "Media Asset Manager" role are editors on the "Website Media" asset category         |
-| role:content-manager#assignee     | viewer        | asset-category:website-media   | Assignees of the "Content Manager" role are viewers on the "Website Media" asset category             |
-| asset-category:website-content    | category      | asset:homepage                 | "Website Content" is the asset category of the "Homepage" asset                                       |
-| asset-category:website-media      | category      | asset:website-hero-image       | "Website Media" is the asset category of the "Website Hero Image" asset                               |
-| team:marketing#member             | assignee      | role:content-manager           | Members of the Marketing team are assigned the "Content Manager" role                                 |
-| team:qa#member                    | assignee      | role:content-qa                | Members of the QA team are assigned the "Content QA" role                                             |
-| team:design#member                | assignee      | role:media-asset-manager       | Members of the Design team are assigned the "Media Asset Manager" role                                |
-
-These are represented in this file: [tuples.json](./tuples.json).
-
-### Assertions
-
-| User        | Relation      | Object                       | Allowed? |
-|-------------|---------------|------------------------------|----------|
-| user:carlos | role_creator  | org:contoso                  | Yes      |
-| user:anne   | view          | asset:website-hero-image     | Yes      |
-| user:beth   | edit          | asset:website-hero-image     | No       |
-| user:beth   | edit          | asset:homepage               | Yes      |
-| user:carlos | edit          | asset:homepage               | Yes      |
-| user:daniel | edit          | asset:homepage               | No       |
-| user:daniel | view          | asset:homepage               | Yes      |
-| user:edith  | view          | asset:homepage               | No       |
-| user:edith  | asset_creator | asset-category:website-media | Yes      |
-
-These are represented in this file: [assertions.json](./assertions.json).
+See the tuples and tests in the [store.yaml](./store.yaml) file.
 
 ## Try It Out
 
-Use `custom-roles` as the SAMPLE_STORE, and follow the rest of the instructions on [Try it out section in the main README](https://github.com/openfga/sample-stores#try-it-out).
+1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
+
+2. In the `custom-roles` directory, run `fga model test --tests store.yaml`

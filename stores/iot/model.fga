@@ -1,0 +1,18 @@
+model
+  schema 1.1
+
+type user
+
+type device_group
+  relations
+    define it_admin: [user]
+    define security_guard: [user]
+
+type device
+  relations
+    define can_rename_device: it_admin
+    define can_view_live_video: it_admin or security_guard
+    define can_view_recorded_video: it_admin or security_guard
+    define it_admin: [user, device_group#it_admin]
+    define security_guard: [user, device_group#security_guard]
+
