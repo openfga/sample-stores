@@ -1,0 +1,41 @@
+name: Run Tests
+
+on:
+  merge_group:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        store-name: [github, gdrive, expenses, iot, slack, entitlements, custom-roles]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Get the latest FGA CLI version
+        run: curl -sL https://api.github.com/repos/vmware/govmomi/releases/latest | jq -r ".tag_name"
+
+      - name: Install the FGA CLI
+        run: |
+          # Get the latest FGA CLI version
+          FGA_VERSION=$(curl -sL https://api.github.com/repos/openfga/cli/releases/latest | jq -r ".tag_name")
+          curl -sLS https://github.com/openfga/cli/releases/download/${FGA_VERSION}/fga_${FGA_VERSION#v}_linux_amd64.deb -o fga-cli.deb
+          sudo dpkg -i ./fga-cli.deb
+
+      - name: Run the tests with the FGA CLI
+        run: fga model test --tests stores/${{matrix.store-name}}/store.yaml
