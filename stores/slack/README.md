@@ -11,8 +11,6 @@
   - [Expected Outcomes](#expected-outcomes)
 - [Modeling in OpenFGA](#modeling-in-openfga)
   - [Model](#model)
-  - [Tuples](#tuples)
-  - [Assertions](#assertions)
 - [Try It Out](#try-it-out)
 
 ## Use-Case
@@ -111,44 +109,10 @@ type channel
     define commenter: [user,workspace#member] or writer
 ```
 
-> Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
->       To switch between the two syntaxes, you can use the [@openfga/syntax-transformer npm package](https://www.npmjs.com/package/@openfga/syntax-transformer) or the [Auth0 FGA Playground](https://play.fga.dev)
-
-You can see a representation of this model in the JSON syntax accepted by the OpenFGA API in [authorization-model.json](./authorization-model.json).
-
-### Tuples
-
-| User                        | Relation         | Object                          | Description                                                                              |
-|-----------------------------|------------------|---------------------------------|------------------------------------------------------------------------------------------|
-| workspace:sandcastle        | parent_workspace | channel:general                 | The Sandcastle workspace is the parent workspace of the #general channel                 |
-| workspace:sandcastle        | parent_workspace | channel:marketing_internal      | The Sandcastle workspace is the parent workspace of the #marketing_internal channel      |
-| workspace:sandcastle        | parent_workspace | channel:proj_marketing_campaign | The Sandcastle workspace is the parent workspace of the #proj_marketing_campaign channel |
-| workspace:sandcastle#member | writer           | channel:proj_marketing_campaign | Members of the Sandcastle workspace are writers in the #proj_marketing_campaign channel  |
-| amy                         | legacy_admin     | workspace:sandcastle            | Amy is a legacy admin on the Sandcastle workspace                                        |
-| bob                         | channels_admin   | workspace:sandcastle            | Bob is a channels admin on the Sandcastle workspace                                      |
-| catherine                   | member           | workspace:sandcastle            | Catherine is a member in the Sandcastle workspace                                        |
-| david                       | guest            | workspace:sandcastle            | David is a guest in the Sandcastle workspace                                             |
-| emily                       | member           | workspace:sandcastle            | Emily is a member in the Sandcastle workspace                                            |
-| bob                         | writer           | channel:marketing_internal      | Bob is a writer in the #marketing_internal channel                                       |
-| david                       | writer           | channel:proj_marketing_campaign | David is a writer in the #proj_marketing_campaign channel                                |
-| emily                       | writer           | channel:marketing_internal      | Emily is a writer in the #marketing_internal channel                                     |
-| emily                       | writer           | channel:general                 | Emily is a writer in the #general channel                                                |
-
-These are represented in this file: [tuples.json](./tuples.json).
-
-### Assertions
-
-| User  | Object                          | Relation       | Allowed? |
-|-------|---------------------------------|----------------|----------|
-| amy   | workspace:sandcastle            | channels_admin | Yes      |
-| amy   | workspace:sandcastle            | channels_admin | No       |
-| emily | channel:marketing_internal      | writer         | Yes      |
-| david | channel:marketing_internal      | writer         | No       |
-| david | channel:proj_marketing_campaign | writer         | Yes      |
-| bob   | channel:general                 | writer         | No       |
-
-These are represented in this file: [assertions.json](./assertions.json).
+See the tuples and tests in the [store.yaml](./store.yaml) file.
 
 ## Try It Out
 
-Use `slack` as the SAMPLE_STORE, and follow the rest of the instructions on [Try it out section in the main README](https://github.com/openfga/sample-stores#try-it-out).
+1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
+
+2. In the `slack` directory, run `fga model test --tests store.yaml`

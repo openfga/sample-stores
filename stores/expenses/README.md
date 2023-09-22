@@ -11,8 +11,6 @@
   - [Expected Outcomes](#expected-outcomes)
 - [Modeling in OpenFGA](#modeling-in-openfga)
   - [Model](#model)
-  - [Tuples](#tuples)
-  - [Assertions](#assertions)
 - [Try It Out](#try-it-out)
 
 ## Use-Case
@@ -72,33 +70,10 @@ type report
     define approver: can_manage from submitter
 ```
 
-> Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
->       To switch between the two syntaxes, you can use the [@openfga/syntax-transformer npm package](https://www.npmjs.com/package/@openfga/syntax-transformer) or the [Auth0 FGA Playground](https://play.fga.dev)
-
-You can see a representation of this model in the JSON syntax accepted by the OpenFGA API in [authorization-model.json](./authorization-model.json).
-
-### Tuples
-
-| User            | Relation  | Object               | Description                                    |
-|-----------------|-----------|----------------------|------------------------------------------------|
-| employee:matt   | manager   | employee:daniel      | Matt is Daniel's manager                       |
-| employee:sam    | manager   | employee:matt        | Sam is Matt's manager                          |
-| employee:emily  | manager   | employee:sam         | Emily is Sam's manager                         |
-| employee:daniel | submitter | report:daniel-chair1 | Daniel has submitted the "Daniel Chair" report |
-| employee:sam    | submitter | report:sam-chair1    | Sam has submitted the "Sam Chair" report       |
-
-These are represented in this file: [tuples.json](./tuples.json).
-
-### Assertions
-
-| User            | Relation   | Object               | Allowed? |
-|-----------------|------------|----------------------|----------|
-| employee:matt   | can_manage | employee:daniel      | Yes      |
-| employee:emily  | approver   | report:daniel-chair1 | Yes      |
-| employee:daniel | approver   | report:daniel-chair1 | No       |
-
-These are represented in this file: [assertions.json](./assertions.json).
+See the tuples and tests in the [store.yaml](./store.yaml) file.
 
 ## Try It Out
 
-Use `expenses` as the SAMPLE_STORE, and follow the rest of the instructions on [Try it out section in the main README](https://github.com/openfga/sample-stores#try-it-out).
+1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
+
+2. In the `entitlements` directory, run `fga model test --tests store.yaml`

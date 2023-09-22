@@ -1,0 +1,18 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user]
+
+type plan
+  relations
+    define subscriber: [organization]
+    define subscriber_member: member from subscriber
+
+type feature
+  relations
+    define associated_plan: [plan]
+    define can_access: subscriber_member from associated_plan

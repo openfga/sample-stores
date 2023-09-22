@@ -1,0 +1,84 @@
+# Documentation: https://openfga.dev/docs/modeling/advanced/slack
+# FGA Playground: https://play.fga.dev/sandbox/?store=slack
+name: Slack
+model_file: ./model.fga
+tuples:
+  # The Sandcastle workspace is the parent workspace of the #general channel
+  - user: workspace:sandcastle
+    relation: parent_workspace
+    object: channel:general
+  # The Sandcastle workspace is the parent workspace of the #marketing_internal channel
+  - user: workspace:sandcastle
+    relation: parent_workspace
+    object: channel:marketing_internal
+  # The Sandcastle workspace is the parent workspace of the #proj_marketing_campaign channel
+  - user: workspace:sandcastle
+    relation: parent_workspace
+    object: channel:proj_marketing_campaign
+  # Members of the Sandcastle workspace are writers in the #proj_marketing_campaign channel
+  - user: workspace:sandcastle#member
+    relation: writer
+    object: channel:proj_marketing_campaign
+  # Amy is a legacy admin on the Sandcastle workspace
+  - user: user:amy
+    relation: legacy_admin
+    object: workspace:sandcastle
+  # Bob is a channels admin on the Sandcastle workspace
+  - user: user:bob
+    relation: channels_admin
+    object: workspace:sandcastle
+  # Catherine is a member in the Sandcastle workspace
+  - user: user:catherine
+    relation: member
+    object: workspace:sandcastle
+  # David is a guest in the Sandcastle workspace
+  - user: user:david
+    relation: guest
+    object: workspace:sandcastle
+  # Emily is a member in the Sandcastle workspace
+  - user: user:emily
+    relation: member
+    object: workspace:sandcastle
+  # Bob is a writer in the #marketing_internal channel
+  - user: user:bob
+    relation: writer
+    object: channel:marketing_internal
+  # David is a writer in the #proj_marketing_campaign channel
+  - user: user:david
+    relation: writer
+    object: channel:proj_marketing_campaign
+  # Emily is a writer in the #marketing_internal channel
+  - user: user:emily
+    relation: writer
+    object: channel:marketing_internal
+  # Emily is a writer in the #general channel
+  - user: user:emily
+    relation: writer
+    object: channel:general
+tests:
+  - name: Test
+    check:
+      - user: user:amy
+        object: workspace:sandcastle
+        assertions:
+          channels_admin: true
+      - user: user:david
+        object: workspace:sandcastle
+        assertions:
+          channels_admin: false
+      - user: user:david
+        object: channel:marketing_internal
+        assertions:
+          writer: false
+      - user: user:emily
+        object: channel:marketing_internal
+        assertions:
+          writer: true
+      - user: user:david
+        object: channel:proj_marketing_campaign
+        assertions:
+          writer: true
+      - user: user:bob
+        object: channel:general
+        assertions:
+          writer: false

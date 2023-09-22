@@ -1,0 +1,13 @@
+model
+  schema 1.1
+
+type employee
+  relations
+    define can_manage: manager or can_manage from manager
+    define manager: [employee]
+
+type report
+  relations
+    define approver: can_manage from submitter
+    define submitter: [employee]
+

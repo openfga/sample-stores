@@ -1,0 +1,61 @@
+# Documentation: https://openfga.dev/docs/modeling/advanced/iot
+# FGA Playground: https://play.fga.dev/sandbox/?store=iot
+name: IoT
+model_file: ./model.fga
+tuples:
+  # Beth is an IT Admin on Device 1
+  - user: user:beth
+    relation: it_admin
+    object: device:1
+  # Dianne is an IT Admin on Device 1
+  - user: user:diane
+    relation: it_admin
+    object: device:1
+  # Anne is a Security Guard on Device 1
+  - user: user:anne
+    relation: security_guard
+    object: device:1
+  # Charles is a Security Guard on Device 1
+  - user: user:charles
+    relation: security_guard
+    object: device:1
+  # IT Admins on Device Group 1 are IT Admins on Device 2
+  - user: device_group:group1#it_admin
+    relation: it_admin
+    object: device:2
+  # Security Guards on Device Group 1 are Security Guards on Device 2
+  - user: device_group:group1#security_guard
+    relation: security_guard
+    object: device:2
+  # IT Admins on Device Group 1 are IT Admins on Device 3
+  - user: device_group:group1#it_admin
+    relation: it_admin
+    object: device:3
+  # Security Guards on Device Group 1 are Security Guards on Device 3
+  - user: device_group:group1#security_guard
+    relation: security_guard
+    object: device:3
+  # Diane is a Security Guard on Device Group 1
+  - user: user:diane
+    relation: it_admin
+    object: device_group:group1
+  # Charles is a Security Guard on Device Group 1
+  - user: user:charles
+    relation: security_guard
+    object: device_group:group1
+tests:
+  - name: Test
+    check:
+      - user: user:anne
+        object: device:1
+        assertions:
+          it_admin: false
+          can_view_recorded_video: true
+      - user: user:charles
+        object: device:2
+        assertions:
+          can_rename_device: false
+      - user: user:diane
+        object: device:2
+        assertions:
+          can_rename_device: true

@@ -1,0 +1,39 @@
+# FGA Playground: https://play.fga.dev/sandbox/?store=expenses
+name: Expenses
+model_file: ./model.fga
+tuples:
+  # Matt is Daniel's manager
+  - user: employee:matt
+    relation: manager
+    object: employee:daniel
+  # Sam is Matt's manager
+  - user: employee:sam
+    relation: manager
+    object: employee:matt
+  # Emily is Sam's manager
+  - user: employee:emily
+    relation: manager
+    object: employee:sam
+  # Daniel has submitted the "Daniel Chair" report
+  - user: employee:daniel
+    relation: submitter
+    object: report:daniel-chair1
+  # Sam has submitted the "Sam Chair" report
+  - user: employee:sam
+    relation: submitter
+    object: report:sam-chair1
+tests:
+  - name: Test
+    check:
+      - user: employee:matt
+        object: employee:daniel
+        assertions:
+          can_manage: true
+      - user: employee:emily
+        object: report:daniel-chair1
+        assertions:
+          approver: true
+      - user: employee:daniel
+        object: report:daniel-chair1
+        assertions:
+          approver: false

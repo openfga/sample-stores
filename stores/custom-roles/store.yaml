@@ -1,0 +1,141 @@
+# Documentation: https://openfga.dev/docs/modeling/custom-roles
+# FGA Playground: https://play.fga.dev/sandbox/?store=custom-roles
+name: Custom Roles
+model_file: ./model.fga
+tuples:
+  # Assignees of the "Content Manager" role are can create assets in the "Website Content" asset category
+  - user: role:content-manager#assignee
+    relation: asset_creator
+    object: asset-category:website-content
+  # Assignees of the "Content Manager" role are editors on the "Website Content" asset category
+  - user: role:content-manager#assignee
+    relation: editor
+    object: asset-category:website-content
+  # The "Website Content" asset category is in the Contoso organization
+  - user: org:contoso
+    relation: org
+    object: asset-category:website-content
+  # Assignees of the "Media Asset Manager" role are viewers on the "Website Content" asset category
+  - user: role:media-asset-manager#assignee
+    relation: viewer
+    object: asset-category:website-content
+  # Assignees of the "Content QA" role can create assets on the "Website Media" asset category
+  - user: role:media-asset-creator#assignee
+    relation: asset_creator
+    object: asset-category:website-media
+  # Assignees of the "Media Asset Manager" role can create assets on the "Website Media" asset category
+  - user: role:media-asset-manager#assignee
+    relation: asset_creator
+    object: asset-category:website-media
+  # Assignees of the "Media Asset Manager" role are editors on the "Website Media" asset category
+  - user: role:media-asset-manager#assignee
+    relation: editor
+    object: asset-category:website-media
+  # The "Website Media" asset category is in the Contoso organization
+  - user: org:contoso
+    relation: org
+    object: asset-category:website-media
+  # Assignees of the "Content Manager" role are viewers on the "Website Media" asset category
+  - user: role:content-manager#assignee
+    relation: viewer
+    object: asset-category:website-media
+  # "Website Content" is the asset category of the "Homepage" asset
+  - user: asset-category:website-content
+    relation: category
+    object: asset:homepage
+  # "Website Media" is the asset category of the "Website Hero Image" asset
+  - user: asset-category:website-media
+    relation: category
+    object: asset:website-hero-image
+  # Edith is a member of the Branding Contractor 1 organization
+  - user: user:edith
+    relation: member
+    object: org:branding-contractor-1
+  # Assignees of the "Content QA" role are asset viewers on the Contoso organization
+  - user: role:content-qa#assignee
+    relation: asset_viewer
+    object: org:contoso
+  # Anne is a member of the Contoso organization
+  - user: user:anne
+    relation: member
+    object: org:contoso
+  # Beth is a member of the Contoso organization
+  - user: user:beth
+    relation: member
+    object: org:contoso
+  # Carlos is a member of the Contoso organization
+  - user: user:carlos
+    relation: member
+    object: org:contoso
+  # Daniel is a member of the Contoso organization
+  - user: user:daniel
+    relation: member
+    object: org:contoso
+  # Carlos is an owner of the Contoso organization
+  - user: user:carlos
+    relation: owner
+    object: org:contoso
+  # Members of the Marketing team are assigned the "Content Manager" role
+  - user: team:marketing#member
+    relation: assignee
+    object: role:content-manager
+  # Members of the QA team are assigned the "Content QA" role
+  - user: team:qa#member
+    relation: assignee
+    object: role:content-qa
+  # Members of the Branding Contractor 1 organization are assigned the "Media Asset Creator" role
+  - user: org:branding-contractor-1#member
+    relation: assignee
+    object: role:media-asset-creator
+  # Members of the Design team are assigned the "Media Asset Manager" role
+  - user: team:design#member
+    relation: assignee
+    object: role:media-asset-manager
+  # Anne is a member of the Design team
+  - user: user:anne
+    relation: member
+    object: team:design
+  # Beth is a member of the Marketing team
+  - user: user:beth
+    relation: member
+    object: team:marketing
+  # Daniel is a member of the QA team
+  - user: user:daniel
+    relation: member
+    object: team:qa
+tests:
+  - name: Test
+    check:
+      - user: user:carlos
+        object: org:contoso
+        assertions:
+          role_creator: true
+      - user: user:anne
+        object: asset:website-hero-image
+        assertions:
+          view: true
+      - user: user:beth
+        object: asset:website-hero-image
+        assertions:
+          edit: false
+      - user: user:beth
+        object: asset:homepage
+        assertions:
+          edit: true
+      - user: user:carlos
+        object: asset:homepage
+        assertions:
+          edit: true
+      - user: user:daniel
+        object: asset:homepage
+        assertions:
+          view: true
+          edit: false
+      - user: user:edith
+        object: asset:homepage
+        assertions:
+          view: false
+      - user: user:edith
+        object: asset-category:website-media
+        assertions:
+          asset_creator: true

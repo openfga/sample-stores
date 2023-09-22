@@ -11,8 +11,6 @@
   - [Expected Outcomes](#expected-outcomes)
 - [Modeling in OpenFGA](#modeling-in-openfga)
   - [Model](#model)
-  - [Tuples](#tuples)
-  - [Assertions](#assertions)
 - [Try It Out](#try-it-out)
 
 ## Use-Case
@@ -99,40 +97,10 @@ type repo
     define reader: [user, team#member] or triager or repo_reader from owner
 ```
 
-> Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
->       To switch between the two syntaxes, you can use the [@openfga/syntax-transformer npm package](https://www.npmjs.com/package/@openfga/syntax-transformer) or the [Auth0 FGA Playground](https://play.fga.dev)
-
-You can see a representation of this model in the JSON syntax accepted by the OpenFGA API in [authorization-model.json](./authorization-model.json).
-
-### Tuples
-
-| User                        | Relation   | Object               | Description                                                                                     |
-|-----------------------------|------------|----------------------|-------------------------------------------------------------------------------------------------|
-| organization:openfga        | owner      | repo:openfga/openfga | The OpenFGA organization is the owner of the openfga/openfga repository                         |
-| organization:openfga#member | repo_admin | organization:openfga | Members of the OpenFGA organization have a repository admin base permission on the organization |
-| user:erik                   | member     | organization:openfga | Erik is a member of the OpenFGA organization                                                    |
-| team:openfga/core#member    | admin      | repo:openfga/openfga | The openfga/core team members are admins on the openfga/openfga repository                      |
-| user:anne                   | reader     | repo:openfga/openfga | Anne is a reader on the openfga/openfga repository                                              |
-| user:beth                   | writer     | repo:openfga/openfga | Beth is a writer on the openfga/openfga repository                                              |
-| user:charles                | member     | team:openfga/core    | Charles is a member of the openfga/core team                                                    |
-| team:openfga/backend#member | member     | team:openfga/core    | Members of the openfga/backend team are members of the openfga/core team                        |
-| user:diane                  | member     | team:openfga/backend | Diane is a member of the openfga/backend team                                                   |
-
-These are represented in this file: [tuples.json](./tuples.json).
-
-### Assertions
-
-| User         | Relation | Object               | Allowed? |
-|--------------|----------|----------------------|----------|
-| user:anne    | reader   | repo:openfga/openfga | Yes      |
-| user:anne    | triager  | repo:openfga/openfga | No       |
-| user:diane   | admin    | repo:openfga/openfga | Yes      |
-| user:erik    | reader   | repo:openfga/openfga | Yes      |
-| user:charles | writer   | repo:openfga/openfga | Yes      |
-| user:beth    | admin    | repo:openfga/openfga | No       |
-
-These are represented in this file: [assertions.json](./assertions.json).
+See the tuples and tests in the [store.yaml](./store.yaml) file.
 
 ## Try It Out
 
-Use `github` as the SAMPLE_STORE, and follow the rest of the instructions on [Try it out section in the main README](https://github.com/openfga/sample-stores#try-it-out).
+1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
+
+2. In the `github` directory, run `fga model test --tests store.yaml`

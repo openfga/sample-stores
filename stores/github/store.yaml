@@ -1,0 +1,65 @@
+# Documentation: https://openfga.dev/docs/modeling/advanced/github
+# FGA Playground: https://play.fga.dev/sandbox/?store=github
+name: GitHub
+model_file: ./model.fga
+tuples:
+  # The OpenFGA organization is the owner of the openfga/openfga repository
+  - user: organization:openfga
+    relation: owner
+    object: repo:openfga/openfga
+  # Members of the OpenFGA organization have a repository admin base permission on the organization
+  - user: organization:openfga#member
+    relation: repo_admin
+    object: organization:openfga
+  # Erik is a member of the OpenFGA organization
+  - user: user:erik
+    relation: member
+    object: organization:openfga
+  # The openfga/core team members are admins on the openfga/openfga repository
+  - user: team:openfga/core#member
+    relation: admin
+    object: repo:openfga/openfga
+  # Anne is a reader on the openfga/openfga repository
+  - user: user:anne
+    relation: reader
+    object: repo:openfga/openfga
+  # Beth is a writer on the openfga/openfga repository
+  - user: user:beth
+    relation: writer
+    object: repo:openfga/openfga
+  # Charles is a member of the openfga/core team
+  - user: user:charles
+    relation: member
+    object: team:openfga/core
+  # Members of the openfga/backend team are members of the openfga/core team
+  - user: team:openfga/backend#member
+    relation: member
+    object: team:openfga/core
+  # Diane is a member of the openfga/backend team
+  - user: user:diane
+    relation: member
+    object: team:openfga/backend
+tests:
+  - name: Test
+    check:
+      - user: user:anne
+        object: repo:openfga/openfga
+        assertions:
+          reader: true
+          triager: false
+      - user: user:beth
+        object: repo:openfga/openfga
+        assertions:
+          admin: false
+      - user: user:charles
+        object: repo:openfga/openfga
+        assertions:
+          writer: true
+      - user: user:diane
+        object: repo:openfga/openfga
+        assertions:
+          admin: true
+      - user: user:erik
+        object: repo:openfga/openfga
+        assertions:
+          reader: true
