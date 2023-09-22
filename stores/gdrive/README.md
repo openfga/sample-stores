@@ -111,9 +111,6 @@ type doc
     define can_read: viewer or owner or viewer from parent
 ```
 
-> Note: The OpenFGA API accepts a JSON syntax for the authorization model that is different from the DSL shown above
->       To switch between the two syntaxes, you can use the [FGA CLI](https://github.com/openfga/cli)
-
 See the tuples and tests in the [store.yaml](./store.yaml) file.
 
 ## Try It Out
