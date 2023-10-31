@@ -1,0 +1,54 @@
+model: |
+  model
+    schema 1.1
+
+  type user
+
+  type document
+    relations
+      define viewer: [user with in_company_network]
+      
+  condition in_company_network(user_ip: ipaddress, cidr: string) {
+    user_ip.in_cidr(cidr)
+  }
+
+tuples:
+    - user: "user:anne"
+      relation: "viewer"
+      object: "document:1"
+      condition: 
+        name: in_company_network
+        context: 
+          cidr: "192.168.0.0/24"
+
+    - user: "user:anne"
+      relation: "viewer"
+      object: "document:2"
+      condition: 
+        name: in_company_network
+        context: 
+          cidr: "192.168.1.0/24"
+
+tests:
+  - check:
+    - user: "user:anne"
+      object: "document:1"
+      context: 
+        user_ip: "192.168.0.1"
+      assertions:
+        viewer: true
+    - user: "user:anne"
+      object: "document:2"
+      context: 
+        user_ip: "192.168.0.1"
+      assertions:
+        viewer: false
+    list_objects:
+      - user: "user:anne"
+        type : "document"
+        context: 
+          user_ip: "192.168.0.1"
+        assertions:
+          viewer:
+            - document:1
+

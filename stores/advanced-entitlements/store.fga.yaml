@@ -1,0 +1,260 @@
+# inspired in https://www.notion.so/pricing
+
+model: |
+  model
+    schema 1.1
+
+  type user
+  type organization
+    relations
+      define member: [user]
+
+  type plan
+    relations
+      define subscriber: [organization#member]
+
+  type feature
+    relations
+      define has_feature: [plan#subscriber, plan#subscriber with is_below_collaborator_limit, plan#subscriber with is_below_row_sync_limit, plan#subscriber with is_below_page_history_days_limit]
+
+  condition is_below_collaborator_limit(collaborator_count: int, collaborator_limit: int){
+    collaborator_count <= collaborator_limit
+  }
+
+  condition is_below_row_sync_limit(row_sync_count: int, row_sync_limit: int){
+    row_sync_count <= row_sync_limit
+  }
+
+  condition is_below_page_history_days_limit(page_history_days_count: int, page_history_days_limit: int){
+    page_history_days_count <= page_history_days_limit
+  }
+
+tuples:
+    - user: user:anne
+      relation: member
+      object: organization:acme
+    - user: user:beth
+      relation: member
+      object: organization:okta
+    - user: organization:acme#member
+      relation: subscriber
+      object: plan:free
+    - user: organization:okta#member
+      relation: subscriber
+      object: plan:pro
+
+    # Free Package definition
+    #   priority_support: false
+    #   page_analytics: basic
+    #   page_history_days: 7
+    #   guest_collaborators: 10
+    #   row_limit_per_synced_db: 100
+
+    - user: plan:free#subscriber
+      relation: has_feature
+      object: feature:can-view-page-history
+      condition: 
+        name: is_below_page_history_days_limit
+        context: 
+          page_history_days_limit: 7
+
+    - user: plan:free#subscriber
+      relation: has_feature
+      object: feature:can-invite-collaborator
+      condition: 
+        name: is_below_collaborator_limit
+        context: 
+          collaborator_limit: 10
+
+    - user: plan:free#subscriber
+      relation: has_feature
+      object: feature:can-sync-rows
+      condition: 
+        name: is_below_row_sync_limit
+        context: 
+          row_sync_limit: 100
+
+    - user: plan:free#subscriber
+      relation: has_feature
+      object: feature:basic-page-analytics
+
+    # Pro Package definition
+    #   priority_support: true
+    #   page_analytics: advanced
+    #   page_history_days: 30
+    #   guest_collaborators: 100
+    #   row_limit_per_synced_db: 20000
+
+    - user: plan:pro#subscriber
+      relation: has_feature
+      object: feature:can-view-page-history
+      condition: 
+        name: is_below_page_history_days_limit
+        context: 
+          page_history_days_limit: 30
+
+    - user: plan:pro#subscriber
+      relation: has_feature
+      object: feature:can-invite-collaborator
+      condition: 
+        name: is_below_collaborator_limit
+        context: 
+          collaborator_limit: 100
+
+    - user: plan:pro#subscriber
+      relation: has_feature
+      object: feature:can-sync-rows
+      condition: 
+        name: is_below_row_sync_limit
+        context: 
+          row_sync_limit: 20000
+
+    - user: plan:pro#subscriber
+      relation: has_feature
+      object: feature:advanced-page-analytics
+
+    - user: plan:pro#subscriber
+      relation: has_feature
+      object: feature:enterprise-support
+
+tests:
+  - name: Tests for Pro subscriber
+    check:
+    - user: user:beth
+      object: feature:can-view-page-history
+      context: 
+        page_history_days_count: 10
+      assertions:
+        has_feature: true
+
+    - user: user:beth
+      object: feature:can-invite-collaborator
+      context: 
+        collaborator_count: 20
+      assertions:
+        has_feature: true
+
+    - user: user:beth
+      object: feature:can-sync-rows
+      context: 
+        row_sync_count: 200
+      assertions:
+        has_feature: true
+
+    - user: user:beth
+      object: feature:advanced-page-analytics
+      assertions:
+        has_feature: true
+
+    - user: user:beth
+      object: feature:enterprise-support
+      assertions:
+        has_feature: true
+
+    - user: user:beth
+      object: plan:pro
+      assertions:
+        subscriber: true
+
+    list_objects:
+      - user: user:beth
+        type : feature
+        context: 
+          collaborator_count: 1
+          row_sync_count : 1
+          page_history_days_count : 1
+        assertions:
+          has_feature:
+            - feature:can-invite-collaborator
+            - feature:can-sync-rows
+            - feature:can-view-page-history
+            - feature:advanced-page-analytics
+            - feature:enterprise-support
+
+  - name: Tests for Free subscriber
+    check:
+    - user: user:anne
+      object: feature:can-view-page-history
+      context: 
+        page_history_days_count: 10
+      assertions:
+        has_feature: false
+
+    - user: user:anne
+      object: feature:can-invite-collaborator
+      context: 
+        collaborator_count: 20
+      assertions:
+        has_feature: false
+
+    - user: user:anne
+      object: feature:can-sync-rows
+      context: 
+        row_sync_count: 200
+      assertions:
+        has_feature: false
+
+    - user: user:anne
+      object: feature:advanced-page-analytics
+      assertions:
+        has_feature: false
+
+    - user: user:anne
+      object: feature:enterprise-support
+      assertions:
+        has_feature: false
+
+    - user: user:anne
+      object: plan:pro
+      assertions:
+        subscriber: false
+
+    - user: user:anne
+      object: feature:can-view-page-history
+      context: 
+        page_history_days_count: 1
+      assertions:
+        has_feature: true
+
+    - user: user:anne
+      object: feature:can-invite-collaborator
+      context: 
+        collaborator_count: 1
+      assertions:
+        has_feature: true
+
+    - user: user:anne
+      object: feature:can-sync-rows
+      context: 
+        row_sync_count: 1
+      assertions:
+        has_feature: true
+
+    - user: user:anne
+      object: feature:basic-page-analytics
+      assertions:
+        has_feature: true
+
+    list_objects:
+      - user: user:anne
+        type : feature
+        context: 
+          collaborator_count: 1
+          row_sync_count : 1
+          page_history_days_count : 1
+        assertions:
+          has_feature:
+            - feature:can-invite-collaborator
+            - feature:can-sync-rows
+            - feature:can-view-page-history
+            - feature:basic-page-analytics
+
+      - user: user:anne
+        type : feature
+        context: 
+          collaborator_count: 1000
+          row_sync_count : 1000
+          page_history_days_count : 1000
+        assertions:
+          has_feature:
+            - feature:basic-page-analytics

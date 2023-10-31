@@ -1,0 +1,94 @@
+model: |
+  model
+    schema 1.1
+
+  type user
+
+  type organization
+    relations
+      define member: [user]
+      define can_access_docs: [group#member with doc_viewer_condition]
+
+  type group
+    relations
+      define organization: [organization]
+      define member: [user]
+
+  type document
+    relations
+      define organization: [organization]
+      define can_access: can_access_docs from organization
+
+  condition doc_viewer_condition(document_attributes: map<string>, allowed_statuses: list<string>) {
+    document_attributes["status"] in allowed_statuses 
+  }
+
+tuples:
+  - user: "organization:acme"
+    relation: "organization"
+    object: "document:1"
+
+  - user: "user:anne"
+    relation: "member"
+    object: "group:content"
+  - user: "user:bob"
+    relation: "member"
+    object: "group:marketing"
+    
+  - user: "group:content#member"
+    relation: "can_access_docs"
+    object: "organization:acme"
+    condition: 
+      name: doc_viewer_condition
+      context: 
+        allowed_statuses : ["draft", "published"]
+
+  - user: "group:marketing#member"
+    relation: "can_access_docs"
+    object: "organization:acme"
+    condition: 
+      name: doc_viewer_condition
+      context: 
+        allowed_statuses : ["published"]
+
+tests:
+  - check:
+    - user: "user:anne"
+      object: "document:1"
+      context: 
+        document_attributes :
+          status: "draft"
+      assertions:
+        can_access: true
+
+    - user: "user:anne"
+      object: "document:1"
+      context: 
+        document_attributes :
+          status: "published"
+      assertions:
+        can_access: true
+
+    - user: "user:bob"
+      object: "document:1"
+      context: 
+        document_attributes :
+          status: "draft"
+      assertions:
+        can_access: false
+        
+    - user: "user:bob"
+      object: "document:1"
+      context: 
+        document_attributes :
+          status: "published"
+      assertions:
+        can_access: true
+
+    - user: "user:bob"
+      object: "document:1"
+      context: 
+        document_attributes :
+          status: "published"
+      assertions:
+        can_access: true

@@ -1,0 +1,50 @@
+model: |
+  model
+    schema 1.1
+
+  type user
+
+  type document
+    relations
+      define viewer: [user with non_expired_grant]
+
+  condition non_expired_grant(current_time: timestamp, grant_timestamp: timestamp, grant_duration: duration) {
+     current_time < grant_timestamp + grant_duration
+  }
+
+tuples:
+    - user: "user:anne"
+      relation: "viewer"
+      object: "document:1"
+      condition: 
+        name: non_expired_grant
+        context: 
+          grant_timestamp : "2019-01-01T00:00:00Z"
+          grant_duration : "10s"
+
+
+    - user: "user:anne"
+      relation: "viewer"
+      object: "document:2"
+      condition: 
+        name: non_expired_grant
+        context: 
+          grant_timestamp : "2019-01-01T00:00:00Z"
+          grant_duration : "5s"
+
+tests:
+  - check:
+    - user: "user:anne"
+      object: "document:1"
+      context: 
+        current_time: "2019-01-01T00:00:09Z"
+      assertions:
+        viewer: true
+
+    - user: "user:anne"
+      object: "document:2"
+      context: 
+        current_time: "2019-01-01T00:00:09Z"
+      assertions:
+        viewer: false
+
