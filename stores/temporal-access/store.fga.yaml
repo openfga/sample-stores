@@ -8,8 +8,8 @@ model: |
     relations
       define viewer: [user with non_expired_grant]
 
-  condition non_expired_grant(current_time: timestamp, grant_timestamp: timestamp, grant_duration: duration) {
-     current_time < grant_timestamp + grant_duration
+  condition non_expired_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
+     current_time < grant_time + grant_duration
   }
 
 tuples:
@@ -19,7 +19,7 @@ tuples:
       condition: 
         name: non_expired_grant
         context: 
-          grant_timestamp : "2019-01-01T00:00:00Z"
+          grant_time : "2019-01-01T00:00:00Z"
           grant_duration : "10s"
 
 
@@ -29,7 +29,7 @@ tuples:
       condition: 
         name: non_expired_grant
         context: 
-          grant_timestamp : "2019-01-01T00:00:00Z"
+          grant_time : "2019-01-01T00:00:00Z"
           grant_duration : "5s"
 
 tests:
