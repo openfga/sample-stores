@@ -1,0 +1,113 @@
+model: |
+  model
+    schema 1.1
+
+  type employee
+  type customer
+
+  # We need a global Bank type where we define all customers and the transfer limit policy 
+  # assigned to them
+
+  type bank
+    relations
+      define customer : [customer]
+      define account_manager : [employee]
+
+  # We can define different policies for customers and account managers
+  
+      define transfer_limit_policy : [bank#customer with transfer_limit_policy, bank#account_manager with transfer_limit_policy]
+
+  type account
+    relations
+      define bank : [bank]
+      define owner : [customer] 
+      define account_manager : [employee]
+      define owner_or_account_manager : owner or account_manager
+
+  # The bank transfer permission is conditioned to the policy assigned to the customer or account manager.
+
+      define can_make_bank_transfer : owner_or_account_manager and transfer_limit_policy from bank
+
+  # The policy has a maximum limit depending that can be overruled for a specific transaction.
+
+  condition transfer_limit_policy(transaction_amount: double, transaction_limit: double, new_transaction_limit_approved: double) {
+     transaction_amount <= transaction_limit || transaction_amount <= new_transaction_limit_approved
+  }
+
+tuples:
+
+  # Customers can transfer up to $100 
+    - user: bank:acme#customer
+      relation : transfer_limit_policy
+      object: bank:acme
+      condition:
+        name: transfer_limit_policy
+        context: 
+          transaction_limit : 100
+
+    # Account managers can transfer up to $100 
+    - user: bank:acme#account_manager
+      relation : transfer_limit_policy
+      object: bank:acme
+      condition:
+        name: transfer_limit_policy
+        context: 
+          transaction_limit : 1000
+
+    - user: customer:anne
+      relation: customer
+      object: bank:acme
+
+    - user: employee:bob
+      relation: account_manager
+      object: bank:acme
+
+    - user: bank:acme
+      relation: bank
+      object: account:123
+
+    - user: customer:anne
+      relation: owner
+      object: account:123
+
+    - user: employee:bob
+      relation: account_manager
+      object: account:123
+
+tests:
+  - name: Test bank transfers from customers
+    check:
+    - user: customer:anne
+      object: account:123
+      context: 
+        transaction_amount: 10
+        new_transaction_limit_approved : 0
+      assertions:
+        can_make_bank_transfer: true
+        
+    - user: customer:anne
+      object: account:123
+      context: 
+        transaction_amount: 1000
+        new_transaction_limit_approved : 1000
+      assertions:
+        can_make_bank_transfer: true
+
+    - user: customer:anne
+      object: account:123
+      context: 
+        transaction_amount: 1000
+        new_transaction_limit_approved : 0
+      assertions:
+        can_make_bank_transfer: false
+
+  - name: Test bank transfers from account managers
+    check:
+    - user: employee:bob
+      object: account:123
+      context: 
+        transaction_amount: 1000
+        new_transaction_limit_approved : 0
+      assertions:
+        can_make_bank_transfer: true
+  
