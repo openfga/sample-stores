@@ -12,4 +12,4 @@ It takes advantage of Conditional Relationship Tuples, which are available in Op
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `group-resource-attributes` directory, run `fga model test --tests store.yaml`
+2. In the `group-resource-attributes` directory, run `fga model test --tests store.fga.yaml`
