@@ -1,0 +1,77 @@
+model: |
+  model
+    schema 1.1
+
+  type user
+
+  type organization
+    relations
+      define member : [user]
+      define ip_based_access_policy : [organization#member with in_company_network]
+
+  type document
+    relations
+      define organization : [organization]      
+      define viewer: [user]
+      define can_view: viewer and ip_based_access_policy from organization
+
+  condition in_company_network(user_ip: ipaddress, cidr: string) {
+    user_ip.in_cidr(cidr)
+  }
+
+tuples:
+    - user: "organization:acme#member"
+      relation: "ip_based_access_policy"
+      object: "organization:acme"
+      condition: 
+        name: in_company_network
+        context: 
+          cidr: "192.168.0.0/24"
+
+    - user: "organization:acme"
+      relation: "organization"
+      object: "document:1"
+      
+    - user: "user:anne"
+      relation: "viewer"
+      object: "document:1"
+
+    - user: "user:anne"
+      relation: "member"
+      object: "organization:acme"
+
+tests:
+  - name: Users in the corporate network can view documents
+    check:
+    - user: user:anne
+      object: document:1
+      context: 
+        user_ip: 192.168.0.1
+      assertions:
+        can_view: true
+
+    list_objects:
+      - user: user:anne
+        type : document
+        context: 
+          user_ip: 192.168.0.1
+        assertions:
+          can_view:
+            - document:1
+
+  - name: Users outside the corporate network cannot view documents
+    check:
+    - user: user:anne
+      object: document:1
+      context: 
+        user_ip: 192.168.1.1
+      assertions:
+        can_view: false
+        
+    list_objects:
+      - user: user:anne
+        type : document
+        context: 
+          user_ip: 192.168.1.1
+        assertions:
+          can_view: []
