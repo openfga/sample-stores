@@ -13,8 +13,6 @@ model: |
     relations
       define organization : [organization]      
       define viewer: [user]
-      
-  # document
       define can_view: viewer and ip_based_access_policy from organization
 
   condition in_company_network(user_ip: ipaddress, cidr: string) {
