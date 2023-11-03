@@ -6,7 +6,7 @@
 
 This entitlements model is inspired on [Notion's subscription plans](https://www.notion.so/pricing).
 
-It takes advantage of Conditional Relationship Tuples, which are available in OpenFGA 1.4 RC1 and above.
+It takes advantage of Conditional Relationship Tuples, which are available in OpenFGA v1.4.0-rc1 and above.
 
 ## Try It Out
 
