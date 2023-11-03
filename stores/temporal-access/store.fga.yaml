@@ -61,8 +61,5 @@ tests:
 
     - user: user:bob
       object: document:1
-      context: 
-        current_time: "2019-01-01T00:00:09Z"
       assertions:
-        viewer: true
-  
+        viewer: true      
