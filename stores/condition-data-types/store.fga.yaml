@@ -1,0 +1,288 @@
+
+# Expressions are defined using Google CEL https://github.com/google/cel-spec/blob/master/doc/langdef.md
+
+model: |
+  model
+    schema 1.1
+
+  type user
+
+  type datatype_test
+    relations
+      define is_valid: [user with is_valid_string, user with is_valid_int, user with is_valid_uint, user with is_valid_double, user with is_valid_duration, user with is_valid_timestamp, user with is_valid_map_string, user with is_valid_list_string, user with is_valid_ipaddress]
+
+  condition is_valid_string(_string:string) {
+    _string != "" && _string.startsWith("1") && _string.endsWith("1") && _string.contains("1") && _string.matches("[0-9]")
+  } 
+
+  condition is_valid_int(_int:int) {
+    _int != 0 && _int > 0
+  }
+
+  condition is_valid_uint(_uint: uint) {
+    _uint != 0u && _uint > 0u
+  }
+
+  condition is_valid_double(_double: double) {
+    _double != 0.0 && _double > 0.0
+  }
+
+  condition is_valid_duration(_duration :duration) {
+    _duration != null && _duration != duration("0s") && _duration > duration("0s") 
+  }
+
+  condition is_valid_timestamp(_timestamp: timestamp) {
+    _timestamp != null && _timestamp != timestamp("2019-01-01T00:00:00Z") && _timestamp > timestamp("2019-01-01T00:00:00Z") 
+  }
+
+  condition is_valid_map_string(_mapstring: map<string>) {
+    "key" in _mapstring && _mapstring["key"] != ""  && _mapstring["key"] > "" 
+  }
+
+  condition is_valid_list_string(_liststring : list<string>) {
+    "1" in _liststring && _liststring[0] != "" && _liststring[0] > "" && _liststring.exists(x, x > "") && _liststring.exists_one(x, x > "") && _liststring.all(x, x > "")
+  }
+
+  condition is_valid_ipaddress(_ipaddress: ipaddress) {
+    _ipaddress != null &&  _ipaddress != ipaddress("192.0.0.1")
+  }
+
+tests: 
+  - name: "Test with context in tuples"
+    tuples:
+      - user: user:int
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_uint
+          context:
+            _uint: 1     
+
+      - user: user:uint
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_uint
+          context:
+            _uint: 1     
+
+      - user: user:double
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_double
+          context:
+            _double: 1      
+
+      - user: user:string
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_string
+          context:
+            _string: "1"
+
+      - user: user:timestamp
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_timestamp
+          context:
+            _timestamp: "2019-02-01T00:00:00Z"   
+
+      - user: user:duration
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_duration
+          context:
+            _duration: "10s"     
+
+      - user: user:mapstring
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_map_string
+          context:
+            _mapstring: 
+              key : "1"
+
+      - user: user:liststring
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_list_string
+          context:
+            _liststring: ["1"] 
+
+      - user: user:ipaddress
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_ipaddress 
+          context:
+            _ipaddress: "192.168.0.1"
+
+    check:  
+      - user: user:int
+        object: datatype_test:one
+        assertions:
+          is_valid: true
+
+      - user: user:uint
+        object: datatype_test:one
+        assertions:
+          is_valid: true
+
+      - user: user:double
+        object: datatype_test:one
+        assertions:
+          is_valid: true
+
+      - user: user:string
+        object: datatype_test:one
+        assertions:
+          is_valid: true  
+
+      - user: user:timestamp
+        object: datatype_test:one
+        assertions:
+          is_valid: true     
+
+      - user: user:duration
+        object: datatype_test:one
+        assertions:
+          is_valid: true
+
+      - user: user:mapstring
+        object: datatype_test:one
+        assertions:
+          is_valid: true
+
+      - user: user:liststring
+        object: datatype_test:one
+        assertions:
+          is_valid: true
+
+      - user: user:ipaddress
+        object: datatype_test:one
+        assertions:
+          is_valid: true       
+
+  - name: "Test with context in checks"
+    tuples:
+      - user: user:int
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_int
+
+      - user: user:uint
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_uint
+
+      - user: user:double
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_double
+
+      - user: user:string
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_string
+      - user: user:timestamp
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_timestamp
+      - user: user:duration
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_duration
+
+      - user: user:mapstring
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_map_string
+
+      - user: user:liststring
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_list_string
+
+      - user: user:ipaddress
+        object: datatype_test:one
+        relation: is_valid
+        condition:  
+          name: is_valid_ipaddress 
+    check:  
+      - user: user:int
+        object: datatype_test:one
+        context:
+            _int: 1
+        assertions:
+          is_valid: true
+
+      - user: user:uint
+        object: datatype_test:one
+        context:
+          _uint: 1
+        assertions:
+          is_valid: true
+
+      - user: user:double
+        object: datatype_test:one
+        context:
+          _double: 1
+        assertions:
+          is_valid: true
+
+      - user: user:string
+        object: datatype_test:one
+        context:
+          _string: "1"
+        assertions:
+          is_valid: true       
+
+      - user: user:timestamp
+        object: datatype_test:one
+        context:
+          _timestamp: "2019-02-01T00:00:00Z"
+        assertions:
+          is_valid: true       
+
+      - user: user:duration
+        object: datatype_test:one
+        context:
+          _duration: "10s"
+        assertions:
+          is_valid: true
+
+      - user: user:mapstring
+        object: datatype_test:one
+        context:
+          _mapstring: 
+            key : "1"
+        assertions:
+          is_valid: true
+
+      - user: user:liststring
+        object: datatype_test:one
+        context:
+          _liststring: ["1"] 
+        assertions:
+          is_valid: true        
+            
+      - user: user:ipaddress
+        object: datatype_test:one
+        context:
+          _ipaddress: "192.168.0.1"
+        assertions:
+          is_valid: true 
