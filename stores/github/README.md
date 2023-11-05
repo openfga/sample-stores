@@ -97,7 +97,7 @@ type repo
     define reader: [user, team#member] or triager or repo_reader from owner
 ```
 
-See the tuples and tests in the [store.yaml](./store.yaml) file.
+See the tuples and tests in the [store.yaml](./store.fga.yaml) file.
 
 ## Try It Out
 

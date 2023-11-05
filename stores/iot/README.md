@@ -74,7 +74,7 @@ type device
     define can_view_recorded_video: it_admin or security_guard
 ```
 
-See the tuples and tests in the [store.yaml](./store.yaml) file.
+See the tuples and tests in the [store.yaml](./store.fga.yaml) file.
 
 ## Try It Out
 

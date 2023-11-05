@@ -109,7 +109,7 @@ type channel
     define commenter: [user,workspace#member] or writer
 ```
 
-See the tuples and tests in the [store.yaml](./store.yaml) file.
+See the tuples and tests in the [store.yaml](./store.fga.yaml) file.
 
 ## Try It Out
 
