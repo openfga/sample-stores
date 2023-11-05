@@ -104,7 +104,7 @@ type asset
     define view: [role#assignee] or comment or viewer from category
 ```
 
-See the tuples and tests in the [store.yaml](./store.yaml) file.
+See the tuples and tests in the [store.yaml](./store.fga.yaml) file.
 
 ## Try It Out
 

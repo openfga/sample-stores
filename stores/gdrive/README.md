@@ -111,7 +111,7 @@ type doc
     define can_read: viewer or owner or viewer from parent
 ```
 
-See the tuples and tests in the [store.yaml](./store.yaml) file.
+See the tuples and tests in the [store.yaml](./store.fga.yaml) file.
 
 ## Try It Out
 

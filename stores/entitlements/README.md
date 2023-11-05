@@ -97,7 +97,7 @@ type feature
     define can_access: subscriber_member from associated_plan
 ```
 
-See the tuples and tests in the [store.yaml](./store.yaml) file.
+See the tuples and tests in the [store.yaml](./store.fga.yaml) file.
 
 ## Try It Out
 

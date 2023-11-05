@@ -38,4 +38,4 @@ jobs:
           sudo dpkg -i ./fga-cli.deb
 
       - name: Run the tests with the FGA CLI
-        run: fga model test --tests stores/${{matrix.store-name}}/store.yaml
+        run: fga model test --tests stores/${{matrix.store-name}}/store.fga.yaml
