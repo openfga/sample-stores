@@ -8,7 +8,7 @@ model: |
     # employee = employees of the SaaS vendor 
     type employee
 
-    # application = internal applications that need to perform maintainance tasks 
+    # application = internal applications that need to perform maintenance tasks 
     type application
 
     # top level type where we define system administrators, note that we are only defining 
