@@ -1,0 +1,133 @@
+model: |
+  model
+    schema 1.1
+
+    # user = users from the customer's organization
+    type user
+
+    # employee = employees of the SaaS vendor 
+    type employee
+
+    # application = internal applications that need to perform maintenance tasks 
+    type application
+
+    # top level type where we define system administrators, note that we are only defining 
+    # superadmins but there could be other roles that would have restricted permissions
+    type system
+    relations
+        define admin : [employee, application] 
+
+    # organization represent the SaaS customer
+    type organization
+    relations
+        define system : [system]
+        
+        # system admins have the same permissions in the organization as
+        # customer admins
+        define admin : [user] or admin from system
+        define member : [user]
+
+        # we could define helpdesk members at the system level too without
+        # a time expiration, but time bounding access help desk access 
+        # for a specific customer is a better security practice
+        define helpdesk_member : [employee with non_expired_time_grant]
+
+        define can_create_project : admin or member
+
+    type project
+    relations
+        define organization : [organization]
+        define owner : [user]
+
+        # admins from the organization have editor permission in all projects
+        define editor : [user] or owner or admin from organization
+        define viewer : [user] or editor or helpdesk_member from organization 
+
+    type task
+    relations
+        define project: [project]
+        define owner : [user]
+
+        # tasks inherit the system admins + helpdesk member permissions from the project
+        define editor : [user] or editor from project
+        define viewer : [user] or editor or viewer from project
+
+    condition non_expired_time_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
+        current_time < grant_time + grant_duration
+    }
+
+tuples:
+    # we define a user and an application as 'super admins'
+    - user: employee:anne
+      relation : admin
+      object: system:global
+    - user: application:system-management-app
+      relation : admin
+      object: system:global
+
+    # this tuple connects the global 'system' with each organization, and needs to be created
+    # for all organizations
+    - user: system:global
+      relation: system
+      object: organization:acme
+
+    # we grant access to a help desk user for 1 hour
+    - user: employee:john
+      relation: helpdesk_member
+      object: organization:acme
+      condition: 
+        name: non_expired_time_grant
+        context: 
+          grant_time : "2024-01-01T00:00:00Z"
+          grant_duration : 1h
+
+    # peter is the organization's admin
+    - user: user:peter
+      relation: admin
+      object: organization:acme
+      
+    # we add the tuples for the project and for a task in the project
+    - user: organization:acme
+      relation: organization
+      object: project:openfga
+
+    - user: project:openfga
+      relation: project
+      object: task:create-example
+
+tests:
+    - check:
+        # anne is a super admin, has full access
+        - user: employee:anne
+          object: task:create-example
+          assertions: 
+            viewer: true
+            editor: true
+
+        # peter is an admin in the organization, has full access
+        - user: user:peter
+          object: task:create-example
+          assertions: 
+            viewer: true
+            editor: true
+
+        # the system application has full access
+        - user: application:system-management-app
+          object: task:create-example
+          assertions: 
+            viewer: true
+            editor: true
+
+        # john only has temporary access as viewer
+        - user: employee:john
+          object: task:create-example
+          context: 
+            current_time: "2024-01-01T00:10:00Z"
+          assertions: 
+            viewer: true
+            editor: false
+
+      
+      
+
+     
