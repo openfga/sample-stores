@@ -8,8 +8,6 @@ OpenFGA's Conditional Relationship Tuples are defined using [Google's CEL expres
 
 This example showcases the different data types and expressions that are supported in OpenFGA conditions and how to use them. 
 
-It takes advantage of Conditional Relationship Tuples, which are available in OpenFGA v1.4.0-rc1 and above.
-
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
