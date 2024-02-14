@@ -32,7 +32,7 @@ Some sample stores are:
 - [IP Based Access](./stores/ip-based-access)
 - [Super-Admin](./stores/superadmin)
 - [Temporal Access](./stores/temporal-access)
-- [Group Resource Attributes](./stores/temporal-access)
+- [Group Resource Attributes](./stores/groups-resource-attributes)
 - [Conditions Data Types](./stores/condition-data-types)
 
 ## Creating your store and loading sample data
