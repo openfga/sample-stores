@@ -13,8 +13,7 @@ model: |
       define customer : [customer]
       define account_manager : [employee]
 
-  # We can define different policies for customers and account managers
-  
+      # We can define different transfer limit policies for customers and account managers
       define transfer_limit_policy : [bank#customer with transfer_limit_policy, bank#account_manager with transfer_limit_policy]
 
   type account
@@ -22,57 +21,58 @@ model: |
       define bank : [bank]
       define owner : [customer] 
       define account_manager : [employee]
-      define owner_or_account_manager : owner or account_manager
 
-  # The bank transfer permission is conditioned to the policy assigned to the customer or account manager.
-
-      define can_make_bank_transfer : owner_or_account_manager and transfer_limit_policy from bank
+      # The bank transfer permission is conditioned to the policy assigned to customers or account managers.
+      define can_make_bank_transfer : (owner or account_manager) and transfer_limit_policy from bank
 
   # The policy has a maximum limit depending that can be overruled for a specific transaction.
-
   condition transfer_limit_policy(transaction_amount: double, transaction_limit: double, new_transaction_limit_approved: double) {
      transaction_amount <= transaction_limit || transaction_amount <= new_transaction_limit_approved
   }
 
 tuples:
-
   # Customers can transfer up to $100 
-    - user: bank:acme#customer
-      relation : transfer_limit_policy
-      object: bank:acme
-      condition:
-        name: transfer_limit_policy
-        context: 
-          transaction_limit : 100
+  - user: bank:acme#customer
+    relation : transfer_limit_policy
+    object: bank:acme
+    condition:
+      name: transfer_limit_policy
+      context: 
+        transaction_limit : 100
 
-    # Account managers can transfer up to $100 
-    - user: bank:acme#account_manager
-      relation : transfer_limit_policy
-      object: bank:acme
-      condition:
-        name: transfer_limit_policy
-        context: 
-          transaction_limit : 1000
+  # Account managers can transfer up to $100 
+  - user: bank:acme#account_manager
+    relation : transfer_limit_policy
+    object: bank:acme
+    condition:
+      name: transfer_limit_policy
+      context: 
+        transaction_limit : 1000
 
-    - user: customer:anne
-      relation: customer
-      object: bank:acme
+  # Anne is bank Acme's customer
+  - user: customer:anne
+    relation: customer
+    object: bank:acme
 
-    - user: employee:bob
-      relation: account_manager
-      object: bank:acme
+  # Anne is bank Acme's employee that's an account manager
+  - user: employee:bob
+    relation: account_manager
+    object: bank:acme
 
-    - user: bank:acme
-      relation: bank
-      object: account:123
+  # The `123` account belongs to the Acme bank
+  - user: bank:acme
+    relation: bank
+    object: account:123
 
-    - user: customer:anne
-      relation: owner
-      object: account:123
+  # Anne is the owner of the `123` account 
+  - user: customer:anne
+    relation: owner
+    object: account:123
 
-    - user: employee:bob
-      relation: account_manager
-      object: account:123
+  # Bob is the account manager of the `123` account 
+  - user: employee:bob
+    relation: account_manager
+    object: account:123
 
 tests:
   - name: Test bank transfers from customers
@@ -110,4 +110,3 @@ tests:
         new_transaction_limit_approved : 0
       assertions:
         can_make_bank_transfer: true
-  
