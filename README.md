@@ -2,7 +2,7 @@
 
 This repo contains some OpenFGA [sample stores](#sample-stores).
 
-[![Discord Server](https://img.shields.io/discord/759188666072825867?color=7289da&logo=discord "Discord Server")](https://discord.gg/8naAwJfWN6)
+[![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
 [![Twitter](https://img.shields.io/twitter/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on Twitter")](https://twitter.com/openfga)
 
 ## Table of Contents
@@ -52,7 +52,7 @@ fga model test --tests "stores/${SAMPLE_STORE}/store.yaml"
 - [OpenFGA on Twitter](https://twitter.com/OpenFGA/)
 - [Zanzibar Academy](https://zanzibar.academy)
 - [Authorization in Software Podcast](https://authorizationinsoftware.auth0.com/public/49/Authorization-in-Software-f9b69587)
-- [Discord Community](https://discord.gg/pvbNmqC)
+- [OpenFGA Community](https://openfga.dev/community)
 - [FGA Playground](https://play.fga.dev)
 
 ## Author
