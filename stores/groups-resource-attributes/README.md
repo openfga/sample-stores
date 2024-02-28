@@ -6,8 +6,6 @@
 
 It enables members of specific groups to access content depending on resource attributes. For example, you can specify that members of the 'marketing' team can only view documents that are 'published' but members of the 'content' team can also view 'draft' documents.
 
-It takes advantage of Conditional Relationship Tuples, which are available in OpenFGA v1.4.0-rc1 and above.
-
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)

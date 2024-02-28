@@ -13,7 +13,7 @@ This repo contains some OpenFGA [sample stores](#sample-stores).
 - [Resources](#resources)
 
 ## About OpenFGA
-[OpenFGA](https://openfga.dev) is an open source Fine-Grained Authorization solution inspired by [Google's Zanzibar paper](https://research.google/pubs/pub48190/). It was created by the FGA team at [Auth0](https://auth0.com) based on [Auth0 Fine-Grained Authorization (FGA)](https://fga.dev), available under [a permissive license (Apache-2)](https://github.com/openfga/rfcs/blob/main/LICENSE) and welcomes community contributions.
+[OpenFGA](https://openfga.dev) is an open source Fine-Grained Authorization solution inspired by [Google's Zanzibar paper](https://research.google/pubs/pub48190/). It was created by the FGA team at [Auth0/Okta](https://auth0.com) based on [Okta Fine-Grained Authorization (FGA)](https://fga.dev), available under [a permissive license (Apache-2)](https://github.com/openfga/rfcs/blob/main/LICENSE) and welcomes community contributions.
 
 OpenFGA is designed to make it easy for application builders to model their permission layer, and to add and integrate fine-grained authorization into their applications. OpenFGA’s design is optimized for reliability and low latency at a high scale.
 
@@ -26,6 +26,14 @@ Some sample stores are:
 - [IoT](./stores/iot)
 - [Slack](./stores/slack)
 - [Custom Roles](./stores/custom-roles)
+- [Entitlements](./stores/entitlements)
+- [Advanced Entitlements](./stores/advanced-entitlements)
+- [Banking](./stores/banking)
+- [IP Based Access](./stores/ip-based-access)
+- [Super-Admin](./stores/superadmin)
+- [Temporal Access](./stores/temporal-access)
+- [Group Resource Attributes](./stores/groups-resource-attributes)
+- [Conditions Data Types](./stores/condition-data-types)
 
 ## Creating your store and loading sample data
 
