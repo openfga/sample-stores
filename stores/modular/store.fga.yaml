@@ -1,0 +1,29 @@
+name: ModularDemo
+model_file: ./fga.mod
+tuples:
+  - user: user:anne
+    relation: admin
+    object: organization:openfga
+  - user: organization:openfga
+    relation: organization
+    object: space:openfga
+  - user: organization:openfga
+    relation: organization
+    object: project:openfga
+tests:
+  - name: Members can view projects
+    check:
+      - user: user:anne
+        object: organization:openfga
+        assertions:
+          admin: true
+          member: true
+          can_create_space: true
+      - user: user:anne
+        object: space:openfga
+        assertions:
+          can_view_pages: true
+      - user: user:anne
+        object: project:openfga
+        assertions:
+          viewer: true
