@@ -1,0 +1,10 @@
+module issue-tracker
+
+extend type organization
+  relations
+    define can_create_project: admin
+
+type project
+  relations
+    define organization: [organization]
+    define viewer: member from organization

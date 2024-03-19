@@ -1,0 +1,16 @@
+module wiki
+
+extend type organization
+  relations
+    define can_create_space: admin
+
+
+type space
+  relations
+    define organization: [organization]
+    define can_view_pages: member from organization
+
+type page
+  relations
+    define space: [space]
+    define owner: [user]

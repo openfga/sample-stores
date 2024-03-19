@@ -1,0 +1,6 @@
+module issue-tracker
+
+type ticket
+  relations
+    define project: [project]
+    define owner: [user]
