@@ -49,7 +49,7 @@ git clone https://github.com/openfga/sample-stores.git openfga-sample-stores && 
 2. Use the `fga` CLI to test the [sample store](#sample-stores) you choose (e.g. `github`, `custom-roles`, etc..)
 ```
 SAMPLE_STORE=github
-fga model test --tests "stores/${SAMPLE_STORE}/store.yaml"
+fga model test --tests "stores/${SAMPLE_STORE}/store.fga.yaml"
 ```
 
 
