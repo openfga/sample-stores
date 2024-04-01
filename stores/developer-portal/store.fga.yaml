@@ -1,0 +1,129 @@
+model: |
+  model
+    schema 1.1
+
+  type user
+
+  # Each customer is modeled as an organization
+  type organization
+    relations
+        define member: [user]
+        define admin: [user]
+
+        # Each organization can have multiple applications
+        define application : [application]
+        
+        # Admins can manage members, regular members can only view them
+        define can_remove_member : admin
+        define can_invite_member : admin
+        define can_view_member : admin or member
+
+        # Admins can create applications and decide which components they can use
+        define can_create_application : admin
+
+  type application
+    relations
+        define organization : [organization]
+
+        # All admins can modify the application, regular members can't unless they
+        # are explicity assigned as writers
+        define writer : [user] or admin from organization
+        define reader : writer or member from organization
+
+        # Permissions to view/delete/edit the application details
+        define can_view: reader or writer
+        define can_edit: writer
+        define can_delete: writer
+
+        # Permissions to manage application's credentials
+        define can_create_credentials : writer
+        define can_delete_credentials : writer
+
+        # Permissions to enable which components can the application use
+        define can_configure_component : writer
+
+
+  # Components model different features that the application's can access, for example
+  # a payments or purchasing module
+
+  # It's likely that for a specific use case, you'd want to have types for each concrete 
+  # module, e.g. a 'purchasing' and 'payments' type with specific permissions
+
+  type component 
+    relations
+        # This relation implies the component can be used by the organization
+        define organization : [organization]
+
+        # Specific applications can read/write data related to the component
+        define reader : [application] and application from organization 
+        define writer : [application] and application from organization
+
+        define can_view : reader or writer
+        define can_write: writer
+
+        define can_delete: admin from organization
+
+tuples:
+    - user: user:anne
+      relation: admin
+      object: organization:acme
+
+    - user: user:marie
+      relation: member
+      object: organization:acme
+
+    - user: organization:acme
+      relation: organization
+      object: application:1
+
+    - user: application:1
+      relation: application
+      object: organization:acme
+
+    - user: application:2
+      relation: application
+      object: organization:acme
+
+    - user: organization:acme
+      relation: organization
+      object: component:payment
+
+    - user: organization:acme
+      relation: organization
+      object: component:purchases
+
+    - user: application:1
+      relation: reader
+      object: component:payment
+
+    - user: application:2
+      relation: writer
+      object: component:payment
+
+tests:
+    - check:
+        - user: user:anne
+          object: application:1
+          assertions:
+            can_edit : true
+            can_delete : true
+            can_view : true
+
+        - user: user:marie
+          object: application:1
+          assertions:
+            can_edit : false
+            can_view : true
+            can_delete : false
+
+        - user: application:1
+          object: component:payment
+          assertions:
+            can_view : true
+            can_write : false
+
+        - user: application:2
+          object: component:payment
+          assertions:
+            can_view : true
+            can_write : true
