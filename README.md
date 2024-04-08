@@ -15,8 +15,6 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 
 ## Sample Store Models
 
-Some sample store models are:
-
 - [GitHub](./stores/github)
 - [Google Drive](./stores/gdrive)
 - [Expenses](./stores/expenses)
