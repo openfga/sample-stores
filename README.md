@@ -1,25 +1,20 @@
 # OpenFGA Sample Stores
 
-This repo contains some OpenFGA [sample stores](#sample-stores).
-
 [![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
 [![Twitter](https://img.shields.io/twitter/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on Twitter")](https://twitter.com/openfga)
 
+This repository contains [sample store models](#sample-stores) for [OpenFGA](https://openfga.dev).
+
 ## Table of Contents
 
-- [About OpenFGA](#about-openfga)
-- [Sample Stores](#sample-stores)
+- [Sample Store Models](#sample-store-models)
 - [Creating your store and loading sample data](#creating-your-store-and-loading-sample-data)
+- [Modeling resources](#modeling-resources)
+- [OpenFGA models in open source projects](#openfga-models-in-open-source-projects)
 - [Resources](#resources)
 
-## About OpenFGA
-[OpenFGA](https://openfga.dev) is an open source Fine-Grained Authorization solution inspired by [Google's Zanzibar paper](https://research.google/pubs/pub48190/). It was created by the FGA team at [Auth0/Okta](https://auth0.com) based on [Okta Fine-Grained Authorization (FGA)](https://fga.dev), available under [a permissive license (Apache-2)](https://github.com/openfga/rfcs/blob/main/LICENSE) and welcomes community contributions.
+## Sample Store Models
 
-OpenFGA is designed to make it easy for application builders to model their permission layer, and to add and integrate fine-grained authorization into their applications. OpenFGA’s design is optimized for reliability and low latency at a high scale.
-
-## Sample Stores
-
-Some sample stores are:
 - [GitHub](./stores/github)
 - [Google Drive](./stores/gdrive)
 - [Expenses](./stores/expenses)
@@ -34,6 +29,7 @@ Some sample stores are:
 - [Temporal Access](./stores/temporal-access)
 - [Group Resource Attributes](./stores/groups-resource-attributes)
 - [Conditions Data Types](./stores/condition-data-types)
+- [Developer Portal](./stores/developer-portal)
 
 ## Creating your store and loading sample data
 
@@ -46,12 +42,30 @@ To try this out, you need the following tools installed:
 git clone https://github.com/openfga/sample-stores.git openfga-sample-stores && cd $_
 ```
 
-2. Use the `fga` CLI to test the [sample store](#sample-stores) you choose (e.g. `github`, `custom-roles`, etc..)
+2. Use the `fga` CLI to test the store you choose (e.g. `github`, `custom-roles`, etc..)
 ```
 SAMPLE_STORE=github
 fga model test --tests "stores/${SAMPLE_STORE}/store.fga.yaml"
 ```
+## Modeling Resources
 
+The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started) documentation is a great way to learn about FGA modeling. These two articles illustrate how you can create a model following the documentation steps:
+
+- [Implementing Multi-Tenancy in Chroma: Part 2 - Authorization Model with OpenFGA](https://cookbook.chromadb.dev/strategies/multi-tenancy/authorization-model-with-openfga/)
+- [Introduction into OpenFGA](https://www.ericksegaar.com/2024/03/04/introduction-into-openfga/)
+
+## OpenFGA models in open source projects
+
+- [canonical/identity-platform-login-ui](https://github.com/canonical/identity-platform-login-ui/blob/main/internal/authorization/schema.openfga)
+- [lxc/incus](https://github.com/lxc/incus/blob/main/internal/server/auth/driver_openfga_model.openfga)
+- [stacklok/minder](https://github.com/stacklok/minder/blob/main/internal/authz/model/minder.fga)
+- [datumforge/datum](https://github.com/datumforge/datum/blob/main/fga/model/datum.fga)
+- [instill-ai/pipeline-backend](https://github.com/instill-ai/pipeline-backend/blob/main/pkg/acl/model.go)
+- [virtool/virtool](https://github.com/virtool/virtool/blob/c621ba6a22bfe3464fe59287337029e42295cfcb/virtool/authorization/openfga.py#L123)
+- [concrete-utopia/utopia](https://github.com/concrete-utopia/utopia/blob/master/utopia-remix/fga/model.fga)
+- [Cross-Lab-Project/crosslab](https://github.com/Cross-Lab-Project/crosslab/blob/main/services/authorization/relation_model.fga)
+
+If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
 ## Resources
 
@@ -62,11 +76,3 @@ fga model test --tests "stores/${SAMPLE_STORE}/store.fga.yaml"
 - [Authorization in Software Podcast](https://authorizationinsoftware.auth0.com/public/49/Authorization-in-Software-f9b69587)
 - [OpenFGA Community](https://openfga.dev/community)
 - [FGA Playground](https://play.fga.dev)
-
-## Author
-
-[OpenFGA Team](https://github.com/openfga)
-
-## License
-
-[Apache-2.0](./LICENSE)
