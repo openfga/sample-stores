@@ -54,3 +54,40 @@ tests:
         object: doc:2021-roadmap
         assertions:
           can_read: true
+
+  - name: Check if the right users have access to the right documents
+    list_users:
+      - object: doc:public-roadmap
+        user_filter: 
+          - type: user
+        assertions:
+          viewer:
+            users: 
+              - user:*
+
+      - object: doc:2021-roadmap
+        user_filter: 
+          - type: user
+        assertions:
+          viewer:
+            users: 
+              - user:beth
+
+      - object: folder:product-2021
+        user_filter: 
+          - type: group
+            relation: member
+        assertions:
+          viewer:
+            users: 
+              - group:fabrikam#member
+
+      - object: folder:product-2021
+        user_filter: 
+          - type: user
+        assertions:
+          viewer:
+            users: 
+              - user:anne
+              - user:charles
+

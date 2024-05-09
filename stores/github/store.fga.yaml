@@ -63,3 +63,27 @@ tests:
         object: repo:openfga/openfga
         assertions:
           reader: true
+
+  - name: Check if the right users have access to the right repositories
+    list_users:
+      - object: repo:openfga/openfga
+        user_filter: 
+          - type: user
+        assertions:
+          writer:
+            users: 
+              - user:charles
+              - user:beth
+              - user:diane
+              - user:erik
+
+      - object: repo:openfga/openfga
+        user_filter: 
+          - type: team
+            relation: member
+        assertions:
+          writer:
+            users: 
+              - team:openfga/backend#member
+              - team:openfga/core#member
+
