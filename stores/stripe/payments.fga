@@ -1,0 +1,5 @@
+module payments
+
+type payment
+type subscription
+type invoice
