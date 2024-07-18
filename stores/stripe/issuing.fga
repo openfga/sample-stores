@@ -1,0 +1,34 @@
+module issuing
+
+extend type account
+    relations
+        define card: [card] # dual-writes relationships between card & account, when you need to traverse relations on two types checking both ways (starting at card then going up or account then going down)
+        define cardholder: cardholder from card 
+        define cardholder_in_test_mode: cardholder from test_mode # exclusion operator  
+
+type card
+    relations
+        define account: [account]
+        define cardholder: [user]
+        define digital_wallet: [digital_wallet]
+        define active: [card] # self-defining relationship
+        define can_purchase: cardholder from active but not cardholder_in_test_mode from account
+        define can_view_transactions: cardholder or admin from account
+        define spending_limit_policy: [card#cardholder with spending_limit]
+
+type transaction 
+    relations
+        define card: [card]
+        define can_view: can_view_transactions from card
+
+type digital_wallet
+    relations
+        define owner: [user]
+
+# spending control condition
+## default spending limit is 500 USD a day
+## could be 100 USD per transaction
+## could be 3000 USD per month
+condition spending_limit(transaction_amount: double, transaction_limit: double, daily_amount: double, daily_limit: double, monthly_amount: double, monthly_limit: double) {
+transaction_amount + daily_amount <= daily_limit || transaction_amount <= transaction_limit || transaction_amount + monthly_amount <= monthly_limit
+}
