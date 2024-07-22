@@ -1,0 +1,57 @@
+# Basic demo with documents and folders. 
+#  - Folder permission get inherited by nested folders and documents
+
+model: |
+  model
+    schema 1.1
+    
+  type user
+
+  type folder
+    relations
+      define parent: [folder]
+      define owner : [user]
+      define viewer: [user]
+      define editor: [user]
+
+      define can_edit : editor or owner or can_edit from parent
+      define can_view : viewer or can_edit
+
+  type document
+    relations
+      define parent: [folder]
+      define viewer: [user] or viewer from parent 
+      define owner : [user]
+      define editor: [user]
+
+      define can_edit : editor or owner or can_edit from parent
+      define can_view : viewer or can_edit
+
+tuples:
+# Tuples for basic example
+  - user: user:anne
+    object: folder:root
+    relation: owner
+
+  - user: folder:root
+    object: document:welcome
+    relation: parent
+
+  - user: user:bob
+    object: document:welcome
+    relation : owner
+
+tests: 
+  - name: Tests for basic example
+    check:
+      - user: user:anne        
+        object: document:welcome
+        assertions:
+          can_edit : true
+          can_view : true
+
+      - user: user:bob        
+        object: folder:root
+        assertions:
+          can_edit : false
+          can_view : false
