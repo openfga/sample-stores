@@ -1,0 +1,117 @@
+# Adds support for Groups:
+#   - Editors and Viewers can be assigned to groups
+#   - Groups can be nested
+
+model: |
+  model
+    schema 1.1
+    
+  type user
+  type organization
+    relations
+      define admin : [user]
+      define can_edit_documents : admin
+
+  type group 
+    relations
+      define member : [user, group#member]
+
+  type folder
+    relations
+      define organization : [organization]
+      define parent: [folder]
+      define owner : [user]
+      define viewer: [user, group#member]
+      define editor: [user, group#member]
+
+      define can_edit : editor or owner or can_edit from parent or can_edit_documents from organization
+      define can_view : viewer or can_edit
+
+  type document
+    relations
+      define parent: [folder]
+      define viewer: [user] or viewer from parent 
+      define owner : [user, group#member]
+      define editor: [user, group#member]
+
+      define can_edit : editor or owner or can_edit from parent
+      define can_view : viewer or can_edit
+
+tuples:
+# Tuples for basic example
+  - user: user:anne
+    object: folder:root
+    relation: owner
+
+  - user: folder:root
+    object: document:welcome
+    relation: parent
+
+  - user: user:bob
+    object: document:welcome
+    relation : owner
+
+# Tuples for multi-tenancy example
+  - user: user:peter
+    object: organization:acme
+    relation: admin
+
+  - user: organization:acme
+    object: folder:root
+    relation: organization
+
+# Tuples for groups example
+  - user: user:martin
+    object: group:engineering
+    relation: member
+
+  - user: group:engineering#member
+    object: group:everyone
+    relation: member
+
+  - user: group:everyone#member
+    object: folder:root
+    relation: editor
+
+tests: 
+  - name: Tests for basic example
+    check:
+      - user: user:anne        
+        object: document:welcome
+        assertions:
+          can_edit : true
+          can_view : true
+
+      - user: user:bob        
+        object: folder:root
+        assertions:
+          can_edit : false
+          can_view : false
+
+  - name: Tests for multi-tenancy
+    check:
+      - user: user:peter        
+        object: folder:root
+        assertions:
+          can_edit : true
+          can_view : true
+
+      - user: user:peter        
+        object: document:welcome
+        assertions:
+          can_edit : true
+          can_view : true
+
+  - name: Tests for groups
+    check:
+      - user: user:martin        
+        object: document:welcome
+        assertions:
+          can_edit : true
+          can_view : true
+
+      - user: user:martin        
+        object: folder:root
+        assertions:
+          can_edit : true
+          can_view : true
