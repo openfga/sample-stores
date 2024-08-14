@@ -56,7 +56,7 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 
 ## OpenFGA models in open source projects
 
-- [canonical/lxd](https://github.com/canonical/lxd/blob/main/lxd/auth/driver_openfga_model.openfga)
+- [canonical/lxd](https://github.com/canonical/lxd/blob/main/lxd/auth/drivers/openfga_model.openfga)
 - [canonical/identity-platform-login-ui](https://github.com/canonical/identity-platform-login-ui/blob/main/internal/authorization/schema.openfga)
 - [lxc/incus](https://github.com/lxc/incus/blob/main/internal/server/auth/driver_openfga_model.openfga)
 - [stacklok/minder](https://github.com/stacklok/minder/blob/main/internal/authz/model/minder.fga)
