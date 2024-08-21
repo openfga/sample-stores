@@ -66,6 +66,7 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 - [concrete-utopia/utopia](https://github.com/concrete-utopia/utopia/blob/master/utopia-remix/fga/model.fga)
 - [Cross-Lab-Project/crosslab](https://github.com/Cross-Lab-Project/crosslab/blob/main/services/authorization/relation_model.fga)
 - [grafana/grafana](https://github.com/grafana/grafana/blob/main/pkg/services/authz/zanzana/schema/schema.fga)
+- [sourcegraph/sourcegraph-public-snapshot](https://github.com/sourcegraph/sourcegraph-public-snapshot/blob/main/cmd/enterprise-portal/service/iam_model.fga)
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
