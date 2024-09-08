@@ -1,10 +1,12 @@
 # OpenFGA Advanced Entitlements Sample Store
 
-* **Title**: **Advanced Entitlements** 
-
 ## Use-Case
 
 This entitlements model is inspired on [Notion's subscription plans](https://www.notion.so/pricing).
+
+Entitlements limits can be defined based on feature usage like number of collaborators, rows synced, page history days.
+
+The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 

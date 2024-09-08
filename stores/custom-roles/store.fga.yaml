@@ -104,7 +104,7 @@ tuples:
     relation: member
     object: team:qa
 tests:
-  - name: Test
+  - name: Test for different user/permissions
     check:
       - user: user:carlos
         object: org:contoso
@@ -139,3 +139,25 @@ tests:
         object: asset-category:website-media
         assertions:
           asset_creator: true
+
+  - name: Test which asserts can Beth view
+    list_objects:
+      - user: user:beth
+        type: asset
+        assertions:
+          view:
+            - asset:homepage
+            - asset:website-hero-image
+
+  - name: Test users can view the homepage asset
+    list_users:
+      - object: asset:homepage
+        user_filter:
+          - type: user
+        assertions:
+          view:
+            users:
+              - user:beth
+              - user:daniel
+              - user:carlos
+              - user:anne

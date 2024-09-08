@@ -44,7 +44,7 @@ tuples:
     relation: security_guard
     object: device_group:group1
 tests:
-  - name: Test
+  - name: Test specific user permissions on each device
     check:
       - user: user:anne
         object: device:1
@@ -59,3 +59,24 @@ tests:
         object: device:2
         assertions:
           can_rename_device: true
+
+  - name: Test who can view live video on device:1
+    list_users:
+      - object: device:1
+        user_filter:
+          - type: user
+        assertions:
+          can_view_live_video:
+            users:
+              - user:diane
+              - user:charles
+              - user:anne
+              - user:beth
+
+  - name: Test in which devices can Beth view live video
+    list_objects:
+      - type: device
+        user: user:beth
+        assertions:
+          can_view_live_video:
+            - device:1

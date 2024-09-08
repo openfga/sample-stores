@@ -40,7 +40,7 @@ tuples:
     relation: viewer
     object: doc:public-roadmap
 tests:
-  - name: Test
+  - name: Test user permissions for doc:2021-roadmap
     check:
       - user: user:anne
         object: doc:2021-roadmap
@@ -54,3 +54,24 @@ tests:
         object: doc:2021-roadmap
         assertions:
           can_read: true
+
+  - name: Test which documents can Anne read
+    list_objects:
+      - user: user:anne
+        type: doc
+        assertions:
+          can_read:
+            - doc:2021-roadmap
+            - doc:public-roadmap
+
+  - name: Test who can access doc:2021-roadmap
+    list_users:
+      - object: doc:2021-roadmap
+        user_filter:
+          - type: user
+        assertions:
+          can_read:
+            users: 
+              - user:anne
+              - user:beth
+              - user:charles

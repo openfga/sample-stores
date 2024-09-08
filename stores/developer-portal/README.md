@@ -2,25 +2,23 @@
 
 ## Use-Case
 
-If your application provides a way to generate API keys to applications to call your APIs, you'll want to create a dashboard where users can manage API keys, and define each API key's permissions.
+It models a developer portal for a B2B SaaS application, where customers can define applications that will make calls to your APIs. 
 
-For this example, we have the following requirements
+For this example, we have the following requirements:
 
-- We want to support multiple customers, and each one should be able to define regular members and administrators for their account.
+- Each customer should be able to define regular members and administrators. 
 - Each customer should be able to define multiple applications.
 - Each customer's administrator should be able to:
-    - Manage organization members (invite, remove, view)
+    - Manage customer's members (invite, remove, view)
     - Manage applications (create, update, delete)
     - Manage application's credentials
     - Configure application's permissions
 - Regular members should be able to:
     - View members
     - View application details
-- Each API should be provisioned access to specific components they can use. For example, the B2B SaaS application could have a Purchase and Payments components. If the customer only paid for the Purchase component, their applications should not be able to access the Payments one.
+- Each application should be provisioned access to specific components they can use. For example, the B2B SaaS application could have a Purchase and Payments components. If the customer only paid for the Purchase component, their applications should not be able to access the Payments component.
 
-
-
-See the model, tuples and tests in the [store.yaml](./store.fga.yaml) file.
+The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 

@@ -7,12 +7,17 @@ model: |
   type organization
     relations
       define member : [user]
+
+      # An IP range can be assigned to the members of every organization
       define ip_based_access_policy : [organization#member with in_company_network]
 
   type document
     relations
       define organization : [organization]      
       define viewer: [user]
+
+      # An user can view a document if they are assigned as a viewer, and the Organization's IP range 
+      # matches the provided IP address 
       define can_view: viewer and ip_based_access_policy from organization
 
   condition in_company_network(user_ip: ipaddress, cidr: string) {
