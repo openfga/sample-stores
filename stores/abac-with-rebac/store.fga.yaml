@@ -1,0 +1,100 @@
+model: |
+  model  
+    schema 1.1
+
+  type user
+    relations
+        define email_verified : [user]
+
+  type document
+    relations
+        define draft : [document]
+        define published : [document]
+
+        define viewer : [user] 
+        define viewer_email_verified : email_verified from viewer
+
+        define owner : [user]
+        define owner_email_verified : email_verified from owner
+
+        define can_view : owner_email_verified or viewer_email_verified from published
+        define can_edit : owner_email_verified from draft
+
+tuples:
+
+    # Whenever bob/anne verify their email, these two tuples should be created
+    - user: user:bob
+      relation: email_verified
+      object: user:bob
+
+    - user: user:anne
+      relation: email_verified
+      object: user:anne
+
+    - user: user:bob
+      relation: owner
+      object: document:readme
+
+    - user: user:anne
+      relation: viewer
+      object: document:readme
+
+    - user: user:jeremy
+      relation: viewer
+      object: document:readme
+
+tests:
+    - name: Test permissions for draft document
+      tuples:
+        # This tuple can be written to OpenFGA when the document status changes
+        # or can be sent as a contextual tuple
+        - user: document:readme
+          relation: draft
+          object: document:readme
+      check:
+        # Only the owner can view and edit a draft document
+        - user: user:anne
+          object: document:readme
+          assertions:
+            can_edit : false
+            can_view : false
+
+        - user: user:bob
+          object: document:readme
+          assertions:
+            can_edit : true
+            can_view : true
+
+        # jeremy does not have a verified email so it's not allowed to edit or view regardless of status
+        - user: user:jeremy
+          object: document:readme
+          assertions:
+            can_edit : false
+            can_view : false
+
+    - name: Test permissions for published document
+      tuples:
+        # This tuple can be written to OpenFGA when the document status changes
+        # or can be sent as a contextual tuple
+        - user: document:readme
+          relation: published
+          object: document:readme
+      check:
+        # Everyone can view a published document, but nobody can edit it
+        - user: user:anne
+          object: document:readme
+          assertions:
+            can_edit : false
+            can_view : true
+        - user: user:bob
+          object: document:readme
+          assertions:
+            can_edit : false
+            can_view : true
+
+        # jeremy does not have a verified email so it's not allowed to edit or view regardless of status
+        - user: user:jeremy
+          object: document:readme
+          assertions:
+            can_edit : false
+            can_view : false
