@@ -1,0 +1,176 @@
+model: |
+  model  
+    schema 1.1
+
+  type user
+
+  # Groups can be nested
+  type group
+    relations
+        define member: [user, group#member]
+
+  # Roles can be nested, and can be assigned to users and group members
+  type role
+    relations
+        define assignee: [user, role#assignee, group#member]
+
+  type organization
+    relations  
+        # Organizations can have predefined ones, in addition of dynamic roles
+        # that can be defined by each organization 
+        define admin: [user, role#assignee]
+
+        # These roles can be assigned to a dynamic role, and all admins inherit it too.
+        define user_manager: [role#assignee] or admin
+        define billing_manager: [role#assignee] or admin
+        define document_manager: [role#assignee] or admin
+        define document_viewer: [role#assignee] or admin
+
+        define can_invite_user: user_manager
+        define can_delete_user: user_manager
+        define can_edit_billing: billing_manager
+        define can_create_document: document_manager
+
+  type document
+    relations
+        # documents belong to an organization
+        define organization: [organization]
+
+        # all permissions are inherited through the organization's roles
+        define editor: document_manager from organization
+        define viewer: document_viewer from organization
+
+        define can_view: viewer or editor
+        define can_edit: editor
+        define can_delete: editor
+
+tuples:
+    # Anne is defined as an admin, using the predefined admin role at the organization level
+
+    - user: user:anne
+      relation: admin
+      object: organization:acme
+
+    # Francis, Ian and Emily are assigned to different Acme groups
+
+    - user: user:francis
+      relation: member
+      object: group:acme-finance
+
+    - user: user:ian
+      relation: member
+      object: group:acme-it-admins
+
+    - user: user:emily
+      relation: member
+      object: group:acme-data-engineering
+
+    # The data-engineering group is part of the engineering group. All members
+    # of data engineering are members of engineering
+
+    - user: group:acme-data-engineering#member
+      relation: member
+      object: group:engineering
+
+    # Group members are assigned to different Acme roles
+
+    - user: group:acme-it-admins#member
+      relation: assignee
+      object: role:acme-admins
+
+    - user: group:acme-finance#member
+      relation: assignee
+      object: role:acme-billing-manager
+  
+    - user: group:engineering#member
+      relation: assignee
+      object: role:acme-document-management
+
+    # Role assignees are assigned to different pre-defined roles in the 
+    # Acme organization
+
+    - user: role:acme-admins#assignee
+      relation: admin
+      object: organization:acme
+
+    - user: role:acme-billing-manager#assignee
+      relation: billing_manager
+      object: organization:acme
+
+    - user: role:acme-document-management#assignee
+      relation: document_manager
+      object: organization:acme
+
+    # The readme document belongs to the Acme organization
+    - user: organization:acme
+      relation: organization
+      object: document:readme
+
+tests:
+    - name: Test document permissions for each user
+      check:
+        # Emily is in Engineering and they have document-management role at Acme
+        - user: user:emily
+          object: document:readme
+          assertions:
+            can_edit : true
+            can_view : true
+
+        # Anne is an admin
+        - user: user:anne
+          object: document:readme
+          assertions:
+            can_edit : true       
+            can_view: true     
+
+        # Ian is an IT-Admin and they are admins at Acme
+        - user: user:ian
+          object: document:readme
+          assertions:
+            can_edit : true  
+            can_view: true     
+
+        # Francis is in the Finance group and they can't manage documents
+        - user: user:francis
+          object: document:readme
+          assertions:
+            can_edit : false    
+            can_view: true                 
+
+    - name: Test billing permissions for each user
+      check: 
+        # Francis is a member of the Finance group
+        - user: user:francis
+          object: organization:acme
+          assertions:
+            can_edit_billing : true                        
+
+        # Ian is an IT-admin and IT-admins are admins
+        - user: user:ian
+          object: organization:acme
+          assertions:
+            can_edit_billing : true
+
+        # Anne is an admin
+        - user: user:anne
+          object: organization:acme
+          assertions:
+            can_edit_billing : true
+
+        # Emily is in Engineering
+        - user: user:emily
+          object: organization:acme
+          assertions:
+            can_edit_billing : false
+        
+    - name: Test all the users that can view document:readme
+      list_users:
+        - object: document:readme
+          user_filter:
+            - type: user
+          assertions:
+            can_view:
+                users:
+                  # all users but Francis can view the document
+                    - user:emily
+                    - user:anne
