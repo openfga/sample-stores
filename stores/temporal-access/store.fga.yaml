@@ -98,6 +98,3 @@ tests:
           viewer:
             users: 
               - user:anne
-
-  # error, if I don't add current time and only expect bob it says it needs time for anne
-  # error, if I don't add anne it says ⅹ ListUsers(object={Type:document Id:1},relation=viewer,user_filter={Type:user Relation:<nil>}, context:&map[current_time:2023-01-01T00:00:01Z]): expected={Users:[user:bob]}, got=N/A
