@@ -82,3 +82,26 @@ tests:
         object: channel:general
         assertions:
           writer: false
+
+     
+  - name: Test which channels can David write to
+    list_objects:
+      - user: user:david
+        type: channel
+        assertions:
+          writer: 
+            - channel:proj_marketing_campaign
+
+  - name: Test who can write to the proj_marketing_campaign channel
+    list_users:
+      - object: channel:proj_marketing_campaign
+        user_filter:
+          - type: user
+        assertions:
+          writer:
+            users: 
+              - user:bob
+              - user:amy
+              - user:david
+              - user:emily
+              - user:catherine

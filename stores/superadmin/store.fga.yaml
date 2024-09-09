@@ -14,12 +14,12 @@ model: |
     # top level type where we define system administrators, note that we are only defining 
     # superadmins but there could be other roles that would have restricted permissions
     type system
-    relations
+      relations
         define admin : [employee, application] 
 
     # organization represent the SaaS customer
     type organization
-    relations
+      relations
         define system : [system]
         
         # system admins have the same permissions in the organization as
@@ -35,7 +35,7 @@ model: |
         define can_create_project : admin or member
 
     type project
-    relations
+      relations
         define organization : [organization]
         define owner : [user]
 
@@ -44,7 +44,7 @@ model: |
         define viewer : [user] or editor or helpdesk_member from organization 
 
     type task
-    relations
+      relations
         define project: [project]
         define owner : [user]
 
@@ -96,38 +96,79 @@ tuples:
       object: task:create-example
 
 tests:
-    - check:
-        # anne is a super admin, has full access
-        - user: employee:anne
-          object: task:create-example
-          assertions: 
-            viewer: true
-            editor: true
+  - name: Test specific permissions for different users
+    check:
+    # anne is a super admin, has full access
+    - user: employee:anne
+      object: task:create-example
+      assertions: 
+        viewer: true
+        editor: true
 
-        # peter is an admin in the organization, has full access
-        - user: user:peter
-          object: task:create-example
-          assertions: 
-            viewer: true
-            editor: true
+    # peter is an admin in the organization, has full access
+    - user: user:peter
+      object: task:create-example
+      assertions: 
+        viewer: true
+        editor: true
 
-        # the system application has full access
-        - user: application:system-management-app
-          object: task:create-example
-          assertions: 
-            viewer: true
-            editor: true
+    # the system application has full access
+    - user: application:system-management-app
+      object: task:create-example
+      assertions: 
+        viewer: true
+        editor: true
 
-        # john only has temporary access as viewer
-        - user: employee:john
-          object: task:create-example
-          context: 
-            current_time: "2024-01-01T00:10:00Z"
-          assertions: 
-            viewer: true
-            editor: false
-
+    # john only has temporary access as viewer
+    - user: employee:john
+      object: task:create-example
+      context: 
+        current_time: "2024-01-01T00:10:00Z"
+      assertions: 
+        viewer: true
+        editor: false
       
-      
+  - name: Test the tasks that each user can view
+    list_objects:
+      - user: employee:john
+        type: task
+        context: 
+          current_time: "2024-01-01T00:10:00Z"
+        assertions:
+          viewer: 
+            - task:create-example
 
-     
+      - user: user:peter
+        type: task
+        assertions:
+          viewer: 
+            - task:create-example
+      
+      - user: employee:anne
+        type: task
+        assertions:
+          viewer: 
+            - task:create-example
+      
+  - name: Test the users/employees can can view task:create-example
+    list_users:
+      - object: task:create-example
+        context: 
+          current_time: "2024-01-01T00:10:00Z"
+        user_filter:
+          - type: user
+        assertions:
+          viewer:
+            users: 
+              - user:peter
+
+      - object: task:create-example
+        context: 
+          current_time: "2024-01-01T00:10:00Z"
+        user_filter:
+          - type: employee
+        assertions:
+          viewer:
+            users: 
+              - employee:anne
+              - employee:john

@@ -101,7 +101,8 @@ tuples:
       object: component:payment
 
 tests:
-    - check:
+    - name: Test permissions for users and applications
+      check:
         - user: user:anne
           object: application:1
           assertions:
@@ -127,3 +128,23 @@ tests:
           assertions:
             can_view : true
             can_write : true
+
+    - name: Test the applications anne can view
+      list_objects:
+        - user: user:anne
+          type: application
+          assertions:
+            can_view:
+              - application:1
+
+    - name: Test who can view application:1
+      list_users:
+        - object: application:1
+          user_filter:
+            - type: user
+          assertions:
+            can_view:
+              users:
+                - user:anne 
+                - user:marie 
+

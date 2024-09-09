@@ -52,7 +52,7 @@ tuples:
     relation: subscriber
     object: plan:team
 tests:
-  - name: Test
+  - name: Test which users have access to different features
     check:
       - user: user:anne
         object: feature:issues
@@ -90,3 +90,25 @@ tests:
         object: feature:sso
         assertions:
           can_access: true
+
+  - name: Test who has access to the issues feature
+    list_users:
+      - object: feature:issues
+        user_filter:
+          - type: user
+        assertions:
+          can_access:
+            users:
+              - user:charles
+              - user:beth
+              - user:anne
+
+  - name: Test which features can Charles access
+    list_objects:
+      - user: user:charles
+        type: feature
+        assertions:
+          can_access:
+            - feature:draft_prs
+            - feature:issues
+            - feature:sso
