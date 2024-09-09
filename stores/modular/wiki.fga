@@ -4,7 +4,6 @@ extend type organization
   relations
     define can_create_space: admin
 
-
 type space
   relations
     define organization: [organization]

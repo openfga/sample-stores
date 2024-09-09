@@ -1,10 +1,10 @@
 # OpenFGA IP-Based Access Sample Store
 
-* **Title**: **IP-Based Access** 
-
 ## Use-Case
 
-It enables granting access for users in a specific IP range.. 
+It enables granting access for users in a specific IP range.
+
+The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 

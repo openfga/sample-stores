@@ -63,7 +63,7 @@ tests:
       object: document:1
       assertions:
         viewer: true
-
+  - name: Test the documents that anne can view
     list_objects:
       - user: user:anne
         type: document
@@ -73,3 +73,28 @@ tests:
           viewer: 
             - document:1
             - document:2
+
+  - name: Test the users that can view document:1
+    list_users:
+      - object: document:1
+        context: 
+          current_time: "2023-01-01T00:00:01Z"
+        user_filter:
+          - type: user
+        assertions:
+          viewer:
+            users: 
+              - user:anne
+              - user:bob
+
+  - name: Test the users that can view document:2
+    list_users:
+      - object: document:2
+        context: 
+          current_time: "2023-01-01T00:00:01Z"
+        user_filter:
+          - type: user
+        assertions:
+          viewer:
+            users: 
+              - user:anne

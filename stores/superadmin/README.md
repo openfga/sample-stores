@@ -2,7 +2,7 @@
 
 ## Use-Case
 
-In B2B SaaS applications, each customer usually has one or more admin users that have full permission over the account.
+In B2B SaaS applications, each customer usually has one or more admin users that have full permission over the account. 
 
 It's also common that employees of the SaaS company can perform specific actions across different accounts, for configuration or help desk purposes. 
 
@@ -17,10 +17,10 @@ The application will have two kinds of resources:
 - **Project**
 - **Tasks**
 
-See the model, tuples and tests in the [store.yaml](./store.fga.yaml) file.
+The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `slack` directory, run `fga model test --tests store.yaml`
+2. In the `superadmin` directory, run `fga model test --tests store.yaml`
