@@ -1,10 +1,10 @@
 # OpenFGA Banking Sample Store
 
-* **Title**: **Bankings** 
-
 ## Use-Case
 
 It models a banking system, with account managers and account owners, where they have different limits for doing bank transactions. The limit can be overruled for a specific transaction.
+
+The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 

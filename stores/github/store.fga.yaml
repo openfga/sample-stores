@@ -40,7 +40,7 @@ tuples:
     relation: member
     object: team:openfga/backend
 tests:
-  - name: Test
+  - name: Test individual user permissions on the openfga/openfga repo
     check:
       - user: user:anne
         object: repo:openfga/openfga
@@ -64,6 +64,28 @@ tests:
         assertions:
           reader: true
 
+  - name: Test who are readers of the openfga/openfga repo
+    list_users:
+    - object: repo:openfga/openfga
+      user_filter:
+        - type: user
+      assertions:
+        reader:
+          users: 
+            - user:diane
+            - user:charles
+            - user:beth
+            - user:anne
+            - user:erik
+
+  - name: Test which repos can Diane read
+    list_objects:
+      - user: user:diane
+        type: repo
+        assertions:
+          reader:
+            - repo:openfga/openfga
+
   - name: Check if the right users have access to the right repositories
     list_users:
       - object: repo:openfga/openfga
@@ -86,4 +108,3 @@ tests:
             users: 
               - team:openfga/backend#member
               - team:openfga/core#member
-

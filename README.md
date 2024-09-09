@@ -53,6 +53,7 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 
 - [Implementing Multi-Tenancy in Chroma: Part 2 - Authorization Model with OpenFGA](https://cookbook.chromadb.dev/strategies/multi-tenancy/authorization-model-with-openfga/)
 - [Introduction into OpenFGA](https://www.ericksegaar.com/2024/03/04/introduction-into-openfga/)
+- 
 
 ## OpenFGA models in open source projects
 
@@ -68,6 +69,7 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 - [grafana/grafana](https://github.com/grafana/grafana/blob/main/pkg/services/authz/zanzana/schema/schema.fga)
 - [sourcegraph/sourcegraph-public-snapshot](https://github.com/sourcegraph/sourcegraph-public-snapshot/blob/main/cmd/enterprise-portal/service/iam_model.fga)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
+
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 

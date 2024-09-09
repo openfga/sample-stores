@@ -1,10 +1,12 @@
 # OpenFGA Temporal Access Sample Store
 
-* **Title**: **Temporal Access** 
-
 ## Use-Case
 
-It enables granting access for a limited time. 
+An application needs to grant access to users to a document during a specific period of time. 
+
+We can model it with OpenFGA using [conditional relationship tuples](https://openfga.dev/docs/modeling/conditions).
+
+The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
