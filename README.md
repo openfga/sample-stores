@@ -1,4 +1,5 @@
 # OpenFGA Sample Stores
+
 [![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
 [![Twitter](https://img.shields.io/twitter/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on Twitter")](https://twitter.com/openfga)
 
@@ -28,6 +29,7 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 - [Temporal Access](./stores/temporal-access)
 - [Group Resource Attributes](./stores/groups-resource-attributes)
 - [Conditions Data Types](./stores/condition-data-types)
+- [Developer Portal](./stores/developer-portal)
 
 ## Creating your store and loading sample data
 
@@ -40,7 +42,7 @@ To try this out, you need the following tools installed:
 git clone https://github.com/openfga/sample-stores.git openfga-sample-stores && cd $_
 ```
 
-2. Use the `fga` CLI to test the [sample store](#sample-stores) you choose (e.g. `github`, `custom-roles`, etc..)
+2. Use the `fga` CLI to test the store you choose (e.g. `github`, `custom-roles`, etc..)
 ```
 SAMPLE_STORE=github
 fga model test --tests "stores/${SAMPLE_STORE}/store.fga.yaml"
@@ -51,6 +53,7 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 
 - [Implementing Multi-Tenancy in Chroma: Part 2 - Authorization Model with OpenFGA](https://cookbook.chromadb.dev/strategies/multi-tenancy/authorization-model-with-openfga/)
 - [Introduction into OpenFGA](https://www.ericksegaar.com/2024/03/04/introduction-into-openfga/)
+- 
 
 ## OpenFGA models in open source projects
 
@@ -67,6 +70,7 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 - [sourcegraph/sourcegraph-public-snapshot](https://github.com/sourcegraph/sourcegraph-public-snapshot/blob/main/cmd/enterprise-portal/service/iam_model.fga)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
 
+
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
 ## Resources
@@ -78,11 +82,3 @@ If you are using OpenFGA in your open source project, please let us know by open
 - [Authorization in Software Podcast](https://authorizationinsoftware.auth0.com/public/49/Authorization-in-Software-f9b69587)
 - [OpenFGA Community](https://openfga.dev/community)
 - [FGA Playground](https://play.fga.dev)
-
-## Author
-
-[OpenFGA Team](https://github.com/openfga)
-
-## License
-
-[Apache-2.0](./LICENSE)
