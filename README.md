@@ -30,6 +30,8 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 - [Group Resource Attributes](./stores/groups-resource-attributes)
 - [Conditions Data Types](./stores/condition-data-types)
 - [Developer Portal](./stores/developer-portal)
+- [Modeling ABAC with ReBAC](./stores/abac-with-rebac)
+- [Modeling multi-tenant Role-Based Access Control](./stores/multitenant-rbac)
 
 ## Creating your store and loading sample data
 
@@ -59,9 +61,10 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 
 - [canonical/lxd](https://github.com/canonical/lxd/blob/main/lxd/auth/drivers/openfga_model.openfga)
 - [canonical/identity-platform-login-ui](https://github.com/canonical/identity-platform-login-ui/blob/main/internal/authorization/schema.openfga)
+- [canonical/jimm](https://github.com/canonical/jimm/blob/v3/openfga/authorisation_model.fga)
 - [lxc/incus](https://github.com/lxc/incus/blob/main/internal/server/auth/driver_openfga_model.openfga)
 - [stacklok/minder](https://github.com/stacklok/minder/blob/main/internal/authz/model/minder.fga)
-- [datumforge/datum](https://github.com/datumforge/datum/blob/main/fga/model/datum.fga)
+- [datum-cloud/datum](https://github.com/datum-cloud/datum/blob/main/fga/model/datum.fga)
 - [instill-ai/pipeline-backend](https://github.com/instill-ai/pipeline-backend/blob/main/pkg/acl/model.go)
 - [virtool/virtool](https://github.com/virtool/virtool/blob/c621ba6a22bfe3464fe59287337029e42295cfcb/virtool/authorization/openfga.py#L123)
 - [concrete-utopia/utopia](https://github.com/concrete-utopia/utopia/blob/master/utopia-remix/fga/model.fga)
@@ -69,7 +72,7 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 - [grafana/grafana](https://github.com/grafana/grafana/blob/main/pkg/services/authz/zanzana/schema/schema.fga)
 - [sourcegraph/sourcegraph-public-snapshot](https://github.com/sourcegraph/sourcegraph-public-snapshot/blob/main/cmd/enterprise-portal/service/iam_model.fga)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
-
+- [ZEISS/knox](https://github.com/ZEISS/knox/blob/main/schema/auth.fga)
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
