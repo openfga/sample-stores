@@ -25,7 +25,7 @@ If the attribute is a **category with a few values**, e.g. a boolean, a category
 
 For example, the following model defines a policy where the user can only view a document if their email is verified, you'll add an email_verified relation to the user type:
 
-````
+```
 type user
     relations
         define email_verified : [user]
@@ -38,7 +38,7 @@ type document
 
 If you want to model a document status, you'll add a relation for each possible status with the document itself:
 
-````
+```
 type user
         
 type document
