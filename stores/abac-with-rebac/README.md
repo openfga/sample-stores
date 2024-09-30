@@ -1,8 +1,8 @@
-# OpenFGA Modeling Attribute-Based Access Control with Relationship Based Access Control
+# OpenFGA Modeling Attribute-Based Access Control with Relationship-Based Access Control
 
 ## Use-Case
 
-This example demonstrates how to model Attribute-Based access control scenarios purely with Relationship Based Access Control constructs.
+This example demonstrates how to model Attribute-Based access control scenarios with relationship-based access Control constructs.
 
 In ABAC, you make authorization decisions based on different attributes of the user, the resource, and the environment. Depending on the kind of attribute, you can model them pretty easily in ReBAC or not.
 
@@ -51,7 +51,7 @@ type document
         define can_view : viewer from published
 ```
 
-If the attribute is a discrete variable with many possible values, e.g. birth date, age, IP address, a a currency amount, then it's not possible to be modeled with pure ReBAC and you need to resort to using [OpenFGA conditions](https://openfga.dev/docs/modeling/conditions). 
+If the attribute is a discrete variable with many possible values, e.g. birth date, age, IP address, and currency amount, then it's not possible to be modeled with pure ReBAC and you need to resort to using [OpenFGA conditions](https://openfga.dev/docs/modeling/conditions). 
 
 If you can model your attribute as a relation, you should do so, as it will make your model simpler and more efficient.
 
