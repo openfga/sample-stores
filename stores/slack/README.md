@@ -19,7 +19,7 @@
 
 This model is inspired by Slack and some of their publicly documented roles and permissions.
 
-> As reference, Slack's publicly available docs were used:
+> As a reference, Slack's publicly available docs were used:
 >
 > - [Role Management at Slack](https://slack.engineering/role-management-at-slack/)
 > - [Types of Roles in Slack](https://slack.com/intl/en-ca/help/articles/360018112273-Types-of-roles-in-Slack)
@@ -36,7 +36,7 @@ Workspace Roles:
 
 System Roles:
 
-- **Channels Admin**: This type of user has the permission to archive channels, rename channels, create private channels, and convert public channels into private channels.
+- **Channels Admin**: This type of user has permission to archive channels, rename channels, create private channels, and convert public channels into private channels.
 
 Channel Settings:
 
@@ -57,7 +57,7 @@ There are users, workspaces and channels.
 - #general channel is a public channel, anyone who is a member of the Sandcastle workspace can view it
 - In the Sandcastle workspace:
   - Amy has a legacy admin role
-  - Bob has a channels admin role
+  - Bob has a channel admin role
   - Catherine and Emily are members
   - David is a guest
 - Catherine and Emily are normal members of the Sandcastle workspace, they can view all public channels, as well as channels they have been invited to
@@ -89,23 +89,23 @@ type user
 # There are workspaces
 type workspace
   relations
-    # users can have the legacy admin role on workspaces
+    # Users can have the legacy admin role on workspaces
     define legacy_admin: [user]
-    # users can have the new channels admin role on workspaces (anyone with a legacy admin role also gets all the channels admin role access) 
+    # Users can have the new channels admin role on workspaces (anyone with a legacy admin role also gets all the channels admin role access) 
     define channels_admin: [user] or legacy_admin
-    # users can have the member role on workspaces, admins automatically get all access granted to members
+    # Users can have the member role on workspaces, admins automatically get all access granted to members
     define member: [user] or legacy_admin or channels_admin
-    # users can have the guest role on workspaces
+    # Users can have the guest role on workspaces
     define guest: [user]
 
 # There are channels
 type channel
   relations
-    # channels have a parent workspace
+    # Channels have a parent workspace
     define parent_workspace: [workspace]
-    # users can be writers on channels
+    # Users can be writers on channels
     define writer: [user,workspace#member]
-    # users can be viewers on channels, writers inherit any access viewers have
+    # Users can be viewers on channels, writers inherit any access viewers have
     define commenter: [user,workspace#member] or writer
 ```
 
