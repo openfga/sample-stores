@@ -51,7 +51,7 @@ type document
         define can_view : viewer from published
 ```
 
-If the attribute is a discrete variable with many possible values, e.g. birth date, age, IP address, and currency amount, then it's not possible to be modeled with pure ReBAC and you need to resort to using [OpenFGA conditions](https://openfga.dev/docs/modeling/conditions). 
+If the attribute is a discrete variable with many possible values, e.g. birth date, age, IP address, a currency amount, then it's not possible to be modeled with pure ReBAC and you need to resort to using [OpenFGA conditions](https://openfga.dev/docs/modeling/conditions). 
 
 If you can model your attribute as a relation, you should do so, as it will make your model simpler and more efficient.
 
