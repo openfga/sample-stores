@@ -1,0 +1,260 @@
+# We 
+
+model: |
+  model
+    schema 1.1
+  
+  type user
+
+  # add an application type
+  type application
+
+  type system
+    relations
+      define super_admin : [user with time_based_grant]
+
+  type role
+    relations
+      define assignee : [user, group#member]
+
+  type organization
+    relations
+      define system : [system]
+      define admin : [user] or super_admin from system or application
+      define application : [application] 
+
+      define can_edit_documents : [role#assignee] or admin or application
+      define can_create_document : [role#assignee] or admin or application
+      define can_add_admin : [role#assignee] or admin or application
+
+  type group 
+    relations
+      define member : [user, group#member]
+
+  type folder
+    relations
+      define organization : [organization]
+      define parent: [folder]
+      define owner : [user]
+      define viewer: [user, group#member]
+      define editor: [user, group#member]
+
+      define can_edit : editor or owner or can_edit from parent or admin from organization
+      define can_view : viewer or can_edit
+
+  type document
+    relations
+      define parent: [folder]
+      define viewer: [user, user:*] or viewer from parent
+      define owner : [user, group#member]
+      define editor: [user, group#member]
+
+      define published: [document]
+
+      define can_edit : editor or owner or can_edit from parent
+      define can_view : (viewer and viewer from published) or can_edit
+
+  condition time_based_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
+     current_time < grant_time + grant_duration
+  }
+
+tuples:
+# Tuples for basic example
+  - user: user:anne
+    object: folder:root
+    relation: owner
+
+  - user: folder:root
+    object: document:welcome
+    relation: parent
+
+  - user: user:bob
+    object: document:welcome
+    relation : owner
+
+# Tuples for multi-tenancy example
+  - user: user:peter
+    object: organization:acme
+    relation: admin
+
+  - user: organization:acme
+    object: folder:root
+    relation: organization
+
+# Tuples for groups example
+  - user: user:martin
+    object: group:engineering
+    relation: member
+
+  - user: group:engineering#member
+    object: group:everyone
+    relation: member
+
+  - user: group:everyone#member
+    object: folder:root
+    relation: editor
+
+  - user: user:*
+    object: document:public-roadmap
+    relation: viewer
+
+# Tuples for Relationship Based ABAC
+  - user: folder:root
+    object: document:document-not-published
+    relation: parent
+
+  - user: user:*
+    object: document:document-not-published
+    relation: viewer
+
+  - user: document:public-roadmap
+    object: document:public-roadmap
+    relation: published
+
+# Tuples for super-admin example
+ 
+ # This tuple is no longer valid in this model
+ # - user: user:sam
+ #  object: system:root
+ #  relation: super_admin
+  - user: system:root
+    object: organization:acme
+    relation: system
+
+# Tuples for conditional relationships
+  - user: user:sam
+    object: system:root
+    relation: super_admin
+    condition: 
+      name: time_based_grant
+      context: 
+        grant_time : "2024-07-21T00:00:00Z"
+        grant_duration : 1h
+
+# Tuples for custom roles
+  - user: user:omar
+    object: role:acme-organization-manager
+    relation: assignee
+
+  - user: user:edith
+    object: role:acme-content-editor
+    relation: assignee
+
+  - user: role:acme-organization-manager#assignee
+    object: organization:acme
+    relation: can_add_admin
+
+  - user: role:acme-content-editor#assignee
+    object: organization:acme
+    relation: can_create_document
+
+# Tuples for API access
+  - user: application:app-1
+    object: organization:acme
+    relation: application
+
+tests: 
+  - name: Tests for basic example
+    check:
+      - user: user:anne        
+        object: document:welcome
+        assertions:
+          can_edit : true
+          can_view : true
+
+      - user: user:bob        
+        object: folder:root
+        assertions:
+          can_edit : false
+          can_view : false
+
+  - name: Tests for multi-tenancy example
+    check:
+      - user: user:peter        
+        object: folder:root
+        assertions:
+          can_edit : true
+          can_view : true
+
+      - user: user:peter        
+        object: document:welcome
+        assertions:
+          can_edit : true
+          can_view : true
+          
+  - name: Tests for groups example
+    check:
+      - user: user:martin        
+        object: document:welcome
+        assertions:
+          can_edit : true
+          can_view : true
+
+      - user: user:martin        
+        object: folder:root
+        assertions:
+          can_edit : true
+          can_view : true
+
+          
+  - name: Tests for public access example
+    check:
+      - user: user:john        
+        object: document:public-roadmap
+        assertions:
+          can_edit : false
+          can_view : true
+
+  - name: Tests for relationship based abac example
+    check:
+      - user: user:john        
+        object: document:document-not-published
+        assertions:
+          can_edit : false
+          can_view : false
+
+# The tests from the previous example need to be completely replaced 
+# as they will require an additional parameter to be sent
+  - name: Tests for super-admin example with conditional relationships
+    check:
+      - user: user:sam        
+        object: document:welcome
+        context: 
+          current_time: "2024-07-21T00:00:09Z"
+        assertions:
+          can_edit : true
+          can_view : true
+
+      - user: user:sam        
+        object: document:welcome
+        context: 
+          current_time: "2024-07-22T00:00:09Z"
+        assertions:
+          can_edit : false
+          can_view : false
+
+  - name : Test for custom roles
+    check:
+      - user: user:omar        
+        object: organization:acme
+        assertions:
+          can_add_admin : true
+          can_create_document : false
+      - user: user:edith        
+        object: organization:acme
+        assertions:
+          can_add_admin : false
+          can_create_document : true
+
+  - name : Test API access
+    check:
+      - user: application:app-1
+        object: organization:acme
+        assertions:
+          can_add_admin : true
+          can_create_document : true
+      - user: application:app-1
+        object: document:welcome
+        assertions:
+          can_edit : true
+          can_view : true
