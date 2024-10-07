@@ -2,7 +2,7 @@
 
 ## Use-Case
 
-This example showcases how to use [modular models](https://openfga.dev/modeling/modular-models) to organize your model across multiple files.
+This example showcases how to use [modular models](https://openfga.dev/docs/modeling/modular-models) to organize your model across multiple files.
 
 It models an application with three modules:
 
