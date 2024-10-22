@@ -6,9 +6,9 @@ model: |
 
   type document
     relations
-      define viewer: [user, user with non_expired_grant]
+      define viewer: [user, user with temporal_access]
 
-  condition non_expired_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
+  condition temporal_access(grant_time: timestamp, grant_duration: duration, current_time: timestamp) {
      current_time < grant_time + grant_duration
   }
 
@@ -21,7 +21,7 @@ tuples:
       relation: viewer
       object: document:1
       condition: 
-        name: non_expired_grant
+        name: temporal_access
         context: 
           grant_time : "2023-01-01T00:00:00Z"
           grant_duration : 1h
@@ -30,7 +30,7 @@ tuples:
       relation: viewer
       object: document:2
       condition: 
-        name: non_expired_grant
+        name: temporal_access
         context: 
           grant_time : "2023-01-01T00:00:00Z"
           grant_duration : 5s
