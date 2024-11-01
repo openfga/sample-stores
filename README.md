@@ -40,22 +40,23 @@ To try this out, you need the following tools installed:
 - `git`
 
 1.  Clone this repository
-```
-git clone https://github.com/openfga/sample-stores.git openfga-sample-stores && cd $_
-```
+  ```sh
+  git clone https://github.com/openfga/sample-stores.git openfga-sample-stores && cd $_
+  ```
 
 2. Use the `fga` CLI to test the store you choose (e.g. `github`, `custom-roles`, etc..)
-```
-SAMPLE_STORE=github
-fga model test --tests "stores/${SAMPLE_STORE}/store.fga.yaml"
-```
+  ```sh
+  SAMPLE_STORE=github
+  fga model test --tests "stores/${SAMPLE_STORE}/store.fga.yaml"
+  ```
+
 ## Modeling Resources
 
 The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started) documentation is a great way to learn about FGA modeling. These two articles illustrate how you can create a model following the documentation steps:
 
 - [Implementing Multi-Tenancy in Chroma: Part 2 - Authorization Model with OpenFGA](https://cookbook.chromadb.dev/strategies/multi-tenancy/authorization-model-with-openfga/)
 - [Introduction into OpenFGA](https://www.ericksegaar.com/2024/03/04/introduction-into-openfga/)
-- 
+
 
 ## OpenFGA models in open source projects
 
@@ -74,6 +75,8 @@ The OpenFGA [Getting Started](https://openfga.dev/docs/modeling/getting-started)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
 - [ZEISS/knox](https://github.com/ZEISS/knox/blob/main/schema/auth.fga)
 - [Lakekeeper](https://github.com/lakekeeper/lakekeeper/blob/main/authz/openfga/v1/schema.fga)
+
+
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
 ## Resources
