@@ -23,7 +23,7 @@ tuples:
     relation: submitter
     object: report:sam-chair1
 tests:
-  - name: Test
+  - name: Test for managers and approvers
     check:
       - user: employee:matt
         object: employee:daniel
@@ -37,3 +37,24 @@ tests:
         object: report:daniel-chair1
         assertions:
           approver: false
+
+  - name: Test which reports can Emily approve
+    list_objects:
+      - user: employee:emily
+        type: report
+        assertions:
+          approver:
+            - report:daniel-chair1
+            - report:sam-chair1
+
+  - name: Test who can approve daniel-chair
+    list_users:
+      - object: report:daniel-chair1
+        user_filter:
+          - type: employee
+        assertions:
+          approver:
+            users:
+              - employee:emily
+              - employee:sam
+              - employee:matt

@@ -1,10 +1,10 @@
 # OpenFGA Groups Resource Attributes  Sample Store
 
-* **Title**: **Temporal Access** 
-
 ## Use-Case
 
 It enables members of specific groups to access content depending on resource attributes. For example, you can specify that members of the 'marketing' team can only view documents that are 'published' but members of the 'content' team can also view 'draft' documents.
+
+The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
