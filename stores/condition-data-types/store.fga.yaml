@@ -26,9 +26,9 @@ model: |
   condition is_valid_double(_double: double) {
     _double != 0.0 && _double > 0.0
   }
-
+  
+  # Duration supports "h" (hours) "m" (minutes) "s" (seconds) "ms" (milliseconds) "us" (microseconds) "ns" (nanoseconds)
   condition is_valid_duration(_duration :duration) {
-    # Duration supports "h" (hours) "m" (minutes) "s" (seconds) "ms" (milliseconds) "us" (microseconds) "ns" (nanoseconds)
     _duration != null && _duration != duration("0s") && _duration > duration("0s") 
   }
 
