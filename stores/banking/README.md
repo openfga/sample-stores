@@ -2,7 +2,7 @@
 
 ## Use-Case
 
-It models a banking system, with account managers and account owners, where they have different limits for doing bank transactions. The limit can be overruled for a specific transaction.
+It models a banking system with account managers and account owners, each having different transaction limits. A specific transaction's limit can be overruled when necessary. An account owner can delegate access to other users.
 
 The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
 
