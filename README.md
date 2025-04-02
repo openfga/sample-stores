@@ -71,7 +71,7 @@ If you are using OpenFGA in your open source project, please let us know by open
 
 ## Resources
 
-- [OpenFGA Documentation](https://openfga.dev)
+- [OpenFGA Documentation](https://openfga.dev/docs/modeling)
 - [OpenFGA on GitHub](https://github.com/openfga/)
 - [OpenFGA on Twitter](https://twitter.com/OpenFGA/)
 - [Zanzibar Academy](https://zanzibar.academy)
