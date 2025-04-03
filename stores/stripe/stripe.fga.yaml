@@ -20,7 +20,7 @@ tuples:
     object: bank_account:1
 
   ### Stripe Issuing Tuples ###
-  # SCENARIO 1: An account manages 2 cards, assinged to users Raghd and Jon. Raghd's card is active and makes two purcahses. Jon's card is inactive and makes one purchase
+  # SCENARIO 1: An account manages 2 cards, assigned to users Raghd and Jon. Raghd's card is active and makes two purchases. Jon's card is inactive and makes one purchase
   # OBJECTS: account:1, user:raghd, user:jon, card:1, card:2, transaction:1, transaction:2, transaction:3
   - user: user:raghd # Raghd is the cardholder of card:1
     relation: cardholder
