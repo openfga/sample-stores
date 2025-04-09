@@ -65,7 +65,7 @@ To try this out, you need the following tools installed:
 - [sourcegraph/sourcegraph-public-snapshot](https://github.com/sourcegraph/sourcegraph-public-snapshot/blob/main/cmd/enterprise-portal/service/iam_model.fga)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
 - [ZEISS/knox](https://github.com/ZEISS/knox/blob/main/schema/auth.fga)
-- [Lakekeeper](https://github.com/lakekeeper/lakekeeper/blob/main/authz/openfga/v1/schema.fga)
+- [Lakekeeper](https://github.com/lakekeeper/lakekeeper/tree/main/authz/openfga/v3.0/components)
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
