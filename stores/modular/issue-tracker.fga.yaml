@@ -1,0 +1,19 @@
+name: ModularDemo
+model_file: ./fga.mod
+tuple_file: ./core-tuples.yaml
+
+tuples:
+  - user: organization:openfga
+    relation: organization
+    object: project:openfga
+tests:
+  - name: Members can view projects
+    check:
+      - user: user:anne
+        object: organization:openfga
+        assertions:
+          can_create_project: true
+      - user: user:anne
+        object: project:openfga
+        assertions:
+          viewer: true

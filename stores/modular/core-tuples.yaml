@@ -1,0 +1,3 @@
+- user: user:anne
+  relation: admin
+  object: organization:openfga

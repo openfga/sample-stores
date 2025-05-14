@@ -52,10 +52,13 @@ type space # module: wiki, file: wiki.fga
     define organization: [organization]
 ```
 
-The model, tuples and unit tests are detailed in [store.fga.yaml](./store.fga.yaml).
+The example includes a module definition file + a test file per module.
 
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `modular` directory, run `fga model test --tests store.fga.yaml`
+2. In the `modular` directory, run the test for each module:
+  - `fga model test --tests core.fga.yaml`
+  - `fga model test --tests wiki.fga.yaml`
+  - `fga model test --tests issue-tracker.fga.yaml`
