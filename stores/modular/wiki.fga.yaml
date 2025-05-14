@@ -1,0 +1,18 @@
+name: Tests for Wiki Module
+model_file: ./fga.mod
+tuple_file: ./core-tuples.yaml
+tuples:
+  - user: organization:openfga
+    relation: organization
+    object: space:openfga
+tests:
+  - name: Members can view projects
+    check:
+      - user: user:anne
+        object: organization:openfga
+        assertions:
+          can_create_space: true
+      - user: user:anne
+        object: space:openfga
+        assertions:
+          can_view_pages: true

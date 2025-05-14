@@ -1,0 +1,11 @@
+name: Tests for core module
+model_file: ./fga.mod
+tuple_file: ./core-tuples.yaml
+tests:
+  - name: Admins are members
+    check:
+      - user: user:anne
+        object: organization:openfga
+        assertions:
+          admin: true
+          member: true
