@@ -2,7 +2,7 @@
 
 ## Use-Case
 
-This example shows a way to enable end-users to define custom roles that's different from the one described in (../custom-roles/README.md). 
+This example shows a way to enable end-users to define custom roles that's different from the one described in the [Custom Roles](../custom-roles/README.md) example.
 
 This approach works better when you want to define multiple instances of the same role. For example, a "Project Admin" role, where the permissions for a "Project Admin" are always the same, but the project admins for each project can be different.  
 
