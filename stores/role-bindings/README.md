@@ -49,7 +49,7 @@ Write tuples to establish both relations for a specific project:
 
 Define the `project` type as:
 
-````
+```
 type project
   relations
      define role_binding : [role_binding]
