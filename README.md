@@ -1,7 +1,7 @@
 # OpenFGA Sample Stores
 
 [![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
-[![Twitter](https://img.shields.io/twitter/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on Twitter")](https://twitter.com/openfga)
+[![Twitter](https://img.shields.io/twitter/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on Twitter")](https://x.com/openfga)
 
 This repository contains [sample store models](#sample-stores) for [OpenFGA](https://openfga.dev).
 
@@ -14,23 +14,26 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 
 ## Sample Store Models
 
-- [GitHub](./stores/github)
-- [Google Drive](./stores/gdrive)
-- [Expenses](./stores/expenses)
-- [IoT](./stores/iot)
-- [Slack](./stores/slack)
-- [Custom Roles](./stores/custom-roles)
-- [Entitlements](./stores/entitlements)
+- [Modeling ABAC with ReBAC](./stores/abac-with-rebac)
 - [Advanced Entitlements](./stores/advanced-entitlements)
 - [Banking](./stores/banking)
-- [IP Based Access](./stores/ip-based-access)
-- [Super-Admin](./stores/superadmin)
-- [Temporal Access](./stores/temporal-access)
-- [Group Resource Attributes](./stores/groups-resource-attributes)
+- [Custom Roles](./stores/custom-roles)
 - [Conditions Data Types](./stores/condition-data-types)
 - [Developer Portal](./stores/developer-portal)
-- [Modeling ABAC with ReBAC](./stores/abac-with-rebac)
+- [Entitlements](./stores/entitlements)
+- [Expenses](./stores/expenses)
+- [Google Drive](./stores/gdrive)
+- [GitHub](./stores/github)
+- [Group Resource Attributes](./stores/groups-resource-attributes)
+- [IoT](./stores/iot)
+- [IP Based Access](./stores/ip-based-access)
+- [Modeling Guide](./stores/modeling-guide)
+- [Modular Models](./stores/modular)
 - [Modeling multi-tenant Role-Based Access Control](./stores/multitenant-rbac)
+- [Role Bindings](./stores/role-bindings)
+- [Slack](./stores/slack)
+- [Super-Admin](./stores/superadmin)
+- [Temporal Access](./stores/temporal-access)
 
 ## Creating your store and loading sample data
 
@@ -65,19 +68,14 @@ To try this out, you need the following tools installed:
 - [sourcegraph/sourcegraph-public-snapshot](https://github.com/sourcegraph/sourcegraph-public-snapshot/blob/main/cmd/enterprise-portal/service/iam_model.fga)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
 - [ZEISS/knox](https://github.com/ZEISS/knox/blob/main/schema/auth.fga)
-- [Lakekeeper](https://github.com/lakekeeper/lakekeeper/tree/main/authz/openfga/v3.0/components)
+- [Lakekeeper](https://github.com/lakekeeper/lakekeeper/tree/main/authz/openfga/v3.2)
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
-## Resources
-
+## Modeling Resources
+- [Modeling Guide](https://www.youtube.com/watch?v=5Lwy9aHXXHE&list=PLUR5l-oTFZqWaDdhEOVt_IfPOIbKo1Ypt)
 - [OpenFGA Documentation](https://openfga.dev/docs/modeling)
-- [OpenFGA on GitHub](https://github.com/openfga/)
-- [OpenFGA on Twitter](https://twitter.com/OpenFGA/)
 - [Zanzibar Academy](https://zanzibar.academy)
-- [Authorization in Software Podcast](https://authorizationinsoftware.auth0.com/public/49/Authorization-in-Software-f9b69587)
-- [OpenFGA Community](https://openfga.dev/community)
-- [FGA Playground](https://play.fga.dev)
 - [Implementing Multi-Tenancy in Chroma: Part 2 - Authorization Model with OpenFGA](https://cookbook.chromadb.dev/strategies/multi-tenancy/authorization-model-with-openfga/)
 - [Introduction into OpenFGA](https://www.ericksegaar.com/2024/03/04/introduction-into-openfga/)
 
