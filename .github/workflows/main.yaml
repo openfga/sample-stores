@@ -19,7 +19,7 @@ jobs:
 
     strategy:
       matrix:
-        store-name: [advanced-entitlements, banking, groups-resource-attributes, ip-based-access, temporal-access, github, gdrive, expenses, iot, slack, entitlements, custom-roles, superadmin]
+        store-name: [abac-with-rebac, advanced-entitlements, banking, condition-data-types, custom-roles, developer-portal, entitlements, expenses, gdrive, github, groups-resource-attributes, iot, ip-based-access, multitenant-rbac, role-bindings, slack, superadmin, temporal-access]
 
     steps:
       - name: Checkout
