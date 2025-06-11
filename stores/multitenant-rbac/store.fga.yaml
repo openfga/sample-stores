@@ -113,29 +113,29 @@ tests:
         - user: user:emily
           object: document:readme
           assertions:
-            can_edit : true
-            can_view : true
+            can_edit: true
+            can_view: true
 
         # Anne is an admin
         - user: user:anne
           object: document:readme
           assertions:
-            can_edit : true       
+            can_edit: true       
             can_view: true     
 
         # Ian is an IT-Admin and they are admins at Acme
         - user: user:ian
           object: document:readme
           assertions:
-            can_edit : true  
+            can_edit: true  
             can_view: true     
 
         # Francis is in the Finance group and they can't manage documents
         - user: user:francis
           object: document:readme
           assertions:
-            can_edit : false    
-            can_view: true                 
+            can_edit: false    
+            can_view: false                 
 
     - name: Test billing permissions for each user
       check: 
@@ -143,25 +143,25 @@ tests:
         - user: user:francis
           object: organization:acme
           assertions:
-            can_edit_billing : true                        
+            can_edit_billing: true                        
 
         # Ian is an IT-admin and IT-admins are admins
         - user: user:ian
           object: organization:acme
           assertions:
-            can_edit_billing : true
+            can_edit_billing: true
 
         # Anne is an admin
         - user: user:anne
           object: organization:acme
           assertions:
-            can_edit_billing : true
+            can_edit_billing: true
 
         # Emily is in Engineering
         - user: user:emily
           object: organization:acme
           assertions:
-            can_edit_billing : false
+            can_edit_billing: false
         
     - name: Test all the users that can view document:readme
       list_users:
@@ -171,6 +171,7 @@ tests:
           assertions:
             can_view:
                 users:
-                  # all users but Francis can view the document
+                    # all users but Francis can view the document
                     - user:emily
                     - user:anne
+                    - user:ian
