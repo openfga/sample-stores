@@ -69,7 +69,7 @@ And link the `role_binding` to the project:
   object: project:openfga
 ```
 
-The [store.yaml](./store.fga.yaml) file has a full example of this scenario for a multi-tenant use case.
+The [store.fga.yaml](./store.fga.yaml) file has a full example of this scenario for a multi-tenant use case.
 
 ## Try It Out
 
