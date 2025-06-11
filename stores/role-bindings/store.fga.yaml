@@ -1,6 +1,6 @@
 model: |
 
-  # We want to be enable each organization to define a "Project Admin" role. 
+  # We want to enable each organization to define a "Project Admin" role. 
   # Permissions are the same for all project admins, but each project can have different admins
 
   model
@@ -12,14 +12,14 @@ model: |
     # When a role has the permission enabled, we write a tuple like:
     #      user: user:*
     #      relation: can_edit_project
-    #      role:project-admin
+    #      object: role:project-admin
 
     type role
       relations
         define can_edit_project: [user:*]
         define can_view_project: [user:*]
 
-        # If we later want to add a `can_delete_project` a new permission to a role, we need to define this new relation
+        # If we later want to add a `can_delete_project` permission to a role, we need to define this new relation
         # define can_delete_project: [user:*]
 
     # We'll link users and roles in a `role_binding` type. 
@@ -31,27 +31,27 @@ model: |
 
         # These will evaluate to `true` if the user is assigned to the role_binding 
         # and the role has the permission enabled
-        define can_edit_project: assignee and can_edit_project from role
         define can_view_project: assignee and can_view_project from role
+        define can_edit_project: assignee and can_edit_project from role
     
-        # To add the `can_delete_project` a new permission to a role, we need to define this new relation
+        # To add a `can_delete_project` permission to a role, we need to define this new relation
         # define can_delete_project: assignee and can_delete_project from role
 
     type organization
       relations
-        define admin : [user]
+        define admin: [user]
 
     type project
       relations
         define organization: [organization]
-        define role_binding : [role_binding]
+        define role_binding: [role_binding]
 
         # We use the role_binding to decide if the user has the permission, and also consider static roles like `admin`
-        define can_view : can_view_project from role_binding or admin from organization
-        define can_edit : can_edit_project from role_binding or admin from organization
+        define can_view: can_view_project from role_binding or admin from organization
+        define can_edit: can_edit_project from role_binding or admin from organization
 
-        # To allow add the `can_delete_project` a new permission to a role, we need to define this new relation
-        # define can_delete_project: can_delete_project from role_binding or admin from organization
+        # To add a `can_delete_project` permission to a role, we need to define this new relation
+        # define can_delete: can_delete_project from role_binding or admin from organization
 
 tuples:
     # Organization Acme creates a 'project admin' role that includes the can_view_project
@@ -67,32 +67,32 @@ tuples:
       
     # When we want to assign a user as a Project admin for a specific project, we need to make sure these tuples are created first (two per project). 
     # We assign the role_binding to the project, and the role to the role_binding.
-    # In this case we have an 'openfga' and an 'openfga.dev' project
+    # In this case we have an 'openfga' and a 'java-sdk' project
 
-    - user: role_binding:acme-project-openfga-admin
+    - user: role_binding:acme-project-admin-openfga
       relation: role_binding
       object: project:openfga
 
     - user: role:acme-project-admin 
       relation: role
-      object: role_binding:acme-project-openfga-admin
+      object: role_binding:acme-project-admin-openfga
 
-    - user: role_binding:acme-project-openfga.dev-admin
+    - user: role_binding:acme-project-admin-java-sdk
       relation: role_binding
-      object: project:openfga.dev
+      object: project:java-sdk
 
-    - user: role:acme-project-admin 
+    - user: role:acme-project-admin
       relation: role
-      object: role_binding:acme-project-openfga.dev-admin
+      object: role_binding:acme-project-admin-java-sdk
 
-    # We can now assign the project admins for a each project, to the role binding instance
-    - user: user:1
+    # We can now assign the project admins for each project to the role binding instance
+    - user: user:anne
       relation: assignee
-      object: role_binding:acme-project-openfga-admin     
+      object: role_binding:acme-project-admin-openfga
 
-    - user: user:2
+    - user: user:bob
       relation: assignee
-      object: role_binding:acme-project-openfga.dev-admin     
+      object: role_binding:acme-project-admin-java-sdk
 
     # To enable all members of the `project-admin` role, for any project, to delete projects, 
     # we need to add a single tuple enabling the permission in the role.
@@ -102,26 +102,26 @@ tuples:
 
 tests:
     - check:
-        - user: user:1
+        - user: user:anne
           object: project:openfga
           assertions:
             can_view: true
             can_edit: true
 
-        - user: user:2
+        - user: user:bob
           object: project:openfga
           assertions:
             can_view: false
             can_edit: false
 
-        - user: user:2
-          object: project:openfga.dev
+        - user: user:bob
+          object: project:java-sdk
           assertions:
             can_view: true
             can_edit: true
 
-        - user: user:1
-          object: project:openfga.dev
+        - user: user:anne
+          object: project:java-sdk
           assertions:
             can_view: false
             can_edit: false
