@@ -26,7 +26,7 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 - [Google Drive](./stores/gdrive)
 - [Group Resource Attributes](./stores/groups-resource-attributes)
 - [IoT](./stores/iot)
-- [IP Based Access](./stores/ip-based-access)
+- [IP-Based Access](./stores/ip-based-access)
 - [Modeling Guide](./stores/modeling-guide)
 - [Modeling Multi-Tenant Role-Based Access Control](./stores/multitenant-rbac)
 - [Modular Models](./stores/modular)
