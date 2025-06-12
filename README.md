@@ -17,7 +17,7 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 - [Modeling ABAC with ReBAC](./stores/abac-with-rebac)
 - [Advanced Entitlements](./stores/advanced-entitlements)
 - [Banking](./stores/banking)
-- [Conditions Data Types](./stores/condition-data-types)
+- [Condition Data Types](./stores/condition-data-types)
 - [Custom Roles](./stores/custom-roles)
 - [Developer Portal](./stores/developer-portal)
 - [Entitlements](./stores/entitlements)
