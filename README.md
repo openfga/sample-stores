@@ -7,10 +7,11 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Sample Store Models](#sample-store-models)
 - [Creating your store and loading sample data](#creating-your-store-and-loading-sample-data)
 - [OpenFGA models in open source projects](#openfga-models-in-open-source-projects)
-- [Resources](#resources)
+- [Modeling Resources](#modeling-resources)
 
 ## Sample Store Models
 
@@ -30,7 +31,7 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 - [Modeling Guide](./stores/modeling-guide)
 - [Modeling Multi-Tenant Role-Based Access Control](./stores/multitenant-rbac)
 - [Modular Models](./stores/modular)
-- [Role Bindings](./stores/role-bindings)
+- [Role Assignments](./stores/role-assignments)
 - [Slack](./stores/slack)
 - [Super-Admin](./stores/superadmin)
 - [Temporal Access](./stores/temporal-access)
