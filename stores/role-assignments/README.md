@@ -1,4 +1,4 @@
-# Custom Roles with Role Bindings
+# Custom Roles with Role Assignments
 
 ## Use Case
 
@@ -27,10 +27,10 @@ To create a Project Admin role where users can view and edit projects, write two
   object: role:project-admin
 ```
 
-Add a `role_binding` type to bind users to the role:
+Add a `role_assignment` type to assign users to the role:
 
 ```
-type role_binding
+type role_assignment
   relations
     define assignee: [user]
     define role: [role]
@@ -44,11 +44,11 @@ Write tuples to establish both relations for a specific project:
 ```
 - user: user:anne
   relation: assignee
-  object: role_binding:project-admin-openfga
+  object: role_assignment:project-admin-openfga
 
 - user: role:project-admin  
   relation: role
-  object: role_binding:project-admin-openfga
+  object: role_assignment:project-admin-openfga
 ```
 
 Define the `project` type as:
@@ -56,16 +56,16 @@ Define the `project` type as:
 ```
 type project
   relations
-     define role_binding : [role_binding]
-     define can_edit_project : can_edit_project from role_binding
-     define can_view_project : can_view_project from role_binding
+     define role_assignment : [role_assignment]
+     define can_edit_project : can_edit_project from role_assignment
+     define can_view_project : can_view_project from role_assignment
 ```
 
-And link the `role_binding` to the project:
+And link the `role_assignment` to the project:
 
 ```
-- user: role_binding:project-admin-openfga
-  relation: role_binding
+- user: role_assignment:project-admin-openfga
+  relation: role_assignment
   object: project:openfga
 ```
 
@@ -75,4 +75,4 @@ The [store.fga.yaml](./store.fga.yaml) file has a full example of this scenario 
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation) installed.
 
-2. In the `role-bindings` directory, run `fga model test --tests store.yaml`
+2. In the `role-assignments` directory, run `fga model test --tests store.yaml`
