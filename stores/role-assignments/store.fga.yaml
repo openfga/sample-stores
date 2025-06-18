@@ -124,4 +124,4 @@ tests:
           object: project:java-sdk
           assertions:
             can_view: false
-            can_view: false
+            can_edit: false
