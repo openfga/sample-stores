@@ -7,12 +7,11 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 
 ## Table of Contents
 
-- [OpenFGA Sample Stores](#openfga-sample-stores)
-  - [Table of Contents](#table-of-contents)
-  - [Sample Store Models](#sample-store-models)
-  - [Creating your store and loading sample data](#creating-your-store-and-loading-sample-data)
-  - [OpenFGA models in open source projects](#openfga-models-in-open-source-projects)
-  - [Modeling Resources](#modeling-resources)
+- [Table of Contents](#table-of-contents)
+- [Sample Store Models](#sample-store-models)
+- [Creating your store and loading sample data](#creating-your-store-and-loading-sample-data)
+- [OpenFGA models in open source projects](#openfga-models-in-open-source-projects)
+- [Modeling Resources](#modeling-resources)
 
 ## Sample Store Models
 
