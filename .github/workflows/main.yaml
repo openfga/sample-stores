@@ -25,6 +25,8 @@ jobs:
 
       - name: Set up Go
         uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: 'stable'
 
       - name: Install the FGA CLI
         run: go install github.com/openfga/cli/cmd/fga@latest
@@ -32,10 +34,18 @@ jobs:
       - name: Run the tests with the FGA CLI
         run: |
           set -euo pipefail
-          
-          for testFile in ./stores/*/store.fga.yaml; do
-            echo "⏳ Running tests in $testFile"
-            fga model test --tests "$testFile"
-            echo "✅ Passed $testFile"
+          shopt -s nullglob
+      
+          testFiles=(./stores/*/store.fga.yaml)
+      
+          if [ ${#testFiles[@]} -eq 0 ]; then
+            echo "⚠️  No test files found in ./stores/*/store.fga.yaml, exiting."
+            exit 1
+          fi
+      
+          for tf in "${testFiles[@]}"; do
+            echo "⏳ Running tests in $tf"
+            fga model test --tests "$tf"
+            echo "✅ Passed $tf"
             echo
           done
