@@ -36,7 +36,7 @@ jobs:
           set -euo pipefail
           shopt -s nullglob
       
-          testFiles=(./stores/*/store.fga.yaml)
+          testFiles=(./stores/*/*.fga.yaml)
       
           if [ ${#testFiles[@]} -eq 0 ]; then
             echo "⚠️  No test files found in ./stores/*/store.fga.yaml, exiting."
