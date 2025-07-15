@@ -17,25 +17,35 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        store-name: [abac-with-rebac, advanced-entitlements, banking, condition-data-types, custom-roles, developer-portal, entitlements, expenses, gdrive, github, groups-resource-attributes, iot, ip-based-access, multitenant-rbac, role-assignments, slack, superadmin, temporal-access]
-
     steps:
       - name: Checkout
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
-      - name: Get the latest FGA CLI version
-        run: curl -sL https://api.github.com/repos/vmware/govmomi/releases/latest | jq -r ".tag_name"
+      - name: Set up Go
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: 'stable'
 
       - name: Install the FGA CLI
-        run: |
-          # Get the latest FGA CLI version
-          FGA_VERSION=$(curl -sL https://api.github.com/repos/openfga/cli/releases/latest | jq -r ".tag_name")
-          curl -sLS https://github.com/openfga/cli/releases/download/${FGA_VERSION}/fga_${FGA_VERSION#v}_linux_amd64.deb -o fga-cli.deb
-          sudo dpkg -i ./fga-cli.deb
+        run: go install github.com/openfga/cli/cmd/fga@latest
 
       - name: Run the tests with the FGA CLI
-        run: fga model test --tests stores/${{matrix.store-name}}/store.fga.yaml
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+      
+          testFiles=(./stores/*/*.fga.yaml)
+      
+          if [ ${#testFiles[@]} -eq 0 ]; then
+            echo "⚠️  No test files found in ./stores/*/store.fga.yaml, exiting."
+            exit 1
+          fi
+      
+          for tf in "${testFiles[@]}"; do
+            echo "⏳ Running tests in $tf"
+            fga model test --tests "$tf"
+            echo "✅ Passed $tf"
+            echo
+          done
