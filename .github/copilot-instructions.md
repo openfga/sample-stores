@@ -319,7 +319,7 @@ The tests section within the .fga.yaml file is where you define specific test ca
             admin: true
 ```
 
-* **List Objects Tests:** Validate the expected results when querying which objects a user has a specific relation with (e.g., user:anne is a member of organization:acme). These tests include the user, type of object, context, and assertions.18  Example of List Objects tests:
+* **List Objects Tests:** Validate the expected results when querying which objects a user has a specific relation with (e.g., user:anne is a member of organization:acme). These tests include the user, type of object, context, and assertions.  Example of List Objects tests:
 
 ```yaml
   list_objects:  
