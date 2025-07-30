@@ -36,6 +36,26 @@ This repository contains [sample store models](#sample-stores) for [OpenFGA](htt
 - [Super-Admin](./stores/superadmin)
 - [Temporal Access](./stores/temporal-access)
 
+## Authoring Models using Coding Assistants
+
+This repository includes a [copilot-instructions](.github/copilot-instructions.md) file that can help you author OpenFGA models. It can be used in VS Code or in any AI-assisted IDE. You can also use it as a prompt, or system prompt, in any LLM. 
+
+Some prompts you can try:
+
+- Create an OpenFGA authorization model for an insurance company.
+- Create an OpenFGA authorization model for B2B SaaS project management system.
+- Create an OpenFGA authorization model for <Product Name> (e.g. create a model for Figma).
+
+It will create a model in an `.fga` file, and a `.fga.yaml` with tuples/tests, and use the [CLI](https://github.com/openfga/cli) to run the tests.
+
+To use it in Visual Studio Code:
+- Setup [VS Code with Copilot](https://code.visualstudio.com/docs/copilot/setup-simplified)
+- Create a new folder, with a .github folder, and copy the [copilot-instructions](.github/copilot-instructions.md) file.
+- Open Copilot
+- Prompt
+
+Other coding assistants look for other file names (CLAUDE.md, AGENTS.md, Cursor rules).
+
 ## Creating your store and loading sample data
 
 To try this out, you need the following tools installed:
