@@ -41,7 +41,7 @@ The following table summarizes these core concepts:
 
 ## **3. The OpenFGA Modeling Language: DSL**
 
-OpenFGA's Configuration Language is fundamental to constructing a system's authorization model, informing OpenFGA about object types and their relationships.10 It describes all possible relations for an object of a given type and the conditions under which one entity is related to that object.10 The language is primarily expressed in DSL (Domain Specific Language).
+OpenFGA's Configuration Language is fundamental to constructing a system's authorization model, informing OpenFGA about object types and their relationships. It describes all possible relations for an object of a given type and the conditions under which one entity is related to that object. The language is primarily expressed in DSL (Domain Specific Language).
 
 ### **DSL: Developer-Friendly Syntax for Readability**
 
