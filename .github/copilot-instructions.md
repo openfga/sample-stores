@@ -95,7 +95,7 @@ For example,
 define viewer: [user] or editor
 ```
 
-means a user is a viewer if directly assigned OR if they are an editor. user:anne is an editor of `document:new-roadmap`, she implicitly has viewer access, reducing the number of required tuples.
+means a user is a viewer if directly assigned OR if they are an editor. `user:anne` is an editor of `document:new-roadmap`, she implicitly has viewer access, reducing the number of required tuples.
 
 ### **Indirect Relationships with 'X from Y': Scalable Hierarchical and Group-Based Access**
 
