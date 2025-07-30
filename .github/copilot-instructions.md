@@ -65,9 +65,9 @@ OpenFGA provides a rich set of constructs for defining relationships, enabling t
 
 ### **Direct Relationships: Explicit Access Grants**
 
-A direct relationship is established when a specific relationship tuple (e.g., user=X, relation=R, object=Y) is explicitly stored. The authorization model must explicitly permit this through direct relationship type restrictions.5 These restrictions define which types of users can be directly associated with an object for a given relation, using formats like
+A direct relationship is established when a specific relationship tuple (e.g., user=X, relation=R, object=Y) is explicitly stored. The authorization model must explicitly permit this through direct relationship type restrictions. These restrictions define which types of users can be directly associated with an object for a given relation, using formats like
 
-`[<type>`], `[<type:*>]`, or `[<type\>#<relation\>]`. 
+`[<type>`], `[<type:*>]`, or `[<type>#<relation>]`. 
 
 For example,
 
@@ -80,7 +80,7 @@ means only individual users can be directly assigned as owners.
 A tuple like:
 
 ```
-{"user": "user:anne", "relation": "user", "object": "document:1"} 
+{"user": "user:anne", "relation": "owner", "object": "document:1"} 
 ```
 
 is a direct relationship.
@@ -142,7 +142,7 @@ The following table summarizes the key relationship definition patterns in OpenF
 | :---- | :---- | :---- | :---- |
 | **Direct Relationship** | Explicitly grants a user a relation to an object via a stored tuple, subject to type restrictions. | `define owner: [user]` | Only individual users can be directly assigned as owner. |
 | **Concentric Relationship** | Defines that having one relation implies having another relation to the same object (e.g., editors are viewers). | `define viewer: [user] or editor` | A user is a viewer if directly assigned as viewer OR if they are an editor. |
-| **Indirect Relationship ('X from Y')** | A user gains a relation (X) to an object through another object (Y) and a specific relation on Y. | `define admin: [user] or repo_admin from owner `| A user is admin of a repo if directly assigned OR if they are repo_admin of an org that owns the repo. |
+| **Indirect Relationship ('X from Y')** | A user gains a relation (X) to an object through another object (Y) and a specific relation on Y. | `define admin: [user] or repo_admin from owner`| A user is admin of a repo if directly assigned OR if they are repo_admin of an org that owns the repo. |
 | **Conditional Relationship** | A relationship is permissible only if a specified condition, evaluated at runtime, is true. | `define admin: [user with non_expired_grant]` | A user is admin only if the non_expired_grant condition evaluates to true for their context. |
 | **Usersets** | Represents a collection of users (e.g., a group or a set of users related by a specific relation). | `define editor: [user, team#member]` | An editor can be a direct user OR any member of a specified team. |
 
@@ -159,7 +159,7 @@ The recommended steps for defining an authorization model are:
 1. **Pick the most important feature:** Focus on a high-priority use case to establish a foundational model.
 2. **List the object types:** Identify all relevant entities (e.g., user, document, folder, organization).
 3. **List relations for those types:** For each type, determine relationships users or other objects can have (e.g., owner, editor, viewer, member).
-4. **Define relations:** Translate these relationships into OpenFGA DSL, specifying direct, concentric, and indirect relationships as needed.6  
+4. **Define relations:** Translate these relationships into OpenFGA DSL, specifying direct, concentric, and indirect relationships as needed.
 5. **Test the model:** Validate your model against expected behaviors using assertions and comprehensive test cases.
 6. **Iterate:** Refine the model based on testing and evolving requirements.
 
@@ -219,9 +219,9 @@ type folder
     define viewer: [user] or editor or viewer from parent_folder  
 ```
 
-In this extension, an editor of a document could be someone directly assigned, an owner, or an editor of its parent_folder, leveraging X from Y for hierarchical permissions.3
+In this extension, an editor of a document could be someone directly assigned, an owner, or an editor of its parent_folder, leveraging X from Y for hierarchical permissions.
 
-## **6. Adding permissions
+## **6. Adding permissions**
 
 It's a common pratice to define specific permissions, that can't be directly assigned, using `can_<permission>` relations, for example:
 
@@ -251,13 +251,24 @@ The OpenFGA CLI serves as a cross-platform command-line tool for interacting wit
 
 * Reading, writing, validating, and transforming authorization models.
 * Running tests on an authorization model, which is crucial for verifying its correctness.
-* Managing OpenFGA stores, encompassing operations such as creation, listing, retrieval, deletion, import, and expor
+* Managing OpenFGA stores, encompassing operations such as creation, listing, retrieval, deletion, import, and export.
 
-To execute tests defined within a .fga.yaml file, the fga model test command is utilized: fga model test \--tests \<filename\>.fga.yaml.18
+To execute tests defined within a .fga.yaml file, the fga model test command is utilized: `fga model test --tests <filename>.fga.yaml`.
+
+The CLI can be installed in different ways:
+
+- Using Homebrew for MacOS: `brew install openfga/tap/fga`
+- Debian: `sudo apt install ./fga_<version>_linux_<arch>.deb`
+- Fedora: `sudo dnf install ./fga_<version>_linux_<arch>.rpm`
+- Alpine Linux: `sudo apk add --allow-untrusted ./fga_<version>_linux_<arch>.apk`
+- Windows via Scoop: scoop install openfga
+
+It can be run using Docker:
+ - docker pull openfga/cli; docker run -it openfga/cli
 
 ### **Automated Testing with .fga.yaml**
 
-The .fga.yaml file is central to defining and testing OpenFGA authorization models, providing a structured approach for validation.18 This file can include:
+The .fga.yaml file is central to defining and testing OpenFGA authorization models, providing a structured approach for validation. This file can include:
 
 * `name` (optional): A descriptive name for the test file.
 * `model` or `model_file`: The authorization model can be defined inline or referenced from an external .fga, .json, or .mod file.
@@ -279,7 +290,7 @@ model: |
     relations  
     define member : [user]  
     define admin : [user with non_expired_grant]  
-  condition non\_expired_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {  
+  condition non_expired_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {  
     current_time < grant_time + grant_duration  
   }  
 tuples: # Inline tuple definitions go here  
@@ -340,7 +351,7 @@ The tests section within the .fga.yaml file is where you define specific test ca
           - organization:acme
 ```
 
-* **List Users Tests:** Confirm which users possess access to a given object. These tests specify the object, a user_filter (by type or userset), context, and assertions for the users for any number of relations. The users field within assertions supports specific syntax for different userset types: `<type\>:<id\>` for a user, `<type\>:<id\>#<relation\>` for a relation on a type, and `<type\>:*` for public access.
+* **List Users Tests:** Confirm which users possess access to a given object. These tests specify the object, a user_filter (by type or userset), context, and assertions for the users for any number of relations. The users field within assertions supports specific syntax for different userset types: `<type>:<id>` for a user, `<type>:<id>#<relation>` for a relation on a type, and `<type>:*` for public access.
 
 Example of List Users tests:
 ```yaml
@@ -554,11 +565,7 @@ When evolving from static roles to custom roles:
 2. **Gradual migration**: Move permissions one at a time to custom roles
 3. **Backwards compatibility**: Maintain existing static role behavior during transition
 
-
-## **9. Testing Models
-Always run the `fga model test --tests <.fga.yaml>` command to ensure your model and tests are behaving as expected.
-
-## **10. Simplify Models
+## **9. Simplify Models**
 
 After generating model and tests, remove from the model all types and relations that are not referenced in the model or the tests.
 
