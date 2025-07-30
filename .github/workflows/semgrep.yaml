@@ -1,4 +1,6 @@
 name: Semgrep
+permissions:
+  contents: read
 on:
   push:
     branches:
