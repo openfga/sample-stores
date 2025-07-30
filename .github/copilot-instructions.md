@@ -120,7 +120,7 @@ condition less_than_hundred(x: int) {
 }
 ```
 
-Conditions are need to be added at the end of the model, and are instantiated using conditional relationship tuples.
+Conditions are required to be defined at the end of the model (after the type definitions), and are instantiated using conditional relationship tuples.
 
 ### **Leveraging Usersets for Group-Based Access Control**
 
