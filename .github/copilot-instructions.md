@@ -10,7 +10,7 @@ OpenFGA is an open-source authorization solution that empowers developers to imp
 
 It functions as a flexible authorization engine, simplifying the process of defining application permissions.
 
-Inspired by Google's Zanzibar paper, OpenFGA primarily champions Relationship-Based Access Control (ReBAC), while also effectively addressing use cases for Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC).1 Its "developer-first" philosophy is evident in its Domain Specific Language (DSL) and supporting tools, which lower the barrier to entry for developers.
+Inspired by Google's Zanzibar paper, OpenFGA primarily champions Relationship-Based Access Control (ReBAC), while also effectively addressing use cases for Role-Based Access Control (RBAC) and Attribute-Based Access Control (ABAC). Its "developer-first" philosophy is evident in its Domain Specific Language (DSL) and supporting tools, which lower the barrier to entry for developers.
 
 The core purpose of an authorization model is to define a system's permission structure, answering questions like, "Can user U perform action A on object O?". By externalizing authorization logic from application code, OpenFGA provides a robust mechanism for managing complex access policies, especially in large-scale systems. The modeling language is designed to be powerful for engineers yet accessible to other team stakeholders, fostering collaborative policy development.
 
