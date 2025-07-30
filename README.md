@@ -48,6 +48,14 @@ Some prompts you can try:
 
 It will create a model in an `.fga` file, and a `.fga.yaml` with tuples/tests, and use the [CLI](https://github.com/openfga/cli) to run the tests.
 
+To use it in Visual Studio Code:
+- Setup [VS Code with Copilot](https://code.visualstudio.com/docs/copilot/setup-simplified)
+- Create a new folder, with a .github folder, and copy the [copilot-instructions](.github/copilot-instructions.md) file.
+- Open Copilot
+- Prompt
+
+Other coding assistants look for other file names (CLAUDE.md, AGENTS.md, Cursor rules).
+
 ## Creating your store and loading sample data
 
 To try this out, you need the following tools installed:
