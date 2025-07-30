@@ -266,7 +266,7 @@ The .fga.yaml file is central to defining and testing OpenFGA authorization mode
 #### Defining the Model and Tuples in .fga.yaml  
 
 You can define your authorization model and relationship tuples directly within the .fga.yaml file. This allows for a self-contained test definition.  
-Example of defining a model and tuples inline 18:
+Example of defining a model and tuples inline:
 
 
 ```yaml
