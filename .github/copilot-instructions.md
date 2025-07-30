@@ -19,7 +19,7 @@ The core purpose of an authorization model is to define a system's permission st
 To effectively model authorization in OpenFGA, it is essential to understand its core building blocks:
 
 * **Authorization Model:** A static blueprint that combines one or more type definitions to precisely define the permission structure of a system. It represents the  
-  *possible* relations between users and objects. Models are generally stable and immutable; each modification creates a new version with a unique ID.
+  *possible* relations between users and objects. Models are immutable; each modification creates a new version with a unique ID. Models aren't expected change often - only when new product features or change in functionality is introduced. They're also generally expected to be backward compatible, but can break backward compatibility once the system has completely moved off the older relations in it.
 * **Type:** A string that defines a class of objects sharing similar characteristics (e.g., user, document, folder, organization, team, repo).
 * **Object:** A specific instance of a defined Type (e.g., `document:roadmap`, `user:anne`, `organization:acme`). An object's relationships are defined through relationship tuples and the authorization model.
 * **User:** An entity that can be related to an object. A user can be a specific individual (e.g., user:anne), a wildcard representing everyone (`user:*`), or a userset (e.g., `team:product#member`), which denotes a group of users.  
