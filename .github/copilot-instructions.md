@@ -261,7 +261,7 @@ The .fga.yaml file is central to defining and testing OpenFGA authorization mode
 
 * `name` (optional): A descriptive name for the test file.
 * `model` or `model_file`: The authorization model can be defined inline or referenced from an external .fga, .json, or .mod file.
-* tuples or tuple_file or tuple_files (optional): Relationship tuples can be defined inline or referenced from external JSON, YAML, or CSV files, and are considered for all tests.18
+* `tuples` or `tuple_file` or `tuple_files` (optional): Relationship tuples can be defined inline or referenced from external JSON, JSONL, YAML, or CSV files, and are considered for all tests.
 
 #### Defining the Model and Tuples in .fga.yaml  
 
