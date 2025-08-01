@@ -56,6 +56,8 @@ To use it in Visual Studio Code:
 
 Other coding assistants look for other file names (CLAUDE.md, AGENTS.md, Cursor rules).
 
+You can also use the [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or the [Context7 MCP](https://github.com/upstash/context7) to get AI agents have OpenFGA context. For getting assistance in modeling, it's recommended that you use [copilot-instructions](.github/copilot-instructions.md) even if you configure an MCP.
+
 ## Creating your store and loading sample data
 
 To try this out, you need the following tools installed:
