@@ -58,7 +58,7 @@ Other coding assistants look for other file names (CLAUDE.md, AGENTS.md, Cursor 
 
 You can also use the [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or the [Context7 MCP](https://github.com/upstash/context7) to provide AI agents with OpenFGA context to help you implement OpenFGA using different SDKs. 
 
-For modeling assistance, we recommend you continue using [copilot-instructions](.github/copilot-instructions.md) even if you configure an MCP.
+For modeling assistance, we you use [copilot-instructions](.github/copilot-instructions.md) even if you configure an MCP.
 
 ## Creating your store and loading sample data
 
