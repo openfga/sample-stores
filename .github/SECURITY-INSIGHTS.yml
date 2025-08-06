@@ -14,15 +14,15 @@ repository:
   accepts-automated-change-request: true
   no-third-party-packages: true
   core-team:
-  - name: Andres Aguiar
-    affiliation: Okta
-    email: andres.aguiar@okta.com
-    social: https://github.com/aaguiarz
-    primary: true
-  - name: Raghd Hamzeh
-    affiliation: Okta
-    email: raghd.hamzeh@okta.com
-    social: https://github.com/rhamzeh
+    - name: Andres Aguiar
+      affiliation: Okta
+      email: andres.aguiar@okta.com
+      social: https://github.com/aaguiarz
+      primary: true
+    - name: Raghd Hamzeh
+      affiliation: Okta
+      email: raghd.hamzeh@okta.com
+      social: https://github.com/rhamzeh
 
   license:
     url: https://raw.githubusercontent.com/openfga/sample-stores/main/LICENSE
