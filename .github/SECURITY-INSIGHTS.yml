@@ -1,0 +1,67 @@
+# Security Insights 2.0 file https://github.com/ossf/security-insights
+# Schema: https://github.com/ossf/security-insights/blob/main/spec/schema.cue
+header:
+  schema-version: 2.0.0
+  last-updated: '2025-07-26'
+  last-reviewed: '2025-07-26'
+  url: https://github.com/openfga/sample-stores
+  project-si-source: https://raw.githubusercontent.com/openfga/.github/main/SECURITY-INSIGHTS.yml
+  comment: Examples of OpenFGA models and store content.
+
+repository:
+  url: https://github.com/openfga/sample-stores
+  status: active
+  bug-fixes-only: false
+  accepts-change-request: true
+  accepts-automated-change-request: true
+  no-third-party-packages: true
+  core-team:
+    - name: Andres Aguiar
+      affiliation: Okta
+      email: andres.aguiar@okta.com
+      social: https://github.com/aaguiarz
+      primary: true
+    - name: Raghd Hamzeh
+      affiliation: Okta
+      email: raghd.hamzeh@okta.com
+      social: https://github.com/rhamzeh
+
+  license:
+    url: https://raw.githubusercontent.com/openfga/sample-stores/main/LICENSE
+    expression: Apache-2.0
+
+  documentation:
+    contributing-guide: https://github.com/openfga/.github/blob/main/CONTRIBUTING.md
+    dependency-management-policy: https://github.com/openfga/openfga/blob/main/docs/dependencies-policy.md
+    governance: https://github.com/openfga/.github/blob/main/GOVERNANCE.md
+    review-policy: https://github.com/openfga/.github/blob/main/CONTRIBUTING.md
+    security-policy: https://github.com/openfga/sample-stores/security.md
+
+  security:
+    assessments:
+      self:
+        evidence: https://github.com/cncf/tag-security/blob/main/community/assessments/projects/openfga/joint-assessment.md
+        date: '2024-12-19'
+        comment: OpenFGA has completed a CNCF security joint assessment with CNCF TAG Security and Compliance
+
+    tools:
+      - name: Snyk
+        type: SCA
+        version: latest
+        rulesets:
+          - built-in
+        integration:
+          adhoc: false
+          ci: true
+          release: true
+        comment: Snyk is enabled for this repo to scan for vulnerabilities.
+      - name: Socket
+        type: other
+        version: latest
+        rulesets:
+          - built-in
+        integration:
+          adhoc: false
+          ci: true
+          release: true
+        comment: Socket is enabled for this repo to scan for supply chain security vulnerabilities.
