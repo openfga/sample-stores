@@ -1,0 +1,179 @@
+name: Stripe
+model_file: ./fga.mod
+tuples:
+  ### Stripe Core Tuples ###
+  # Tyler is the owner of account:1
+  - user: user:tyler
+    relation: owner
+    object: account:1
+  # Andres is an admin of account:1
+  - user: user:andres
+    relation: admin
+    object: account:1
+  # Dongni can only view account:1
+  - user: user:dongni
+    relation: view_only
+    object: account:1
+  # The bank_account:1 belongs to account:1
+  - user: account:1
+    relation: account
+    object: bank_account:1
+
+  ### Stripe Issuing Tuples ###
+  # SCENARIO 1: An account manages 2 cards, assigned to users Raghd and Jon. Raghd's card is active and makes two purchases. Jon's card is inactive and makes one purchase
+  # OBJECTS: account:1, user:raghd, user:jon, card:1, card:2, transaction:1, transaction:2, transaction:3
+  - user: user:raghd # Raghd is the cardholder of card:1
+    relation: cardholder
+    object: card:1
+  - user: account:1 # The card:1 belongs to account:1
+    relation: account
+    object: card:1
+  - user: card:1 # The account:1 manages card:1
+    relation: card
+    object: account:1
+  - user: card:1 # The card:1 is activated
+    relation: active
+    object: card:1
+  - user: card:1 # The card:1 was used for transaction:1
+    relation: card
+    object: transaction:1
+  - user: card:1 # The card:1 was used for transaction:2
+    relation: card
+    object: transaction:2
+  - user: user:jon # Jon is the cardholder of card:2
+    relation: cardholder
+    object: card:2
+  - user: account:1 # The card:2 belongs to account:1
+    relation: account
+    object: card:2
+  - user: card:2 # The account:1 manages card:2
+    relation: card
+    object: account:1
+  - user: card:2 # The card:2 was used for transaction:3
+    relation: card
+    object: transaction:3
+  # but no card:2 "active" relationship tuple
+
+  # SCENARIO 2: A Stripe account (in test mode) manges one active card that tries to make a purchase.
+  # OBJECTS: account:2, card:3, transaction:4
+  - user: user:tyler # Tyler is the owner of account:2
+    relation: owner
+    object: account:2
+  - user: account:2 # The account:2 is in test mode
+    relation: test_mode
+    object: account:2
+  - user: card:3 # The account:2 manages card:3
+    relation: card
+    object: account:2
+  - user: account:2 # The card:3 belongs to account:2
+    relation: account
+    object: card:3
+  - user: user:maria # Maria is the cardholder of card:3
+    relation: cardholder
+    object: card:3
+  - user: card:3 # The card:3 is activated
+    relation: active
+    object: card:3
+
+tests:
+  - name: Stripe Core Tests
+    check:
+      - user: user:tyler
+        object: account:1
+        assertions:
+          owner: true # "Is Tyler an owner of account:1?" | check direct relationship with account owner
+          iam_admin: true # "Is Tyler an iam_admin of account:1?" | check indirect 'concentric' relationship inherited from admin and owner
+      - user: user:dongni
+        object: account:1
+        assertions:
+          admin: false # "Is Dongni an admin of account:1?"
+      - user: user:tyler
+        object: bank_account:1
+        assertions:
+          can_delete_bank_account: true # "Can Tyler delete bank_account:1 from account:1?" | check parent-child inheritance
+          can_view: true # "Can Tyler view bank_account:1?"
+          can_transfer_balance: true # "Can Tyler transfer the balance in bank_account:1?"
+      - user: user:dongni
+        object: bank_account:1
+        assertions:
+          can_view: false # "Can Dongni view bank_account:1?"
+      - user: user:tyler
+        object: account:2
+        assertions:
+          can_add_bank_account: false # "Can Tyler add a bank_account if account:2 is in test_mode?" | check exclusion operator with self-defining attribute
+
+  - name: Stripe Issuing Tests
+    check:
+      - user: user:raghd
+        object: card:1
+        assertions:
+          cardholder: true # "Is Raghd the cardholder for card:1?"
+      - user: user:raghd
+        object: card:2
+        assertions:
+          cardholder: false # "Is Raghd the cardholder for card:2?"
+      - user: user:raghd
+        object: transaction:1
+        assertions:
+          can_view: true # "Can Raghd view transaction:1?"
+      - user: user:tyler
+        object: transaction:1
+        assertions:
+          can_view: true # "Can Tyler (an account owner that manages the card) view transaction:1?"
+
+      - user: card:1
+        object: card:1
+        assertions:
+          active: true # "Is card:1 active?" | check if card:1=active self-defining attribute tuple is set
+      - user: user:raghd
+        object: card:1
+        assertions:
+          can_purchase: true # "Can Raghd make a purchase with card:1?" if card:1 is active
+
+      - user: card:2
+        object: card:2
+        assertions:
+          active: false # "Is card:2 active?" | check if the active self-defining relationship tuple is set on card:2
+      - user: user:jon
+        object: card:2
+        assertions:
+          can_purchase: false # "Can Jon make a purchase with card:2?" if card:2 is inactive
+
+      - user: card:3
+        object: card:3
+        assertions:
+          active: true # "Is card:3 active?" | check if the active self-defining relationship tuple is set on card:3
+      - user: account:2
+        object: account:2
+        assertions:
+          test_mode: true # "Is account:2 in test_mode?" | check if the test_mode self-defining relationship tuple is set on account:2
+      - user: user:maria
+        object: card:3
+        assertions:
+          can_purchase: false # "Can Maria make a purchase with card:3 but the account is in test_mode)?" | check dual-write relationship inheritance
+
+    # todo: can someone make a purchase above a contextual spending limit?
+    # todo: can someone add a card to a wallet?
+
+    list_objects:
+      - user: user:raghd
+        type: card
+        assertions:
+          cardholder:
+            - card:1
+      - user: user:raghd
+        type: transaction
+        assertions:
+          can_view:
+            - transaction:1
+            - transaction:2
+      - user: user:jon
+        type: card
+        assertions:
+          cardholder:
+            - card:2
+      - user: user:jon
+        type: transaction
+        assertions:
+          can_view:
+            - transaction:3

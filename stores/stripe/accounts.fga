@@ -1,0 +1,28 @@
+
+module account
+
+type user
+type account
+  relations
+    define owner: [user]
+    define admin: [user] or owner
+    define iam_admin: [user] or admin
+    define developer: [user] or admin
+    define transfer_analyst: [user] or admin
+    define view_only: [user] or admin
+    define transfer_analyst_in_test_mode: transfer_analyst but not transfer_analyst from test_mode # intermediate relations, just used for evaluating other relations
+    
+    define test_mode: [account] # self-defining relationship, used to set a type into a true/false state
+
+    define can_close_account: owner
+    define can_change_owner: owner
+    define can_invite: iam_admin
+    define can_add_bank_account: admin but not admin from test_mode # exclusion operator
+    define can_delete_default_bank_account: owner
+
+type bank_account
+  relations
+    define account: [account]
+    define can_delete_bank_account: admin from account
+    define can_view: admin from account
+    define can_transfer_balance: transfer_analyst from account
