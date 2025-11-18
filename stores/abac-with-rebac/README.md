@@ -61,6 +61,6 @@ The example in [store.fga.yaml](./store.fga.yaml) showcases the two examples abo
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `abac-with-rebac` directory, run `fga model test --tests store.yaml`
+2. In the `abac-with-rebac` directory, run `fga model test --tests store.fga.yaml`
 
 
