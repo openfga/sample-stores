@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of an **Applicant Tracking System (ATS)**, like Greenhouse, Lever, Ashby, BambooHR, JazzHR, or Workable. These platforms manage job postings, candidate pipelines, interviews, scorecards, and hiring workflows.
+This model represents the authorization needs of an **Applicant Tracking System (ATS)**, like Greenhouse, Lever, or Workable. These platforms manage job postings, candidate pipelines, interviews, scorecards, and hiring workflows.
 
 The model captures the following requirements:
 
