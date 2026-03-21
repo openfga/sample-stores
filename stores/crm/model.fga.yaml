@@ -1,0 +1,186 @@
+name: CRM Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: sales_manager
+    object: organization:acme
+  - user: user:charlie
+    relation: sales_rep
+    object: organization:acme
+
+  - user: organization:acme
+    relation: organization
+    object: account:mega-corp
+  - user: user:charlie
+    relation: owner
+    object: account:mega-corp
+
+  - user: organization:acme
+    relation: organization
+    object: contact:john-doe
+  - user: account:mega-corp
+    relation: account
+    object: contact:john-doe
+  - user: user:charlie
+    relation: owner
+    object: contact:john-doe
+
+  - user: organization:acme
+    relation: organization
+    object: lead:new-prospect
+  - user: user:charlie
+    relation: owner
+    object: lead:new-prospect
+
+  - user: organization:acme
+    relation: organization
+    object: opportunity:big-deal
+  - user: account:mega-corp
+    relation: account
+    object: opportunity:big-deal
+  - user: user:charlie
+    relation: owner
+    object: opportunity:big-deal
+
+  - user: organization:acme
+    relation: organization
+    object: engagement:call-001
+  - user: user:charlie
+    relation: owner
+    object: engagement:call-001
+
+  - user: organization:acme
+    relation: organization
+    object: note:meeting-notes
+  - user: user:charlie
+    relation: owner
+    object: note:meeting-notes
+
+  - user: organization:acme
+    relation: organization
+    object: task:follow-up
+  - user: user:charlie
+    relation: owner
+    object: task:follow-up
+
+tests:
+  - name: Admin has full CRM access
+    check:
+      - user: user:alice
+        object: account:mega-corp
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: opportunity:big-deal
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Sales manager can view and edit accounts
+    check:
+      - user: user:bob
+        object: account:mega-corp
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+
+  - name: Account owner has full access
+    check:
+      - user: user:charlie
+        object: account:mega-corp
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+
+  - name: Contact inherits from account owner
+    check:
+      - user: user:charlie
+        object: contact:john-doe
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: Lead owner can convert
+    check:
+      - user: user:charlie
+        object: lead:new-prospect
+        assertions:
+          can_view: true
+          can_edit: true
+          can_convert: true
+      - user: user:bob
+        object: lead:new-prospect
+        assertions:
+          can_view: true
+          can_convert: true
+
+  - name: Opportunity follows account ownership
+    check:
+      - user: user:charlie
+        object: opportunity:big-deal
+        assertions:
+          can_view: true
+          can_edit: true
+          can_close: true
+
+  - name: Sales manager can view and close opportunities
+    check:
+      - user: user:bob
+        object: opportunity:big-deal
+        assertions:
+          can_view: true
+          can_edit: true
+          can_close: true
+          can_delete: false
+
+  - name: Engagement owner and manager visibility
+    check:
+      - user: user:charlie
+        object: engagement:call-001
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:bob
+        object: engagement:call-001
+        assertions:
+          can_view: true
+          can_edit: false
+
+  - name: Note owner can edit but only admin can delete
+    check:
+      - user: user:charlie
+        object: note:meeting-notes
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:bob
+        object: note:meeting-notes
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+
+  - name: Task owner can complete
+    check:
+      - user: user:charlie
+        object: task:follow-up
+        assertions:
+          can_view: true
+          can_edit: true
+          can_complete: true
+      - user: user:bob
+        object: task:follow-up
+        assertions:
+          can_view: true
+          can_edit: false
+          can_complete: false

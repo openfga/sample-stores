@@ -1,0 +1,134 @@
+name: File Storage Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: member
+    object: organization:acme
+  - user: user:charlie
+    relation: member
+    object: organization:acme
+
+  - user: organization:acme
+    relation: organization
+    object: group:engineering
+  - user: user:charlie
+    relation: member
+    object: group:engineering
+
+  - user: organization:acme
+    relation: organization
+    object: drive:shared-drive
+  - user: user:alice
+    relation: owner
+    object: drive:shared-drive
+
+  # Bob's personal drive (alice is NOT owner)
+  - user: organization:acme
+    relation: organization
+    object: drive:bobs-drive
+  - user: user:bob
+    relation: owner
+    object: drive:bobs-drive
+
+  - user: organization:acme
+    relation: organization
+    object: folder:projects
+  - user: drive:shared-drive
+    relation: drive
+    object: folder:projects
+  - user: user:bob
+    relation: owner
+    object: folder:projects
+
+  - user: organization:acme
+    relation: organization
+    object: folder:backend
+  - user: folder:projects
+    relation: parent_folder
+    object: folder:backend
+  - user: group:engineering#member
+    relation: writer
+    object: folder:backend
+
+  - user: organization:acme
+    relation: organization
+    object: file:api-spec
+  - user: folder:backend
+    relation: folder
+    object: file:api-spec
+  - user: user:charlie
+    relation: owner
+    object: file:api-spec
+
+tests:
+  - name: Drive owner has full access
+    check:
+      - user: user:alice
+        object: drive:shared-drive
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Org members can view drive
+    check:
+      - user: user:bob
+        object: drive:shared-drive
+        assertions:
+          can_view: true
+          can_edit: false
+
+  - name: Folder owner can manage folder
+    check:
+      - user: user:bob
+        object: folder:projects
+        assertions:
+          can_view: true
+          can_edit: true
+          can_create_file: true
+
+  - name: Group members inherit folder write access
+    check:
+      - user: user:charlie
+        object: folder:backend
+        assertions:
+          can_view: true
+          can_edit: true
+          can_create_file: true
+
+  - name: File inherits from folder permissions
+    check:
+      - user: user:charlie
+        object: file:api-spec
+        assertions:
+          can_view: true
+          can_edit: true
+          can_download: true
+          can_delete: true
+
+  - name: Parent folder owner inherits to child folder
+    check:
+      - user: user:bob
+        object: folder:backend
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: Admin can delete drive they do not own
+    check:
+      - user: user:alice
+        object: drive:bobs-drive
+        assertions:
+          can_view: true
+          can_delete: true
+
+  - name: Drive reader can read nested folders
+    check:
+      - user: user:bob
+        object: folder:projects
+        assertions:
+          can_view: true

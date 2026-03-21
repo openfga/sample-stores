@@ -1,0 +1,76 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or recruiter or hiring_manager
+    define admin: [user]
+    define recruiter: [user]
+    define hiring_manager: [user]
+
+type department
+  relations
+    define organization: [organization]
+    define head: [user]
+    define can_view: head or member from organization
+
+type office
+  relations
+    define organization: [organization]
+    define can_view: member from organization
+
+type job
+  relations
+    define organization: [organization]
+    define department: [department]
+    define hiring_manager: [user]
+    define recruiter: [user]
+    define can_view: hiring_manager or recruiter or admin from organization
+    define can_edit: hiring_manager or recruiter or admin from organization
+    define can_close: hiring_manager or admin from organization
+
+type candidate
+  relations
+    define organization: [organization]
+    define recruiter: [user]
+    define can_view: recruiter or admin from organization or recruiter from organization
+    define can_edit: recruiter or admin from organization
+    define can_delete: admin from organization
+
+type application
+  relations
+    define job: [job]
+    define organization: [organization]
+    define candidate: [candidate]
+    define recruiter: [user]
+    define can_view: recruiter or hiring_manager from job or admin from organization or recruiter from organization
+    define can_edit: recruiter or admin from organization
+    define can_change_stage: recruiter or hiring_manager from job
+
+type scheduled_interview
+  relations
+    define application: [application]
+    define organization: [organization]
+    define organizer: [user]
+    define interviewer: [user]
+    define can_view: organizer or interviewer or admin from organization
+    define can_edit: organizer or admin from organization
+
+type scorecard
+  relations
+    define interview: [scheduled_interview]
+    define organization: [organization]
+    define interviewer: [user]
+    define can_view: interviewer or admin from organization
+    define can_edit: interviewer
+
+type offer
+  relations
+    define application: [application]
+    define organization: [organization]
+    define creator: [user]
+    define can_view: creator or admin from organization or recruiter from organization
+    define can_edit: creator or admin from organization
+    define can_approve: admin from organization

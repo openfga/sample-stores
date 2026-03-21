@@ -1,0 +1,70 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or sales_rep or sales_manager
+    define admin: [user]
+    define sales_manager: [user]
+    define sales_rep: [user]
+
+type account
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_view: owner or sales_manager from organization or admin from organization
+    define can_edit: owner or sales_manager from organization or admin from organization
+    define can_delete: admin from organization
+
+type contact
+  relations
+    define organization: [organization]
+    define account: [account]
+    define owner: [user]
+    define can_view: owner or owner from account or sales_manager from organization or admin from organization
+    define can_edit: owner or admin from organization
+    define can_delete: admin from organization
+
+type lead
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_view: owner or sales_manager from organization or admin from organization
+    define can_edit: owner or sales_manager from organization or admin from organization
+    define can_convert: owner or sales_manager from organization
+    define can_delete: admin from organization
+
+type opportunity
+  relations
+    define organization: [organization]
+    define account: [account]
+    define owner: [user]
+    define can_view: owner or owner from account or sales_manager from organization or admin from organization
+    define can_edit: owner or sales_manager from organization or admin from organization
+    define can_close: owner or sales_manager from organization
+    define can_delete: admin from organization
+
+type engagement
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_view: owner or sales_manager from organization or admin from organization
+    define can_edit: owner or admin from organization
+
+type note
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_view: owner or sales_manager from organization or admin from organization
+    define can_edit: owner
+    define can_delete: owner or admin from organization
+
+type task
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_view: owner or sales_manager from organization or admin from organization
+    define can_edit: owner or admin from organization
+    define can_complete: owner

@@ -1,0 +1,188 @@
+name: Chat Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: member
+    object: organization:acme
+  - user: user:charlie
+    relation: member
+    object: organization:acme
+  - user: user:diana
+    relation: member
+    object: organization:acme
+
+  - user: organization:acme
+    relation: organization
+    object: group:engineering
+  - user: user:bob
+    relation: member
+    object: group:engineering
+  - user: user:charlie
+    relation: member
+    object: group:engineering
+
+  # Public channel - group-based membership
+  - user: organization:acme
+    relation: organization
+    object: conversation:engineering-general
+  - user: user:bob
+    relation: owner
+    object: conversation:engineering-general
+  - user: group:engineering#member
+    relation: member
+    object: conversation:engineering-general
+
+  # DM conversation
+  - user: organization:acme
+    relation: organization
+    object: conversation:bob-charlie-dm
+  - user: user:bob
+    relation: member
+    object: conversation:bob-charlie-dm
+  - user: user:charlie
+    relation: member
+    object: conversation:bob-charlie-dm
+
+  # Message in engineering channel
+  - user: organization:acme
+    relation: organization
+    object: message:msg-001
+  - user: conversation:engineering-general
+    relation: conversation
+    object: message:msg-001
+  - user: user:charlie
+    relation: sender
+    object: message:msg-001
+
+  # Message in DM
+  - user: organization:acme
+    relation: organization
+    object: message:dm-001
+  - user: conversation:bob-charlie-dm
+    relation: conversation
+    object: message:dm-001
+  - user: user:bob
+    relation: sender
+    object: message:dm-001
+
+tests:
+  - name: Channel owner has full access
+    check:
+      - user: user:bob
+        object: conversation:engineering-general
+        assertions:
+          can_view: true
+          can_post: true
+          can_edit: true
+          can_delete: true
+          can_add_member: true
+          can_remove_member: true
+
+  - name: Group members can view and post in channel
+    check:
+      - user: user:charlie
+        object: conversation:engineering-general
+        assertions:
+          can_view: true
+          can_post: true
+          can_edit: false
+          can_add_member: false
+
+  - name: Non-member cannot see channel
+    check:
+      - user: user:diana
+        object: conversation:engineering-general
+        assertions:
+          can_view: false
+          can_post: false
+
+  - name: Admin can manage any conversation
+    check:
+      - user: user:alice
+        object: conversation:engineering-general
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_add_member: true
+
+  - name: DM participants can view and post
+    check:
+      - user: user:bob
+        object: conversation:bob-charlie-dm
+        assertions:
+          can_view: true
+          can_post: true
+      - user: user:charlie
+        object: conversation:bob-charlie-dm
+        assertions:
+          can_view: true
+          can_post: true
+      - user: user:diana
+        object: conversation:bob-charlie-dm
+        assertions:
+          can_view: false
+          can_post: false
+
+  - name: Message sender can edit own messages
+    check:
+      - user: user:charlie
+        object: message:msg-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_reply: true
+
+  - name: Channel member can view and reply to messages
+    check:
+      - user: user:bob
+        object: message:msg-001
+        assertions:
+          can_view: true
+          can_edit: false
+          can_reply: true
+
+  - name: Non-member cannot see messages
+    check:
+      - user: user:diana
+        object: message:msg-001
+        assertions:
+          can_view: false
+          can_reply: false
+
+  - name: Admin can view and delete any message
+    check:
+      - user: user:alice
+        object: message:msg-001
+        assertions:
+          can_view: true
+          can_delete: true
+      - user: user:alice
+        object: message:dm-001
+        assertions:
+          can_view: true
+          can_delete: true
+
+  - name: DM message visibility
+    check:
+      - user: user:bob
+        object: message:dm-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:charlie
+        object: message:dm-001
+        assertions:
+          can_view: true
+          can_edit: false
+          can_reply: true
+      - user: user:diana
+        object: message:dm-001
+        assertions:
+          can_view: false

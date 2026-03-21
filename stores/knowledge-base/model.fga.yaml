@@ -1,0 +1,167 @@
+name: Knowledge Base Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: editor
+    object: organization:acme
+  - user: user:charlie
+    relation: member
+    object: organization:acme
+
+  - user: organization:acme
+    relation: organization
+    object: group:docs-team
+  - user: user:bob
+    relation: member
+    object: group:docs-team
+
+  # Top-level space container
+  - user: organization:acme
+    relation: organization
+    object: container:engineering-space
+  - user: user:bob
+    relation: owner
+    object: container:engineering-space
+  - user: group:docs-team#member
+    relation: editor
+    object: container:engineering-space
+
+  # Nested folder container
+  - user: organization:acme
+    relation: organization
+    object: container:api-docs
+  - user: container:engineering-space
+    relation: parent_container
+    object: container:api-docs
+
+  # Article in the API docs container
+  - user: organization:acme
+    relation: organization
+    object: article:getting-started
+  - user: container:api-docs
+    relation: parent_container
+    object: article:getting-started
+  - user: user:bob
+    relation: author
+    object: article:getting-started
+
+  # Public article (anyone can view)
+  - user: organization:acme
+    relation: organization
+    object: article:public-faq
+  - user: user:*
+    relation: viewer
+    object: article:public-faq
+  - user: user:bob
+    relation: author
+    object: article:public-faq
+
+  # Attachment
+  - user: organization:acme
+    relation: organization
+    object: attachment:diagram-png
+  - user: article:getting-started
+    relation: article
+    object: attachment:diagram-png
+  - user: user:bob
+    relation: uploader
+    object: attachment:diagram-png
+
+tests:
+  - name: Admin has full access to containers
+    check:
+      - user: user:alice
+        object: container:engineering-space
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Container owner can manage container
+    check:
+      - user: user:bob
+        object: container:engineering-space
+        assertions:
+          can_view: true
+          can_edit: true
+          can_create_article: true
+          can_delete: true
+
+  - name: Org members can view containers
+    check:
+      - user: user:charlie
+        object: container:engineering-space
+        assertions:
+          can_view: true
+          can_edit: false
+
+  - name: Nested container inherits from parent
+    check:
+      - user: user:bob
+        object: container:api-docs
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:charlie
+        object: container:api-docs
+        assertions:
+          can_view: true
+          can_edit: false
+
+  - name: Article author can publish and archive
+    check:
+      - user: user:bob
+        object: article:getting-started
+        assertions:
+          can_view: true
+          can_edit: true
+          can_publish: true
+          can_archive: true
+          can_delete: true
+
+  - name: Article inherits container visibility
+    check:
+      - user: user:charlie
+        object: article:getting-started
+        assertions:
+          can_view: true
+          can_edit: false
+          can_publish: false
+
+  - name: Public article is viewable by anyone
+    check:
+      - user: user:charlie
+        object: article:public-faq
+        assertions:
+          can_view: true
+      - user: user:bob
+        object: article:public-faq
+        assertions:
+          can_view: true
+          can_publish: true
+
+  - name: Group-based access to containers
+    check:
+      - user: user:bob
+        object: container:engineering-space
+        assertions:
+          can_view: true
+          can_edit: true
+          can_create_article: true
+
+  - name: Attachment follows article visibility
+    check:
+      - user: user:bob
+        object: attachment:diagram-png
+        assertions:
+          can_view: true
+          can_delete: true
+      - user: user:charlie
+        object: attachment:diagram-png
+        assertions:
+          can_view: true
+          can_delete: false

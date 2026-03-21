@@ -1,0 +1,260 @@
+name: Human Resources Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  # Organization setup
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: hr_manager
+    object: organization:acme
+  - user: user:charlie
+    relation: member
+    object: organization:acme
+  - user: user:diana
+    relation: member
+    object: organization:acme
+
+  # Company belongs to org
+  - user: organization:acme
+    relation: organization
+    object: company:acme-corp
+
+  # Team setup
+  - user: organization:acme
+    relation: organization
+    object: team:engineering
+  - user: user:charlie
+    relation: manager
+    object: team:engineering
+  - user: user:diana
+    relation: member
+    object: team:engineering
+
+  # Child team for hierarchy test
+  - user: organization:acme
+    relation: organization
+    object: team:backend
+  - user: team:engineering
+    relation: parent_team
+    object: team:backend
+  - user: user:eve
+    relation: member
+    object: team:backend
+
+  # Group setup
+  - user: organization:acme
+    relation: organization
+    object: group:developers
+  - user: user:diana
+    relation: member
+    object: group:developers
+
+  # Location
+  - user: organization:acme
+    relation: organization
+    object: location:hq-office
+
+  # Employee setup - Diana is the employee
+  - user: organization:acme
+    relation: organization
+    object: employee:diana-record
+  - user: company:acme-corp
+    relation: company
+    object: employee:diana-record
+  - user: user:diana
+    relation: assignee
+    object: employee:diana-record
+  - user: user:charlie
+    relation: manager
+    object: employee:diana-record
+
+  # Employment for Diana
+  - user: organization:acme
+    relation: organization
+    object: employment:diana-swe
+
+  # Benefit for Diana
+  - user: organization:acme
+    relation: organization
+    object: benefit:diana-health
+
+  # Payroll run
+  - user: organization:acme
+    relation: organization
+    object: payroll_run:march-2026
+
+  # Time off request
+  - user: organization:acme
+    relation: organization
+    object: time_off:diana-vacation
+  - user: user:diana
+    relation: requester
+    object: time_off:diana-vacation
+  - user: user:charlie
+    relation: approver
+    object: time_off:diana-vacation
+
+tests:
+  - name: Organization admin has full access
+    check:
+      - user: user:alice
+        object: organization:acme
+        assertions:
+          admin: true
+          can_manage_employees: true
+          can_view_sensitive_data: true
+
+  - name: HR manager can manage employees
+    check:
+      - user: user:bob
+        object: organization:acme
+        assertions:
+          hr_manager: true
+          can_manage_employees: true
+          can_view_sensitive_data: true
+
+  - name: Employee can view own record
+    check:
+      - user: user:diana
+        object: employee:diana-record
+        assertions:
+          assignee: true
+          can_view: true
+          can_view_sensitive: true
+          can_edit: false
+
+  - name: Manager can view employee record but not sensitive data
+    check:
+      - user: user:charlie
+        object: employee:diana-record
+        assertions:
+          manager: true
+          can_view: true
+          can_view_sensitive: false
+          can_edit: false
+
+  - name: HR manager can edit employee records
+    check:
+      - user: user:bob
+        object: employee:diana-record
+        assertions:
+          can_view: true
+          can_view_sensitive: true
+          can_edit: true
+
+  - name: Admin can terminate employees
+    check:
+      - user: user:alice
+        object: employee:diana-record
+        assertions:
+          can_view: true
+          can_edit: true
+          can_terminate: true
+
+  - name: Team manager can view team
+    check:
+      - user: user:charlie
+        object: team:engineering
+        assertions:
+          manager: true
+          can_view: true
+          can_manage: true
+
+  - name: Team member can view team
+    check:
+      - user: user:diana
+        object: team:engineering
+        assertions:
+          member: true
+          can_view: true
+          can_manage: false
+
+  - name: Org members can view locations
+    check:
+      - user: user:charlie
+        object: location:hq-office
+        assertions:
+          can_view: true
+          can_edit: false
+      - user: user:alice
+        object: location:hq-office
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: Only HR and admin can view payroll
+    check:
+      - user: user:bob
+        object: payroll_run:march-2026
+        assertions:
+          can_view: true
+          can_approve: false
+      - user: user:alice
+        object: payroll_run:march-2026
+        assertions:
+          can_view: true
+          can_approve: true
+      - user: user:diana
+        object: payroll_run:march-2026
+        assertions:
+          can_view: false
+          can_approve: false
+
+  - name: Time off request permissions
+    check:
+      - user: user:diana
+        object: time_off:diana-vacation
+        assertions:
+          can_view: true
+          can_approve: false
+          can_cancel: true
+      - user: user:charlie
+        object: time_off:diana-vacation
+        assertions:
+          can_view: true
+          can_approve: true
+          can_cancel: false
+      - user: user:bob
+        object: time_off:diana-vacation
+        assertions:
+          can_view: true
+          can_approve: true
+
+  - name: Employment visibility
+    check:
+      - user: user:alice
+        object: employment:diana-swe
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:bob
+        object: employment:diana-swe
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: Benefit visibility
+    check:
+      - user: user:bob
+        object: benefit:diana-health
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:alice
+        object: benefit:diana-health
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: Team parent-child inheritance
+    check:
+      - user: user:diana
+        object: team:backend
+        assertions:
+          can_view: true
+      - user: user:eve
+        object: team:backend
+        assertions:
+          can_view: true

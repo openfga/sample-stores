@@ -1,0 +1,72 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or accountant or auditor
+    define admin: [user]
+    define accountant: [user]
+    define auditor: [user]
+
+type account
+  relations
+    define organization: [organization]
+    define can_view: accountant from organization or admin from organization or auditor from organization
+    define can_edit: accountant from organization or admin from organization
+    define can_create: accountant from organization or admin from organization
+
+type contact
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_view: owner or accountant from organization or admin from organization
+    define can_edit: owner or accountant from organization or admin from organization
+
+type invoice
+  relations
+    define organization: [organization]
+    define creator: [user]
+    define contact: [contact]
+    define can_view: creator or accountant from organization or admin from organization or auditor from organization
+    define can_edit: creator or accountant from organization or admin from organization
+    define can_approve: admin from organization
+    define can_void: admin from organization
+
+type expense
+  relations
+    define organization: [organization]
+    define submitter: [user]
+    define can_view: submitter or accountant from organization or admin from organization or auditor from organization
+    define can_edit: submitter or accountant from organization or admin from organization
+    define can_approve: accountant from organization or admin from organization
+
+type payment
+  relations
+    define organization: [organization]
+    define can_view: accountant from organization or admin from organization or auditor from organization
+    define can_create: accountant from organization or admin from organization
+    define can_edit: accountant from organization or admin from organization
+
+type journal_entry
+  relations
+    define organization: [organization]
+    define creator: [user]
+    define can_view: creator or accountant from organization or admin from organization or auditor from organization
+    define can_edit: creator or accountant from organization or admin from organization
+    define can_post: admin from organization
+
+type purchase_order
+  relations
+    define organization: [organization]
+    define requester: [user]
+    define approver: [user]
+    define can_view: requester or approver or accountant from organization or admin from organization
+    define can_edit: requester or accountant from organization or admin from organization
+    define can_approve: approver or admin from organization
+
+type financial_statement
+  relations
+    define organization: [organization]
+    define can_view: accountant from organization or admin from organization or auditor from organization

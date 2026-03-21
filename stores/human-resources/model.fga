@@ -1,0 +1,86 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or hr_manager
+    define admin: [user]
+    define hr_manager: [user]
+    define can_manage_employees: admin or hr_manager
+    define can_view_sensitive_data: admin or hr_manager
+
+type company
+  relations
+    define organization: [organization]
+    define admin: [user] or admin from organization
+    define member: [user] or member from organization
+    define can_view: member
+    define can_edit: admin
+
+type group
+  relations
+    define organization: [organization]
+    define manager: [user]
+    define member: [user]
+    define can_view: member or manager or admin from organization
+    define can_manage: manager or admin from organization
+
+type team
+  relations
+    define organization: [organization]
+    define manager: [user]
+    define member: [user]
+    define parent_team: [team]
+    define can_view: member or manager or member from parent_team
+    define can_manage: manager or admin from organization
+
+type location
+  relations
+    define organization: [organization]
+    define can_view: member from organization
+    define can_edit: admin from organization
+
+type employee
+  relations
+    define organization: [organization]
+    define company: [company]
+    define assignee: [user]
+    define manager: [user]
+    define team: [team]
+    define hr_admin: [user] or hr_manager from organization
+    define can_view: assignee or manager or hr_admin or admin from organization
+    define can_view_sensitive: assignee or hr_admin
+    define can_edit: hr_admin or admin from organization
+    define can_terminate: admin from organization
+
+type employment
+  relations
+    define employee: [employee]
+    define organization: [organization]
+    define can_view: [user] or admin from organization or hr_manager from organization
+    define can_edit: admin from organization or hr_manager from organization
+
+type benefit
+  relations
+    define employee: [employee]
+    define organization: [organization]
+    define can_view: [user] or hr_manager from organization or admin from organization
+    define can_edit: hr_manager from organization or admin from organization
+
+type payroll_run
+  relations
+    define organization: [organization]
+    define can_view: hr_manager from organization or admin from organization
+    define can_approve: admin from organization
+
+type time_off
+  relations
+    define employee: [employee]
+    define organization: [organization]
+    define requester: [user]
+    define approver: [user]
+    define can_view: requester or approver or hr_manager from organization
+    define can_approve: approver or hr_manager from organization
+    define can_cancel: requester or admin from organization

@@ -1,0 +1,188 @@
+name: Issue Tracking Model Tests
+model_file: ./model.fga
+
+tuples:
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: agent
+    object: organization:acme
+  - user: user:charlie
+    relation: member
+    object: organization:acme
+
+  - user: organization:acme
+    relation: organization
+    object: team:support
+  - user: user:bob
+    relation: member
+    object: team:support
+  - user: user:charlie
+    relation: lead
+    object: team:support
+
+  - user: organization:acme
+    relation: organization
+    object: collection:bugs
+  - user: user:bob
+    relation: owner
+    object: collection:bugs
+
+  # Child collection for hierarchy test
+  - user: organization:acme
+    relation: organization
+    object: collection:ui-bugs
+  - user: collection:bugs
+    relation: parent_collection
+    object: collection:ui-bugs
+
+  - user: organization:acme
+    relation: organization
+    object: ticket:bug-123
+  - user: collection:bugs
+    relation: collection
+    object: ticket:bug-123
+  - user: user:diana
+    relation: creator
+    object: ticket:bug-123
+  - user: user:bob
+    relation: assignee
+    object: ticket:bug-123
+  - user: team:support
+    relation: assigned_team
+    object: ticket:bug-123
+
+  - user: organization:acme
+    relation: organization
+    object: comment:c-001
+  - user: ticket:bug-123
+    relation: ticket
+    object: comment:c-001
+  - user: user:bob
+    relation: author
+    object: comment:c-001
+
+  - user: organization:acme
+    relation: organization
+    object: attachment:screenshot
+  - user: ticket:bug-123
+    relation: ticket
+    object: attachment:screenshot
+  - user: user:diana
+    relation: uploader
+    object: attachment:screenshot
+
+  - user: organization:acme
+    relation: organization
+    object: contact:customer-xyz
+
+tests:
+  - name: Admin has full ticket access
+    check:
+      - user: user:alice
+        object: ticket:bug-123
+        assertions:
+          can_view: true
+          can_edit: true
+          can_close: true
+          can_assign: true
+          can_delete: true
+
+  - name: Assignee can view edit and close ticket
+    check:
+      - user: user:bob
+        object: ticket:bug-123
+        assertions:
+          can_view: true
+          can_edit: true
+          can_close: true
+          can_delete: false
+
+  - name: Creator can view ticket
+    check:
+      - user: user:diana
+        object: ticket:bug-123
+        assertions:
+          can_view: true
+          can_edit: false
+          can_close: false
+
+  - name: Team lead can close tickets assigned to team
+    check:
+      - user: user:charlie
+        object: ticket:bug-123
+        assertions:
+          can_view: true
+          can_close: true
+
+  - name: Comment author can edit own comments
+    check:
+      - user: user:bob
+        object: comment:c-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:diana
+        object: comment:c-001
+        assertions:
+          can_view: true
+          can_edit: false
+
+  - name: Attachment permissions follow ticket
+    check:
+      - user: user:diana
+        object: attachment:screenshot
+        assertions:
+          can_view: true
+          can_delete: true
+      - user: user:bob
+        object: attachment:screenshot
+        assertions:
+          can_view: true
+          can_delete: false
+
+  - name: Collection owner can manage collection
+    check:
+      - user: user:bob
+        object: collection:bugs
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+
+  - name: Collection hierarchy inheritance
+    check:
+      - user: user:bob
+        object: collection:ui-bugs
+        assertions:
+          can_view: true
+
+  - name: Admin can delete any comment
+    check:
+      - user: user:alice
+        object: comment:c-001
+        assertions:
+          can_view: true
+          can_delete: true
+
+  - name: Admin can delete any attachment
+    check:
+      - user: user:alice
+        object: attachment:screenshot
+        assertions:
+          can_view: true
+          can_delete: true
+
+  - name: Agent can manage contacts
+    check:
+      - user: user:bob
+        object: contact:customer-xyz
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:charlie
+        object: contact:customer-xyz
+        assertions:
+          can_view: false

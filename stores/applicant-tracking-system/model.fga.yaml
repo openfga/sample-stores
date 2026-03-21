@@ -1,0 +1,197 @@
+name: Application Tracking System Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  # Organization
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: recruiter
+    object: organization:acme
+  - user: user:charlie
+    relation: hiring_manager
+    object: organization:acme
+
+  # Department
+  - user: organization:acme
+    relation: organization
+    object: department:engineering
+  - user: user:charlie
+    relation: head
+    object: department:engineering
+
+  # Office
+  - user: organization:acme
+    relation: organization
+    object: office:san-francisco
+
+  # Job
+  - user: organization:acme
+    relation: organization
+    object: job:swe-senior
+  - user: user:charlie
+    relation: hiring_manager
+    object: job:swe-senior
+  - user: user:bob
+    relation: recruiter
+    object: job:swe-senior
+
+  # Candidate
+  - user: organization:acme
+    relation: organization
+    object: candidate:diana
+  - user: user:bob
+    relation: recruiter
+    object: candidate:diana
+
+  # Application
+  - user: organization:acme
+    relation: organization
+    object: application:diana-swe
+  - user: job:swe-senior
+    relation: job
+    object: application:diana-swe
+  - user: user:bob
+    relation: recruiter
+    object: application:diana-swe
+
+  # Scheduled Interview
+  - user: organization:acme
+    relation: organization
+    object: scheduled_interview:diana-onsite
+  - user: user:bob
+    relation: organizer
+    object: scheduled_interview:diana-onsite
+  - user: user:charlie
+    relation: interviewer
+    object: scheduled_interview:diana-onsite
+
+  # Scorecard
+  - user: organization:acme
+    relation: organization
+    object: scorecard:charlie-feedback
+  - user: user:charlie
+    relation: interviewer
+    object: scorecard:charlie-feedback
+
+  # Offer
+  - user: organization:acme
+    relation: organization
+    object: offer:diana-offer
+  - user: user:bob
+    relation: creator
+    object: offer:diana-offer
+
+tests:
+  - name: Admin has full access to jobs
+    check:
+      - user: user:alice
+        object: job:swe-senior
+        assertions:
+          can_view: true
+          can_edit: true
+          can_close: true
+
+  - name: Hiring manager can view and close jobs
+    check:
+      - user: user:charlie
+        object: job:swe-senior
+        assertions:
+          can_view: true
+          can_edit: true
+          can_close: true
+
+  - name: Recruiter can view and edit candidates
+    check:
+      - user: user:bob
+        object: candidate:diana
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+
+  - name: Recruiter can manage applications
+    check:
+      - user: user:bob
+        object: application:diana-swe
+        assertions:
+          can_view: true
+          can_edit: true
+          can_change_stage: true
+
+  - name: Hiring manager can view application and change stage
+    check:
+      - user: user:charlie
+        object: application:diana-swe
+        assertions:
+          can_view: true
+          can_edit: false
+          can_change_stage: true
+
+  - name: Interview permissions
+    check:
+      - user: user:charlie
+        object: scheduled_interview:diana-onsite
+        assertions:
+          can_view: true
+          can_edit: false
+      - user: user:bob
+        object: scheduled_interview:diana-onsite
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: Scorecard permissions
+    check:
+      - user: user:charlie
+        object: scorecard:charlie-feedback
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:bob
+        object: scorecard:charlie-feedback
+        assertions:
+          can_view: false
+          can_edit: false
+
+  - name: Offer permissions
+    check:
+      - user: user:bob
+        object: offer:diana-offer
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: false
+      - user: user:alice
+        object: offer:diana-offer
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: true
+
+  - name: Hiring manager cannot directly view candidate
+    check:
+      - user: user:charlie
+        object: candidate:diana
+        assertions:
+          can_view: false
+          can_edit: false
+
+  - name: Department visibility for org members
+    check:
+      - user: user:bob
+        object: department:engineering
+        assertions:
+          can_view: true
+      - user: user:charlie
+        object: department:engineering
+        assertions:
+          can_view: true
+
+  - name: Office visibility
+    check:
+      - user: user:bob
+        object: office:san-francisco
+        assertions:
+          can_view: true

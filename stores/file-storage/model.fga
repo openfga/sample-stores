@@ -1,0 +1,50 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin
+    define admin: [user]
+
+type group
+  relations
+    define organization: [organization]
+    define member: [user]
+
+type drive
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define writer: [user, group#member] or owner
+    define reader: [user, group#member] or writer or member from organization
+    define can_view: reader
+    define can_edit: writer
+    define can_delete: owner or admin from organization
+
+type folder
+  relations
+    define drive: [drive]
+    define parent_folder: [folder]
+    define owner: [user] or owner from parent_folder
+    define writer: [user, group#member] or owner or writer from parent_folder
+    define reader: [user, group#member] or writer or reader from parent_folder or reader from drive
+    define can_view: reader
+    define can_edit: writer
+    define can_create_file: writer
+    define can_delete: owner or admin from organization
+    define organization: [organization]
+
+type file
+  relations
+    define folder: [folder]
+    define drive: [drive]
+    define owner: [user] or owner from folder
+    define writer: [user, group#member] or owner or writer from folder
+    define reader: [user, group#member] or writer or reader from folder
+    define can_view: reader
+    define can_edit: writer
+    define can_download: reader
+    define can_delete: owner
+    define organization: [organization]

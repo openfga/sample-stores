@@ -1,0 +1,66 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or agent
+    define admin: [user]
+    define agent: [user]
+
+type team
+  relations
+    define organization: [organization]
+    define member: [user]
+    define lead: [user]
+    define can_view: member or lead or admin from organization
+
+type collection
+  relations
+    define organization: [organization]
+    define parent_collection: [collection]
+    define owner: [user]
+    define viewer: [user, team#member] or owner or admin from organization or viewer from parent_collection
+    define can_view: viewer
+    define can_edit: owner or admin from organization
+    define can_delete: admin from organization
+
+type ticket
+  relations
+    define organization: [organization]
+    define collection: [collection]
+    define assignee: [user]
+    define assigned_team: [team]
+    define creator: [user]
+    define reporter: [user]
+    define viewer: [user, team#member] or assignee or creator or reporter or member from assigned_team or viewer from collection
+    define editor: [user] or assignee or member from assigned_team
+    define can_view: viewer or lead from assigned_team or agent from organization or admin from organization
+    define can_edit: editor or agent from organization or admin from organization
+    define can_close: assignee or lead from assigned_team or admin from organization
+    define can_assign: agent from organization or admin from organization
+    define can_delete: admin from organization
+
+type comment
+  relations
+    define ticket: [ticket]
+    define organization: [organization]
+    define author: [user]
+    define can_view: author or can_view from ticket
+    define can_edit: author
+    define can_delete: author or admin from organization
+
+type attachment
+  relations
+    define ticket: [ticket]
+    define organization: [organization]
+    define uploader: [user]
+    define can_view: uploader or can_view from ticket
+    define can_delete: uploader or admin from organization
+
+type contact
+  relations
+    define organization: [organization]
+    define can_view: agent from organization or admin from organization
+    define can_edit: agent from organization or admin from organization
