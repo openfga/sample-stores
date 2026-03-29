@@ -37,9 +37,6 @@ tuples:
     relation: parent_collection
     object: collection:ui-bugs
 
-  - user: organization:acme
-    relation: organization
-    object: ticket:bug-123
   - user: collection:bugs
     relation: collection
     object: ticket:bug-123
@@ -53,9 +50,6 @@ tuples:
     relation: assigned_team
     object: ticket:bug-123
 
-  - user: organization:acme
-    relation: organization
-    object: comment:c-001
   - user: ticket:bug-123
     relation: ticket
     object: comment:c-001
@@ -63,9 +57,6 @@ tuples:
     relation: author
     object: comment:c-001
 
-  - user: organization:acme
-    relation: organization
-    object: attachment:screenshot
   - user: ticket:bug-123
     relation: ticket
     object: attachment:screenshot

@@ -1,0 +1,174 @@
+name: Call Center Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:callcenter
+  - user: user:bob
+    relation: supervisor
+    object: organization:callcenter
+  - user: user:charlie
+    relation: agent
+    object: organization:callcenter
+  - user: user:diana
+    relation: member
+    object: organization:callcenter
+
+  # Call with participant
+  - user: organization:callcenter
+    relation: organization
+    object: call:call-001
+  - user: user:charlie
+    relation: participant
+    object: call:call-001
+
+  # Contact
+  - user: organization:callcenter
+    relation: organization
+    object: contact:john-doe
+  - user: user:charlie
+    relation: owner
+    object: contact:john-doe
+
+  # Comment on a call
+  - user: call:call-001
+    relation: call
+    object: comment:note-001
+  - user: user:charlie
+    relation: author
+    object: comment:note-001
+
+  # Recording of a call
+  - user: call:call-001
+    relation: call
+    object: recording:rec-001
+
+tests:
+  - name: Admin has full access to all resources
+    check:
+      - user: user:alice
+        object: call:call-001
+        assertions:
+          can_view: true
+          can_delete: true
+      - user: user:alice
+        object: contact:john-doe
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: comment:note-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: recording:rec-001
+        assertions:
+          can_view: true
+          can_delete: true
+
+  - name: Supervisor can view recordings and manage comments
+    check:
+      - user: user:bob
+        object: call:call-001
+        assertions:
+          can_view: true
+          can_delete: false
+      - user: user:bob
+        object: contact:john-doe
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:bob
+        object: comment:note-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:bob
+        object: recording:rec-001
+        assertions:
+          can_view: true
+          can_delete: false
+
+  - name: Agent can view calls and manage own contacts and comments
+    check:
+      - user: user:charlie
+        object: call:call-001
+        assertions:
+          can_view: true
+          can_delete: false
+      - user: user:charlie
+        object: contact:john-doe
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:charlie
+        object: comment:note-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:charlie
+        object: recording:rec-001
+        assertions:
+          can_view: false
+          can_delete: false
+
+  - name: Member has no access to resources
+    check:
+      - user: user:diana
+        object: call:call-001
+        assertions:
+          can_view: false
+          can_delete: false
+      - user: user:diana
+        object: contact:john-doe
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: comment:note-001
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: recording:rec-001
+        assertions:
+          can_view: false
+          can_delete: false
+
+  - name: Recording access restricted to supervisors and admins
+    check:
+      - user: user:alice
+        object: recording:rec-001
+        assertions:
+          can_view: true
+      - user: user:bob
+        object: recording:rec-001
+        assertions:
+          can_view: true
+      - user: user:charlie
+        object: recording:rec-001
+        assertions:
+          can_view: false
+      - user: user:diana
+        object: recording:rec-001
+        assertions:
+          can_view: false
+
+  - name: Comment author can edit and delete own comments
+    check:
+      - user: user:charlie
+        object: comment:note-001
+        assertions:
+          can_edit: true
+          can_delete: true

@@ -1,0 +1,262 @@
+name: Learning Management System Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:university
+  - user: user:bob
+    relation: instructor
+    object: organization:university
+  - user: user:charlie
+    relation: student
+    object: organization:university
+  - user: user:diana
+    relation: member
+    object: organization:university
+
+  # Course
+  - user: organization:university
+    relation: organization
+    object: course:intro-cs
+  - user: user:bob
+    relation: owner
+    object: course:intro-cs
+  - user: user:bob
+    relation: enrolled_instructor
+    object: course:intro-cs
+  - user: user:charlie
+    relation: enrolled_student
+    object: course:intro-cs
+
+  # Class linked to course
+  - user: course:intro-cs
+    relation: course
+    object: class:section-a
+  - user: user:bob
+    relation: instructor
+    object: class:section-a
+  - user: user:charlie
+    relation: student
+    object: class:section-a
+
+  # Content linked to course
+  - user: course:intro-cs
+    relation: course
+    object: content:lecture-slides
+  - user: user:bob
+    relation: author
+    object: content:lecture-slides
+
+  # Collection
+  - user: organization:university
+    relation: organization
+    object: collection:cs-fundamentals
+  - user: user:bob
+    relation: owner
+    object: collection:cs-fundamentals
+
+  # Activity linked to class
+  - user: class:section-a
+    relation: class
+    object: activity:homework-1
+  - user: user:bob
+    relation: creator
+    object: activity:homework-1
+  - user: user:charlie
+    relation: assignee
+    object: activity:homework-1
+
+tests:
+  - name: Admin has full access to all resources
+    check:
+      - user: user:alice
+        object: course:intro-cs
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_publish: true
+      - user: user:alice
+        object: class:section-a
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_enroll: true
+      - user: user:alice
+        object: content:lecture-slides
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: collection:cs-fundamentals
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: activity:homework-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_grade: true
+
+  - name: Instructor can manage courses and grade activities
+    check:
+      - user: user:bob
+        object: course:intro-cs
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_publish: true
+      - user: user:bob
+        object: class:section-a
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_enroll: true
+      - user: user:bob
+        object: content:lecture-slides
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:bob
+        object: collection:cs-fundamentals
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:bob
+        object: activity:homework-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_grade: true
+          can_submit: false
+
+  - name: Student can view enrolled courses and submit activities
+    check:
+      - user: user:charlie
+        object: course:intro-cs
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_publish: false
+      - user: user:charlie
+        object: class:section-a
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_enroll: false
+      - user: user:charlie
+        object: content:lecture-slides
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:charlie
+        object: collection:cs-fundamentals
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:charlie
+        object: activity:homework-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_grade: false
+          can_submit: true
+
+  - name: Member has no access to resources
+    check:
+      - user: user:diana
+        object: course:intro-cs
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+          can_publish: false
+      - user: user:diana
+        object: class:section-a
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+          can_enroll: false
+      - user: user:diana
+        object: content:lecture-slides
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: collection:cs-fundamentals
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: activity:homework-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+          can_grade: false
+          can_submit: false
+
+  - name: Course publishing requires owner or admin
+    check:
+      - user: user:alice
+        object: course:intro-cs
+        assertions:
+          can_publish: true
+      - user: user:bob
+        object: course:intro-cs
+        assertions:
+          can_publish: true
+      - user: user:charlie
+        object: course:intro-cs
+        assertions:
+          can_publish: false
+
+  - name: Only instructors and admins can grade activities
+    check:
+      - user: user:alice
+        object: activity:homework-1
+        assertions:
+          can_grade: true
+      - user: user:bob
+        object: activity:homework-1
+        assertions:
+          can_grade: true
+      - user: user:charlie
+        object: activity:homework-1
+        assertions:
+          can_grade: false
+
+  - name: Only assigned student can submit activity
+    check:
+      - user: user:charlie
+        object: activity:homework-1
+        assertions:
+          can_submit: true
+      - user: user:bob
+        object: activity:homework-1
+        assertions:
+          can_submit: false
+      - user: user:alice
+        object: activity:homework-1
+        assertions:
+          can_submit: false

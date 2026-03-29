@@ -19,9 +19,6 @@ tuples:
     relation: owner
     object: account:mega-corp
 
-  - user: organization:acme
-    relation: organization
-    object: contact:john-doe
   - user: account:mega-corp
     relation: account
     object: contact:john-doe
@@ -36,9 +33,6 @@ tuples:
     relation: owner
     object: lead:new-prospect
 
-  - user: organization:acme
-    relation: organization
-    object: opportunity:big-deal
   - user: account:mega-corp
     relation: account
     object: opportunity:big-deal

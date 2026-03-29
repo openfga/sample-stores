@@ -1,0 +1,199 @@
+name: Ecommerce Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  # Organization
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: store_manager
+    object: organization:acme
+  - user: user:charlie
+    relation: member
+    object: organization:acme
+
+  # Store
+  - user: organization:acme
+    relation: organization
+    object: store:main-shop
+  - user: user:bob
+    relation: owner
+    object: store:main-shop
+  - user: user:charlie
+    relation: staff
+    object: store:main-shop
+
+  # Product
+  - user: store:main-shop
+    relation: store
+    object: product:sneakers
+  - user: user:charlie
+    relation: creator
+    object: product:sneakers
+
+  # Customer
+  - user: store:main-shop
+    relation: store
+    object: customer:diana
+  - user: user:diana
+    relation: account_owner
+    object: customer:diana
+
+  # Order placed by the customer
+  - user: store:main-shop
+    relation: store
+    object: order:ord-001
+  - user: user:diana
+    relation: placed_by
+    object: order:ord-001
+
+tests:
+  - name: Admin has full access to store
+    check:
+      - user: user:alice
+        object: store:main-shop
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Store owner can manage store
+    check:
+      - user: user:bob
+        object: store:main-shop
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Store staff can view but not edit store
+    check:
+      - user: user:charlie
+        object: store:main-shop
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+
+  - name: Store manager can manage products
+    check:
+      - user: user:bob
+        object: product:sneakers
+        assertions:
+          can_view: true
+          can_create: true
+          can_edit: true
+          can_delete: true
+
+  - name: Product creator can edit own product
+    check:
+      - user: user:charlie
+        object: product:sneakers
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_manage_inventory: true
+
+  - name: Staff can view and manage inventory but not delete products
+    check:
+      - user: user:charlie
+        object: product:sneakers
+        assertions:
+          can_view: true
+          can_manage_inventory: true
+          can_delete: false
+
+  - name: Customer can view own account
+    check:
+      - user: user:diana
+        object: customer:diana
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+
+  - name: Store staff can view customers
+    check:
+      - user: user:charlie
+        object: customer:diana
+        assertions:
+          can_view: true
+          can_edit: false
+
+  - name: Store manager can edit customers
+    check:
+      - user: user:bob
+        object: customer:diana
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+
+  - name: Only admin can delete customers
+    check:
+      - user: user:alice
+        object: customer:diana
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Customer can view own order
+    check:
+      - user: user:diana
+        object: order:ord-001
+        assertions:
+          can_view: true
+          can_cancel: true
+          can_edit: false
+          can_refund: false
+          can_fulfill: false
+
+  - name: Store staff can view and fulfill orders
+    check:
+      - user: user:charlie
+        object: order:ord-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_fulfill: true
+          can_cancel: false
+          can_refund: false
+
+  - name: Store manager can refund and cancel orders
+    check:
+      - user: user:bob
+        object: order:ord-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_cancel: true
+          can_refund: true
+          can_fulfill: true
+          can_delete: false
+
+  - name: Admin has full order access
+    check:
+      - user: user:alice
+        object: order:ord-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_cancel: true
+          can_refund: true
+          can_fulfill: true
+          can_delete: true
+
+  - name: Non-store member cannot see orders
+    check:
+      - user: user:charlie
+        object: customer:diana
+        assertions:
+          can_delete: false
+      - user: user:diana
+        object: product:sneakers
+        assertions:
+          can_view: false
+          can_edit: false

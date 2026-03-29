@@ -1,0 +1,52 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or store_manager
+    define admin: [user]
+    define store_manager: [user]
+
+type store
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define manager: [user] or owner or store_manager from organization
+    define staff: [user] or manager
+    define organization_admin: admin from organization
+    define can_delete: owner or organization_admin
+    define can_edit: manager or can_delete
+    define can_view: staff or can_edit
+
+type product
+  relations
+    define store: [store]
+    define creator: [user]
+    define viewer: [user]
+    define can_delete: manager from store or organization_admin from store
+    define can_create: can_delete
+    define can_manage_inventory: staff from store or can_create
+    define can_edit: creator or can_manage_inventory
+    define can_view: viewer or can_edit
+
+type customer
+  relations
+    define store: [store]
+    define account_owner: [user]
+    define can_delete: organization_admin from store
+    define can_edit: account_owner or manager from store or can_delete
+    define can_view: staff from store or can_edit
+
+type order
+  relations
+    define store: [store]
+    define customer: [customer]
+    define placed_by: [user]
+    define can_delete: organization_admin from store
+    define can_refund: manager from store or can_delete
+    define can_cancel: placed_by or can_refund
+    define can_fulfill: staff from store or can_delete
+    define can_edit: can_fulfill
+    define can_view: placed_by or can_edit

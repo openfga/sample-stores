@@ -15,10 +15,10 @@ The model captures the following requirements:
 - **Time-off workflow**: Employees submit requests, designated approvers and HR managers can approve, and only the requester or admin can cancel.
 - **Team hierarchy**: Teams support parent-child nesting — members of a parent team can view child teams. Group members and managers can view their groups, and only managers or admins can manage them.
 
-The model, tuples, and tests are in [model.fga](./model.fga) and [model.fga.yaml](./model.fga.yaml).
+The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `human-resources` directory, run `fga model test --tests model.fga.yaml`
+2. In the `human-resources` directory, run `fga model test --tests store.fga.yaml`

@@ -1,0 +1,66 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or instructor or student
+    define admin: [user]
+    define instructor: [user]
+    define student: [user]
+
+type course
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define enrolled_instructor: [user]
+    define enrolled_student: [user]
+    define organization_admin: admin from organization
+    define organization_instructor: instructor from organization
+    define organization_student: student from organization
+    define can_delete: organization_admin
+    define can_publish: owner or can_delete
+    define can_edit: enrolled_instructor or can_publish
+    define can_view: enrolled_student or organization_instructor or can_edit
+
+type class
+  relations
+    define course: [course]
+    define instructor: [user]
+    define student: [user]
+    define organization_admin: organization_admin from course
+    define organization_instructor: organization_instructor from course
+    define course_instructor: enrolled_instructor from course
+    define course_student: enrolled_student from course
+    define can_delete: organization_admin
+    define can_enroll: instructor or can_delete
+    define can_edit: course_instructor or can_enroll
+    define can_view: student or course_student or organization_instructor or can_edit
+
+type content
+  relations
+    define course: [course]
+    define author: [user]
+    define can_delete: author or organization_admin from course
+    define can_edit: organization_instructor from course or can_delete
+    define can_view: organization_student from course or can_edit
+
+type collection
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_delete: admin from organization
+    define can_edit: owner or instructor from organization or can_delete
+    define can_view: student from organization or can_edit
+
+type activity
+  relations
+    define class: [class]
+    define creator: [user]
+    define assignee: [user]
+    define can_delete: organization_admin from class
+    define can_grade: creator or organization_instructor from class or can_delete
+    define can_edit: can_grade
+    define can_view: assignee or can_edit
+    define can_submit: assignee

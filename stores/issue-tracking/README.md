@@ -15,10 +15,10 @@ The model captures the following requirements:
 - **Attachment lifecycle**: Attachment visibility follows the parent ticket. Only the uploader or an admin can delete attachments.
 - **Contact management**: Only agents and admins can view and manage external contacts (customers, leads), keeping customer data restricted from regular members.
 
-The model, tuples, and tests are in [model.fga](./model.fga) and [model.fga.yaml](./model.fga.yaml).
+The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `issue-tracking` directory, run `fga model test --tests model.fga.yaml`
+2. In the `issue-tracking` directory, run `fga model test --tests store.fga.yaml`

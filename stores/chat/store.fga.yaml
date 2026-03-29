@@ -48,9 +48,6 @@ tuples:
     object: conversation:bob-charlie-dm
 
   # Message in engineering channel
-  - user: organization:acme
-    relation: organization
-    object: message:msg-001
   - user: conversation:engineering-general
     relation: conversation
     object: message:msg-001
@@ -59,9 +56,6 @@ tuples:
     object: message:msg-001
 
   # Message in DM
-  - user: organization:acme
-    relation: organization
-    object: message:dm-001
   - user: conversation:bob-charlie-dm
     relation: conversation
     object: message:dm-001

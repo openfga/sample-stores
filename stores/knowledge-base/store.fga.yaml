@@ -39,9 +39,6 @@ tuples:
     object: container:api-docs
 
   # Article in the API docs container
-  - user: organization:acme
-    relation: organization
-    object: article:getting-started
   - user: container:api-docs
     relation: parent_container
     object: article:getting-started
@@ -50,9 +47,6 @@ tuples:
     object: article:getting-started
 
   # Public article (anyone can view)
-  - user: organization:acme
-    relation: organization
-    object: article:public-faq
   - user: user:*
     relation: viewer
     object: article:public-faq
@@ -61,9 +55,6 @@ tuples:
     object: article:public-faq
 
   # Attachment
-  - user: organization:acme
-    relation: organization
-    object: attachment:diagram-png
   - user: article:getting-started
     relation: article
     object: attachment:diagram-png

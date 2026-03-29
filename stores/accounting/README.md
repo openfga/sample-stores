@@ -15,10 +15,10 @@ The model captures the following requirements:
 - **Invoice lifecycle**: Creators can manage their invoices, but voiding requires admin authority.
 - **Financial statement protection**: Balance sheets, income statements, and cash flow statements are read-only resources accessible only to accountants, admins, and auditors.
 
-The model, tuples, and tests are in [model.fga](./model.fga) and [model.fga.yaml](./model.fga.yaml).
+The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `accounting` directory, run `fga model test --tests model.fga.yaml`
+2. In the `accounting` directory, run `fga model test --tests store.fga.yaml`

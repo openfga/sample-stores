@@ -1,0 +1,219 @@
+name: Calendar Platform Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: scheduler
+    object: organization:acme
+  - user: user:charlie
+    relation: viewer
+    object: organization:acme
+  - user: user:diana
+    relation: member
+    object: organization:acme
+
+  # Calendar
+  - user: organization:acme
+    relation: organization
+    object: calendar:team-cal
+  - user: user:bob
+    relation: owner
+    object: calendar:team-cal
+
+  # Event linked to calendar
+  - user: calendar:team-cal
+    relation: calendar
+    object: event:standup
+  - user: user:bob
+    relation: organizer
+    object: event:standup
+  - user: user:diana
+    relation: attendee
+    object: event:standup
+
+  # Scheduling link
+  - user: organization:acme
+    relation: organization
+    object: link:booking-page
+  - user: user:bob
+    relation: owner
+    object: link:booking-page
+
+  # Recording linked to event
+  - user: event:standup
+    relation: event
+    object: recording:standup-rec
+
+  # Webinar
+  - user: organization:acme
+    relation: organization
+    object: webinar:product-launch
+  - user: user:bob
+    relation: organizer
+    object: webinar:product-launch
+
+tests:
+  - name: Admin has full access to all calendar resources
+    check:
+      - user: user:alice
+        object: calendar:team-cal
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_share: true
+      - user: user:alice
+        object: event:standup
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_invite: true
+      - user: user:alice
+        object: link:booking-page
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: recording:standup-rec
+        assertions:
+          can_view: true
+          can_delete: true
+      - user: user:alice
+        object: webinar:product-launch
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_publish: true
+
+  - name: Scheduler can manage events and links
+    check:
+      - user: user:bob
+        object: calendar:team-cal
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_share: true
+      - user: user:bob
+        object: event:standup
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_invite: true
+      - user: user:bob
+        object: link:booking-page
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:bob
+        object: recording:standup-rec
+        assertions:
+          can_view: true
+          can_delete: false
+      - user: user:bob
+        object: webinar:product-launch
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_publish: true
+
+  - name: Viewer has read-only access
+    check:
+      - user: user:charlie
+        object: calendar:team-cal
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_share: false
+      - user: user:charlie
+        object: event:standup
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_invite: false
+      - user: user:charlie
+        object: link:booking-page
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:charlie
+        object: recording:standup-rec
+        assertions:
+          can_view: true
+          can_delete: false
+      - user: user:charlie
+        object: webinar:product-launch
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_publish: false
+
+  - name: Member has no access except as event attendee
+    check:
+      - user: user:diana
+        object: calendar:team-cal
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: event:standup
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: link:booking-page
+        assertions:
+          can_view: false
+          can_edit: false
+      - user: user:diana
+        object: recording:standup-rec
+        assertions:
+          can_view: false
+          can_delete: false
+      - user: user:diana
+        object: webinar:product-launch
+        assertions:
+          can_view: false
+          can_edit: false
+          can_publish: false
+
+  - name: Event organizer can manage their events
+    check:
+      - user: user:bob
+        object: event:standup
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_invite: true
+
+  - name: Webinar publishing requires organizer or admin
+    check:
+      - user: user:alice
+        object: webinar:product-launch
+        assertions:
+          can_publish: true
+      - user: user:bob
+        object: webinar:product-launch
+        assertions:
+          can_publish: true
+      - user: user:charlie
+        object: webinar:product-launch
+        assertions:
+          can_publish: false

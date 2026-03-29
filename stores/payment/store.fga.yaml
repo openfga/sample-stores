@@ -1,0 +1,219 @@
+name: Payment Platform Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:payments-co
+  - user: user:bob
+    relation: finance_manager
+    object: organization:payments-co
+  - user: user:charlie
+    relation: viewer
+    object: organization:payments-co
+  - user: user:diana
+    relation: member
+    object: organization:payments-co
+
+  # Payment link
+  - user: organization:payments-co
+    relation: organization
+    object: link:checkout-page
+  - user: user:bob
+    relation: creator
+    object: link:checkout-page
+
+  # Payment
+  - user: organization:payments-co
+    relation: organization
+    object: payment:txn-001
+  - user: user:bob
+    relation: creator
+    object: payment:txn-001
+
+  # Payout
+  - user: organization:payments-co
+    relation: organization
+    object: payout:payout-001
+
+  # Refund
+  - user: organization:payments-co
+    relation: organization
+    object: refund:refund-001
+
+  # Subscription
+  - user: organization:payments-co
+    relation: organization
+    object: subscription:plan-monthly
+  - user: user:bob
+    relation: creator
+    object: subscription:plan-monthly
+
+tests:
+  - name: Admin has full access to all payment resources
+    check:
+      - user: user:alice
+        object: link:checkout-page
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: payment:txn-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_refund: true
+      - user: user:alice
+        object: payout:payout-001
+        assertions:
+          can_view: true
+          can_approve: true
+      - user: user:alice
+        object: refund:refund-001
+        assertions:
+          can_view: true
+          can_approve: true
+      - user: user:alice
+        object: subscription:plan-monthly
+        assertions:
+          can_view: true
+          can_edit: true
+          can_cancel: true
+          can_delete: true
+
+  - name: Finance manager can manage payments and subscriptions
+    check:
+      - user: user:bob
+        object: link:checkout-page
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:bob
+        object: payment:txn-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_refund: true
+      - user: user:bob
+        object: payout:payout-001
+        assertions:
+          can_view: true
+          can_approve: false
+      - user: user:bob
+        object: refund:refund-001
+        assertions:
+          can_view: true
+          can_approve: false
+      - user: user:bob
+        object: subscription:plan-monthly
+        assertions:
+          can_view: true
+          can_edit: true
+          can_cancel: true
+          can_delete: false
+
+  - name: Viewer has read-only access
+    check:
+      - user: user:charlie
+        object: link:checkout-page
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:charlie
+        object: payment:txn-001
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_refund: false
+      - user: user:charlie
+        object: payout:payout-001
+        assertions:
+          can_view: false
+          can_approve: false
+      - user: user:charlie
+        object: refund:refund-001
+        assertions:
+          can_view: true
+          can_approve: false
+      - user: user:charlie
+        object: subscription:plan-monthly
+        assertions:
+          can_view: true
+          can_edit: false
+          can_cancel: false
+          can_delete: false
+
+  - name: Member has no access to payment resources
+    check:
+      - user: user:diana
+        object: link:checkout-page
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: payment:txn-001
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+          can_refund: false
+      - user: user:diana
+        object: payout:payout-001
+        assertions:
+          can_view: false
+          can_approve: false
+      - user: user:diana
+        object: refund:refund-001
+        assertions:
+          can_view: false
+          can_approve: false
+      - user: user:diana
+        object: subscription:plan-monthly
+        assertions:
+          can_view: false
+          can_edit: false
+          can_cancel: false
+          can_delete: false
+
+  - name: Payout approval restricted to admin
+    check:
+      - user: user:alice
+        object: payout:payout-001
+        assertions:
+          can_approve: true
+      - user: user:bob
+        object: payout:payout-001
+        assertions:
+          can_approve: false
+      - user: user:charlie
+        object: payout:payout-001
+        assertions:
+          can_approve: false
+
+  - name: Refund approval restricted to admin
+    check:
+      - user: user:alice
+        object: refund:refund-001
+        assertions:
+          can_approve: true
+      - user: user:bob
+        object: refund:refund-001
+        assertions:
+          can_approve: false
+
+  - name: Payment creator can view but not edit or refund
+    check:
+      - user: user:bob
+        object: payment:txn-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_refund: true

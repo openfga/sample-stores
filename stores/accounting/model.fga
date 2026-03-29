@@ -13,58 +13,58 @@ type organization
 type account
   relations
     define organization: [organization]
-    define can_view: accountant from organization or admin from organization or auditor from organization
-    define can_edit: accountant from organization or admin from organization
     define can_create: accountant from organization or admin from organization
+    define can_edit: can_create
+    define can_view: auditor from organization or can_edit
 
 type contact
   relations
     define organization: [organization]
     define owner: [user]
-    define can_view: owner or accountant from organization or admin from organization
     define can_edit: owner or accountant from organization or admin from organization
+    define can_view: can_edit
 
 type invoice
   relations
     define organization: [organization]
     define creator: [user]
     define contact: [contact]
-    define can_view: creator or accountant from organization or admin from organization or auditor from organization
-    define can_edit: creator or accountant from organization or admin from organization
-    define can_approve: admin from organization
     define can_void: admin from organization
+    define can_approve: can_void
+    define can_edit: creator or accountant from organization or can_approve
+    define can_view: owner from contact or auditor from organization or can_edit
 
 type expense
   relations
     define organization: [organization]
     define submitter: [user]
-    define can_view: submitter or accountant from organization or admin from organization or auditor from organization
-    define can_edit: submitter or accountant from organization or admin from organization
     define can_approve: accountant from organization or admin from organization
+    define can_edit: submitter or can_approve
+    define can_view: auditor from organization or can_edit
 
 type payment
   relations
     define organization: [organization]
-    define can_view: accountant from organization or admin from organization or auditor from organization
     define can_create: accountant from organization or admin from organization
-    define can_edit: accountant from organization or admin from organization
+    define can_edit: can_create
+    define can_view: auditor from organization or can_edit
 
 type journal_entry
   relations
     define organization: [organization]
     define creator: [user]
-    define can_view: creator or accountant from organization or admin from organization or auditor from organization
-    define can_edit: creator or accountant from organization or admin from organization
     define can_post: admin from organization
+    define can_edit: creator or accountant from organization or can_post
+    define can_view: auditor from organization or can_edit
 
 type purchase_order
   relations
     define organization: [organization]
     define requester: [user]
     define approver: [user]
-    define can_view: requester or approver or accountant from organization or admin from organization
-    define can_edit: requester or accountant from organization or admin from organization
     define can_approve: approver or admin from organization
+    define can_edit: requester or accountant from organization or can_approve
+    define can_view: can_edit
 
 type financial_statement
   relations

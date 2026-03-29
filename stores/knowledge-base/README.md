@@ -15,10 +15,10 @@ The model captures the following requirements:
 - **Attachment lifecycle**: Attachments follow the visibility of their parent article. Only the uploader or an admin can delete attachments.
 - **Organization-wide readability**: All organization members can view containers and articles by default, supporting a culture of knowledge sharing. Editing is restricted to designated editors, groups, and admins.
 
-The model, tuples, and tests are in [model.fga](./model.fga) and [model.fga.yaml](./model.fga.yaml).
+The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `knowledge-base` directory, run `fga model test --tests model.fga.yaml`
+2. In the `knowledge-base` directory, run `fga model test --tests store.fga.yaml`

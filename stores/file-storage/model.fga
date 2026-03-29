@@ -16,35 +16,34 @@ type group
 type drive
   relations
     define organization: [organization]
+    define organization_admin: admin from organization
     define owner: [user]
     define writer: [user, group#member] or owner
     define reader: [user, group#member] or writer or member from organization
     define can_view: reader
     define can_edit: writer
-    define can_delete: owner or admin from organization
+    define can_delete: owner or organization_admin
 
 type folder
   relations
     define drive: [drive]
     define parent_folder: [folder]
+    define organization_admin: organization_admin from drive
     define owner: [user] or owner from parent_folder
     define writer: [user, group#member] or owner or writer from parent_folder
     define reader: [user, group#member] or writer or reader from parent_folder or reader from drive
     define can_view: reader
     define can_edit: writer
     define can_create_file: writer
-    define can_delete: owner or admin from organization
-    define organization: [organization]
+    define can_delete: owner or organization_admin
 
 type file
   relations
     define folder: [folder]
-    define drive: [drive]
     define owner: [user] or owner from folder
     define writer: [user, group#member] or owner or writer from folder
     define reader: [user, group#member] or writer or reader from folder
     define can_view: reader
     define can_edit: writer
     define can_download: reader
-    define can_delete: owner
-    define organization: [organization]
+    define can_delete: owner or organization_admin from folder

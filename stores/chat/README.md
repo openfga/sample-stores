@@ -16,10 +16,10 @@ The model captures the following requirements:
 - **Admin override**: Organization admins can view, edit, and delete any conversation or message, and manage membership across all channels, supporting moderation and compliance needs.
 - **Non-member isolation**: Users who are not members of a conversation cannot view it, post in it, or see any of its messages — enforcing strict channel privacy.
 
-The model, tuples, and tests are in [model.fga](./model.fga) and [model.fga.yaml](./model.fga.yaml).
+The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `chat` directory, run `fga model test --tests model.fga.yaml`
+2. In the `chat` directory, run `fga model test --tests store.fga.yaml`

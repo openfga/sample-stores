@@ -1,0 +1,43 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or supervisor or agent
+    define admin: [user]
+    define supervisor: [user]
+    define agent: [user]
+
+type call
+  relations
+    define organization: [organization]
+    define participant: [user]
+    define organization_admin: admin from organization
+    define organization_supervisor: supervisor from organization
+    define organization_agent: agent from organization
+    define can_delete: organization_admin
+    define can_view: participant or organization_agent or organization_supervisor or can_delete
+
+type contact
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_delete: supervisor from organization or admin from organization
+    define can_edit: owner or agent from organization or can_delete
+    define can_view: can_edit
+
+type comment
+  relations
+    define call: [call]
+    define author: [user]
+    define can_delete: author or organization_admin from call
+    define can_edit: organization_supervisor from call or can_delete
+    define can_view: organization_agent from call or can_edit
+
+type recording
+  relations
+    define call: [call]
+    define can_delete: organization_admin from call
+    define can_view: organization_supervisor from call or can_delete

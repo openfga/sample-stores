@@ -9,6 +9,9 @@ tuples:
   - user: user:bob
     relation: recruiter
     object: organization:acme
+  - user: user:diana
+    relation: recruiter
+    object: organization:acme
   - user: user:charlie
     relation: hiring_manager
     object: organization:acme
@@ -27,8 +30,8 @@ tuples:
     object: office:san-francisco
 
   # Job
-  - user: organization:acme
-    relation: organization
+  - user: department:engineering
+    relation: department
     object: job:swe-senior
   - user: user:charlie
     relation: hiring_manager
@@ -41,24 +44,15 @@ tuples:
   - user: organization:acme
     relation: organization
     object: candidate:diana
-  - user: user:bob
-    relation: recruiter
-    object: candidate:diana
 
   # Application
-  - user: organization:acme
-    relation: organization
-    object: application:diana-swe
   - user: job:swe-senior
     relation: job
     object: application:diana-swe
-  - user: user:bob
-    relation: recruiter
-    object: application:diana-swe
 
   # Scheduled Interview
-  - user: organization:acme
-    relation: organization
+  - user: application:diana-swe
+    relation: application
     object: scheduled_interview:diana-onsite
   - user: user:bob
     relation: organizer
@@ -68,16 +62,16 @@ tuples:
     object: scheduled_interview:diana-onsite
 
   # Scorecard
-  - user: organization:acme
-    relation: organization
+  - user: scheduled_interview:diana-onsite
+    relation: interview
     object: scorecard:charlie-feedback
   - user: user:charlie
     relation: interviewer
     object: scorecard:charlie-feedback
 
   # Offer
-  - user: organization:acme
-    relation: organization
+  - user: application:diana-swe
+    relation: application
     object: offer:diana-offer
   - user: user:bob
     relation: creator
@@ -101,6 +95,15 @@ tests:
           can_view: true
           can_edit: true
           can_close: true
+
+  - name: Org recruiter can view job without direct assignment
+    check:
+      - user: user:diana
+        object: job:swe-senior
+        assertions:
+          can_view: true
+          can_edit: false
+          can_close: false
 
   - name: Recruiter can view and edit candidates
     check:

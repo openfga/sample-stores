@@ -1,0 +1,49 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or finance_manager or viewer
+    define admin: [user]
+    define finance_manager: [user]
+    define viewer: [user]
+
+type link
+  relations
+    define organization: [organization]
+    define creator: [user]
+    define can_delete: admin from organization
+    define can_edit: creator or finance_manager from organization or can_delete
+    define can_view: viewer from organization or can_edit
+
+type payment
+  relations
+    define organization: [organization]
+    define creator: [user]
+    define can_delete: admin from organization
+    define can_refund: finance_manager from organization or can_delete
+    define can_edit: can_refund
+    define can_view: creator or viewer from organization or can_edit
+
+type payout
+  relations
+    define organization: [organization]
+    define can_approve: admin from organization
+    define can_view: finance_manager from organization or can_approve
+
+type refund
+  relations
+    define organization: [organization]
+    define can_approve: admin from organization
+    define can_view: viewer from organization or finance_manager from organization or can_approve
+
+type subscription
+  relations
+    define organization: [organization]
+    define creator: [user]
+    define can_delete: admin from organization
+    define can_cancel: finance_manager from organization or can_delete
+    define can_edit: can_cancel
+    define can_view: creator or viewer from organization or can_edit

@@ -1,0 +1,234 @@
+name: Advertising Platform Authorization Model Tests
+model_file: ./model.fga
+
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:adtech
+  - user: user:bob
+    relation: campaign_manager
+    object: organization:adtech
+  - user: user:charlie
+    relation: analyst
+    object: organization:adtech
+  - user: user:diana
+    relation: member
+    object: organization:adtech
+
+  # Campaign
+  - user: organization:adtech
+    relation: organization
+    object: campaign:summer-sale
+  - user: user:bob
+    relation: owner
+    object: campaign:summer-sale
+
+  # Ad group linked to campaign
+  - user: campaign:summer-sale
+    relation: campaign
+    object: ad_group:us-targeting
+  - user: user:bob
+    relation: owner
+    object: ad_group:us-targeting
+
+  # Ad linked to ad group
+  - user: ad_group:us-targeting
+    relation: ad_group
+    object: ad:banner-001
+  - user: user:bob
+    relation: creator
+    object: ad:banner-001
+
+  # Creative
+  - user: organization:adtech
+    relation: organization
+    object: creative:video-spot
+  - user: user:bob
+    relation: creator
+    object: creative:video-spot
+
+  # Report
+  - user: organization:adtech
+    relation: organization
+    object: report:q1-performance
+
+tests:
+  - name: Admin has full access to all resources
+    check:
+      - user: user:alice
+        object: campaign:summer-sale
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_publish: true
+      - user: user:alice
+        object: ad_group:us-targeting
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: ad:banner-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_approve: true
+      - user: user:alice
+        object: creative:video-spot
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:alice
+        object: report:q1-performance
+        assertions:
+          can_view: true
+          can_create: true
+          can_delete: true
+
+  - name: Campaign manager can create and edit but not publish or approve
+    check:
+      - user: user:bob
+        object: campaign:summer-sale
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_publish: false
+      - user: user:bob
+        object: ad_group:us-targeting
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:bob
+        object: ad:banner-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_approve: false
+      - user: user:bob
+        object: creative:video-spot
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:bob
+        object: report:q1-performance
+        assertions:
+          can_view: true
+          can_create: true
+          can_delete: false
+
+  - name: Analyst has read-only access
+    check:
+      - user: user:charlie
+        object: campaign:summer-sale
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_publish: false
+      - user: user:charlie
+        object: ad_group:us-targeting
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:charlie
+        object: ad:banner-001
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_approve: false
+      - user: user:charlie
+        object: creative:video-spot
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:charlie
+        object: report:q1-performance
+        assertions:
+          can_view: true
+          can_create: false
+          can_delete: false
+
+  - name: Member has no access to ad resources
+    check:
+      - user: user:diana
+        object: campaign:summer-sale
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+          can_publish: false
+      - user: user:diana
+        object: ad_group:us-targeting
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: ad:banner-001
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+          can_approve: false
+      - user: user:diana
+        object: creative:video-spot
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: report:q1-performance
+        assertions:
+          can_view: false
+          can_create: false
+          can_delete: false
+
+  - name: Ad approval workflow - only admin can approve
+    check:
+      - user: user:alice
+        object: ad:banner-001
+        assertions:
+          can_approve: true
+      - user: user:bob
+        object: ad:banner-001
+        assertions:
+          can_approve: false
+      - user: user:charlie
+        object: ad:banner-001
+        assertions:
+          can_approve: false
+
+  - name: Campaign publishing - only admin can publish
+    check:
+      - user: user:alice
+        object: campaign:summer-sale
+        assertions:
+          can_publish: true
+      - user: user:bob
+        object: campaign:summer-sale
+        assertions:
+          can_publish: false
+      - user: user:charlie
+        object: campaign:summer-sale
+        assertions:
+          can_publish: false
+
+  - name: Creative ownership - creator can view and edit
+    check:
+      - user: user:bob
+        object: creative:video-spot
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false

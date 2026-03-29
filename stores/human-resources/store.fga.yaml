@@ -57,9 +57,6 @@ tuples:
     object: location:hq-office
 
   # Employee setup - Diana is the employee
-  - user: organization:acme
-    relation: organization
-    object: employee:diana-record
   - user: company:acme-corp
     relation: company
     object: employee:diana-record
@@ -70,14 +67,14 @@ tuples:
     relation: manager
     object: employee:diana-record
 
-  # Employment for Diana
-  - user: organization:acme
-    relation: organization
+  # Employment for Diana (linked to employee)
+  - user: employee:diana-record
+    relation: employee
     object: employment:diana-swe
 
-  # Benefit for Diana
-  - user: organization:acme
-    relation: organization
+  # Benefit for Diana (linked to employee)
+  - user: employee:diana-record
+    relation: employee
     object: benefit:diana-health
 
   # Payroll run
@@ -85,9 +82,9 @@ tuples:
     relation: organization
     object: payroll_run:march-2026
 
-  # Time off request
-  - user: organization:acme
-    relation: organization
+  # Time off request (linked to employee)
+  - user: employee:diana-record
+    relation: employee
     object: time_off:diana-vacation
   - user: user:diana
     relation: requester

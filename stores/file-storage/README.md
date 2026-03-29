@@ -15,10 +15,10 @@ The model captures the following requirements:
 - **Granular file operations**: Separate permissions for viewing (`can_view`), editing (`can_edit`), downloading (`can_download`), and deleting (`can_delete`) files.
 - **Admin override**: Organization admins can delete any drive, regardless of individual ownership.
 
-The model, tuples, and tests are in [model.fga](./model.fga) and [model.fga.yaml](./model.fga.yaml).
+The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
 
 ## Try It Out
 
 1. Make sure you have the [FGA CLI](https://github.com/openfga/cli/?tab=readme-ov-file#installation)
 
-2. In the `file-storage` directory, run `fga model test --tests model.fga.yaml`
+2. In the `file-storage` directory, run `fga model test --tests store.fga.yaml`

@@ -14,6 +14,8 @@ type department
   relations
     define organization: [organization]
     define head: [user]
+    define organization_admin: admin from organization
+    define organization_recruiter: recruiter from organization
     define can_view: head or member from organization
 
 type office
@@ -23,54 +25,55 @@ type office
 
 type job
   relations
-    define organization: [organization]
     define department: [department]
     define hiring_manager: [user]
     define recruiter: [user]
-    define can_view: hiring_manager or recruiter or admin from organization
-    define can_edit: hiring_manager or recruiter or admin from organization
-    define can_close: hiring_manager or admin from organization
+    define organization_admin: organization_admin from department
+    define organization_recruiter: organization_recruiter from department
+    define department_head: head from department
+    define can_close: hiring_manager or organization_admin
+    define can_edit: recruiter or can_close
+    define can_view: organization_recruiter or department_head or can_edit
 
 type candidate
   relations
     define organization: [organization]
-    define recruiter: [user]
-    define can_view: recruiter or admin from organization or recruiter from organization
-    define can_edit: recruiter or admin from organization
     define can_delete: admin from organization
+    define can_edit: recruiter from organization or can_delete
+    define can_view: can_edit
 
 type application
   relations
     define job: [job]
-    define organization: [organization]
     define candidate: [candidate]
-    define recruiter: [user]
-    define can_view: recruiter or hiring_manager from job or admin from organization or recruiter from organization
-    define can_edit: recruiter or admin from organization
-    define can_change_stage: recruiter or hiring_manager from job
+    define organization_admin: organization_admin from job
+    define organization_recruiter: organization_recruiter from job
+    define department_head: department_head from job
+    define can_edit: recruiter from job or organization_admin
+    define can_change_stage: recruiter from job or hiring_manager from job
+    define can_view: can_view from job
 
 type scheduled_interview
   relations
     define application: [application]
-    define organization: [organization]
     define organizer: [user]
     define interviewer: [user]
-    define can_view: organizer or interviewer or admin from organization
-    define can_edit: organizer or admin from organization
+    define organization_admin: organization_admin from application
+    define department_head: department_head from application
+    define can_edit: organizer or organization_admin
+    define can_view: department_head or interviewer or can_edit
 
 type scorecard
   relations
     define interview: [scheduled_interview]
-    define organization: [organization]
     define interviewer: [user]
-    define can_view: interviewer or admin from organization
     define can_edit: interviewer
+    define can_view: department_head from interview or organization_admin from interview or can_edit
 
 type offer
   relations
     define application: [application]
-    define organization: [organization]
     define creator: [user]
-    define can_view: creator or admin from organization or recruiter from organization
-    define can_edit: creator or admin from organization
-    define can_approve: admin from organization
+    define can_approve: organization_admin from application
+    define can_edit: creator or can_approve
+    define can_view: department_head from application or organization_recruiter from application or can_edit

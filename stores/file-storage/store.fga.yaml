@@ -34,9 +34,6 @@ tuples:
     relation: owner
     object: drive:bobs-drive
 
-  - user: organization:acme
-    relation: organization
-    object: folder:projects
   - user: drive:shared-drive
     relation: drive
     object: folder:projects
@@ -44,9 +41,6 @@ tuples:
     relation: owner
     object: folder:projects
 
-  - user: organization:acme
-    relation: organization
-    object: folder:backend
   - user: folder:projects
     relation: parent_folder
     object: folder:backend
@@ -54,9 +48,6 @@ tuples:
     relation: writer
     object: folder:backend
 
-  - user: organization:acme
-    relation: organization
-    object: file:api-spec
   - user: folder:backend
     relation: folder
     object: file:api-spec
