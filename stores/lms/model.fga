@@ -31,12 +31,10 @@ type class
     define student: [user]
     define organization_admin: organization_admin from course
     define organization_instructor: organization_instructor from course
-    define course_instructor: enrolled_instructor from course
-    define course_student: enrolled_student from course
     define can_delete: organization_admin
     define can_enroll: instructor or can_delete
-    define can_edit: course_instructor or can_enroll
-    define can_view: student or course_student or organization_instructor or can_edit
+    define can_edit: enrolled_instructor from course or can_enroll
+    define can_view: student or enrolled_student from course or organization_instructor or can_edit
 
 type content
   relations
