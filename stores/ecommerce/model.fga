@@ -8,6 +8,7 @@ type organization
     define member: [user] or admin or store_manager
     define admin: [user]
     define store_manager: [user]
+    define can_create_store: admin
 
 type store
   relations
@@ -18,6 +19,8 @@ type store
     define organization_admin: admin from organization
     define can_delete: owner or organization_admin
     define can_create_product: manager or organization_admin
+    define can_create_customer: staff or can_edit
+    define can_create_order: staff or can_edit
     define can_edit: manager or can_delete
     define can_view: staff or can_edit
 
@@ -28,6 +31,7 @@ type product
     define viewer: [user]
     define can_delete: manager from store or organization_admin from store
     define can_manage_inventory: staff from store or organization_admin from store
+    define can_create_review: can_view from store
     define can_edit: creator or can_manage_inventory
     define can_view: viewer or can_edit
 
@@ -39,6 +43,14 @@ type customer
     define can_edit: account_owner or manager from store or can_delete
     define can_view: staff from store or can_edit
 
+type review
+  relations
+    define product: [product]
+    define author: [user]
+    define can_delete: author or can_delete from product
+    define can_edit: author
+    define can_view: can_view from product or can_edit
+
 type order
   relations
     define store: [store]
@@ -46,7 +58,7 @@ type order
     define placed_by: [user]
     define can_delete: organization_admin from store
     define can_refund: manager from store or can_delete
-    define can_cancel: placed_by or can_refund
+    define can_cancel: account_owner from customer or placed_by or can_refund
     define can_fulfill: staff from store or can_delete
     define can_edit: can_fulfill
-    define can_view: placed_by or can_edit
+    define can_view: account_owner from customer or placed_by or can_edit

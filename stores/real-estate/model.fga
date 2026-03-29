@@ -1,0 +1,60 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define admin: [user]
+    define broker: [user]
+    define agent: [user]
+    define appraiser: [user]
+    define member: [user] or admin or broker or agent or appraiser
+    define can_create_property: admin
+    define can_create_neighborhood: admin
+
+type property
+  relations
+    define organization: [organization]
+    define can_delete: admin from organization
+    define can_edit: broker from organization or can_delete
+    define can_create_listing: agent from organization or broker from organization or can_delete
+    define can_create_inspection: appraiser from organization or broker from organization or can_delete
+    define can_view: member from organization or can_edit
+
+type listing
+  relations
+    define organization: [organization]
+    define property: [property]
+    define listing_agent: [user]
+    define org_admin: admin from organization
+    define org_broker: broker from organization
+    define can_delete: org_admin
+    define can_create_transaction: listing_agent or org_broker or can_delete
+    define can_close: listing_agent or org_broker or can_delete
+    define can_edit: can_close
+    define can_view: member from organization or can_edit
+
+type transaction
+  relations
+    define listing: [listing]
+    define buyer_agent: [user]
+    define seller_agent: [user]
+    define can_delete: can_delete from listing
+    define can_edit: buyer_agent or seller_agent or can_edit from listing
+    define can_view_financial: can_edit
+    define can_view: can_view from listing or can_edit
+
+type inspection
+  relations
+    define property: [property]
+    define inspector: [user]
+    define can_delete: can_delete from property
+    define can_edit: inspector or can_delete
+    define can_view: can_view from property or can_edit
+
+type neighborhood
+  relations
+    define organization: [organization]
+    define can_edit: admin from organization
+    define can_view: member from organization or can_edit

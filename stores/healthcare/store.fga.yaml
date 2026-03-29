@@ -1,0 +1,303 @@
+name: Healthcare
+model_file: model.fga
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:mercy-hospital
+  - user: user:dr-smith
+    relation: provider
+    object: organization:mercy-hospital
+  - user: user:dr-jones
+    relation: provider
+    object: organization:mercy-hospital
+  - user: user:nurse-williams
+    relation: nurse
+    object: organization:mercy-hospital
+  - user: user:clerk-brown
+    relation: medical_records_staff
+    object: organization:mercy-hospital
+  - user: user:billing-davis
+    relation: member
+    object: organization:mercy-hospital
+
+  # Facility
+  - user: organization:mercy-hospital
+    relation: organization
+    object: facility:main-campus
+  - user: user:dr-jones
+    relation: director
+    object: facility:main-campus
+
+  # Patient doe — primary provider is dr-smith, nurse-williams on care team
+  - user: organization:mercy-hospital
+    relation: organization
+    object: patient:doe
+  - user: user:dr-smith
+    relation: primary_provider
+    object: patient:doe
+  - user: user:nurse-williams
+    relation: care_team
+    object: patient:doe
+
+  # Patient roe — primary provider is dr-jones (used for isolation tests)
+  - user: organization:mercy-hospital
+    relation: organization
+    object: patient:roe
+  - user: user:dr-jones
+    relation: primary_provider
+    object: patient:roe
+
+  # Encounter for patient doe at main-campus, attended by dr-smith
+  - user: patient:doe
+    relation: patient
+    object: encounter:enc-001
+  - user: user:dr-smith
+    relation: attending_provider
+    object: encounter:enc-001
+
+  # Diagnosis for patient doe, diagnosed by dr-smith
+  - user: patient:doe
+    relation: patient
+    object: diagnosis:diag-001
+  - user: user:dr-smith
+    relation: diagnosing_provider
+    object: diagnosis:diag-001
+
+  # Treatment within encounter enc-001, ordered by dr-smith
+  - user: encounter:enc-001
+    relation: encounter
+    object: treatment:treat-001
+  - user: user:dr-smith
+    relation: ordering_provider
+    object: treatment:treat-001
+
+  # Medication in the formulary
+  - user: organization:mercy-hospital
+    relation: organization
+    object: medication:aspirin
+
+tests:
+  - name: Admin has full access to all resources
+    check:
+      - user: user:alice
+        object: patient:doe
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view_sensitive: true
+          can_create_encounter: true
+          can_view: true
+      - user: user:alice
+        object: encounter:enc-001
+        assertions:
+          can_delete: true
+          can_create_treatment: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: diagnosis:diag-001
+        assertions:
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: treatment:treat-001
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: facility:main-campus
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: medication:aspirin
+        assertions:
+          can_edit: true
+          can_view: true
+
+  - name: Primary provider can manage patient care
+    check:
+      - user: user:dr-smith
+        object: patient:doe
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view_sensitive: true
+          can_create_encounter: true
+          can_view: true
+      - user: user:dr-smith
+        object: encounter:enc-001
+        assertions:
+          can_delete: false
+          can_create_treatment: true
+          can_edit: true
+          can_view: true
+      - user: user:dr-smith
+        object: diagnosis:diag-001
+        assertions:
+          can_edit: true
+          can_view: true
+      - user: user:dr-smith
+        object: treatment:treat-001
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+
+  - name: Care team nurse can view but not edit patient records
+    check:
+      - user: user:nurse-williams
+        object: patient:doe
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view_sensitive: true
+          can_create_encounter: true
+          can_view: true
+      - user: user:nurse-williams
+        object: encounter:enc-001
+        assertions:
+          can_delete: false
+          can_create_treatment: false
+          can_edit: false
+          can_view: true
+      - user: user:nurse-williams
+        object: diagnosis:diag-001
+        assertions:
+          can_edit: false
+          can_view: true
+      - user: user:nurse-williams
+        object: treatment:treat-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+
+  - name: Medical records clerk can edit demographics and view sensitive data
+    check:
+      - user: user:clerk-brown
+        object: patient:doe
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view_sensitive: true
+          can_create_encounter: true
+          can_create_diagnosis: true
+          can_view: true
+      - user: user:clerk-brown
+        object: encounter:enc-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:clerk-brown
+        object: diagnosis:diag-001
+        assertions:
+          can_edit: false
+          can_view: true
+
+  - name: Unrelated provider cannot access other providers patients
+    check:
+      - user: user:dr-jones
+        object: patient:doe
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view_sensitive: false
+          can_create_encounter: false
+          can_view: false
+      - user: user:dr-jones
+        object: encounter:enc-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: false
+      - user: user:dr-jones
+        object: diagnosis:diag-001
+        assertions:
+          can_edit: false
+          can_view: false
+      - user: user:dr-jones
+        object: treatment:treat-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: false
+
+  - name: Provider can access their own patients but not others
+    check:
+      - user: user:dr-jones
+        object: patient:roe
+        assertions:
+          can_edit: true
+          can_view_sensitive: true
+          can_view: true
+      - user: user:dr-smith
+        object: patient:roe
+        assertions:
+          can_edit: false
+          can_view_sensitive: false
+          can_view: false
+
+  - name: Facility access follows organization membership
+    check:
+      - user: user:dr-jones
+        object: facility:main-campus
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:dr-smith
+        object: facility:main-campus
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:billing-davis
+        object: facility:main-campus
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+
+  - name: Medication formulary restricted to clinical staff
+    check:
+      - user: user:dr-smith
+        object: medication:aspirin
+        assertions:
+          can_edit: false
+          can_view: true
+      - user: user:nurse-williams
+        object: medication:aspirin
+        assertions:
+          can_edit: false
+          can_view: true
+      - user: user:clerk-brown
+        object: medication:aspirin
+        assertions:
+          can_edit: false
+          can_view: false
+      - user: user:billing-davis
+        object: medication:aspirin
+        assertions:
+          can_edit: false
+          can_view: false
+
+  - name: Billing staff cannot access patient data
+    check:
+      - user: user:billing-davis
+        object: patient:doe
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view_sensitive: false
+          can_view: false
+      - user: user:billing-davis
+        object: encounter:enc-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: false

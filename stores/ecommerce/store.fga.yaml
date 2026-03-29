@@ -40,6 +40,14 @@ tuples:
     relation: account_owner
     object: customer:diana
 
+  # Review on product by diana
+  - user: product:sneakers
+    relation: product
+    object: review:rev-001
+  - user: user:diana
+    relation: author
+    object: review:rev-001
+
   # Order placed by the customer
   - user: store:main-shop
     relation: store
@@ -52,30 +60,48 @@ tests:
   - name: Admin has full access to store
     check:
       - user: user:alice
+        object: organization:acme
+        assertions:
+          can_create_store: true
+      - user: user:alice
         object: store:main-shop
         assertions:
           can_view: true
           can_create_product: true
+          can_create_customer: true
+          can_create_order: true
           can_edit: true
           can_delete: true
 
   - name: Store owner can manage store
     check:
       - user: user:bob
+        object: organization:acme
+        assertions:
+          can_create_store: false
+      - user: user:bob
         object: store:main-shop
         assertions:
           can_view: true
           can_create_product: true
+          can_create_customer: true
+          can_create_order: true
           can_edit: true
           can_delete: true
 
   - name: Store staff can view but not edit store
     check:
       - user: user:charlie
+        object: organization:acme
+        assertions:
+          can_create_store: false
+      - user: user:charlie
         object: store:main-shop
         assertions:
           can_view: true
           can_create_product: false
+          can_create_customer: true
+          can_create_order: true
           can_edit: false
           can_delete: false
 
@@ -89,6 +115,7 @@ tests:
         object: product:sneakers
         assertions:
           can_view: true
+          can_create_review: true
           can_edit: true
           can_delete: true
 
@@ -98,6 +125,7 @@ tests:
         object: product:sneakers
         assertions:
           can_view: true
+          can_create_review: true
           can_edit: true
           can_delete: false
           can_manage_inventory: true
@@ -108,6 +136,7 @@ tests:
         object: product:sneakers
         assertions:
           can_view: true
+          can_create_review: true
           can_manage_inventory: true
           can_delete: false
 
@@ -119,6 +148,11 @@ tests:
           can_view: true
           can_edit: true
           can_delete: false
+      - user: user:diana
+        object: store:main-shop
+        assertions:
+          can_create_customer: false
+          can_create_order: false
 
   - name: Store staff can view customers
     check:
@@ -192,6 +226,33 @@ tests:
           can_fulfill: true
           can_delete: true
 
+  - name: Review author can edit and delete own review
+    check:
+      - user: user:diana
+        object: review:rev-001
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+
+  - name: Store manager can delete reviews but not edit them
+    check:
+      - user: user:bob
+        object: review:rev-001
+        assertions:
+          can_delete: true
+          can_edit: false
+          can_view: true
+
+  - name: Store staff can view reviews but not edit or delete
+    check:
+      - user: user:charlie
+        object: review:rev-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+
   - name: Non-store member cannot see orders
     check:
       - user: user:charlie
@@ -202,4 +263,5 @@ tests:
         object: product:sneakers
         assertions:
           can_view: false
+          can_create_review: false
           can_edit: false

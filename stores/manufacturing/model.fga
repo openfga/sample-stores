@@ -1,0 +1,72 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define admin: [user]
+    define plant_manager: [user]
+    define engineer: [user]
+    define quality_inspector: [user]
+    define operator: [user]
+    define procurement: [user]
+    define member: [user] or admin or plant_manager or engineer or quality_inspector or operator or procurement
+    define can_create_part: engineer or procurement or admin
+    define can_create_supplier: procurement or admin
+    define can_create_quality_report: quality_inspector or admin
+
+type production_line
+  relations
+    define organization: [organization]
+    define supervisor: [user]
+    define org_admin: admin from organization
+    define org_plant_manager: plant_manager from organization
+    define org_engineer: engineer from organization
+    define can_delete: org_admin
+    define can_edit: supervisor or org_plant_manager or can_delete
+    define can_create_work_order: can_edit
+    define can_create_machine: org_engineer or can_edit
+    define can_view: member from organization or can_edit
+
+type machine
+  relations
+    define production_line: [production_line]
+    define assigned_operator: [user]
+    define org_engineer: org_engineer from production_line
+    define can_delete: org_engineer or can_delete from production_line
+    define can_edit: assigned_operator or can_edit from production_line or can_delete
+    define can_view: can_view from production_line or can_edit
+
+type work_order
+  relations
+    define production_line: [production_line]
+    define creator: [user]
+    define assignee: [user]
+    define can_delete: can_delete from production_line
+    define can_approve: can_edit from production_line
+    define can_edit: creator or assignee or can_approve
+    define can_view: can_view from production_line or can_edit
+
+type quality_report
+  relations
+    define organization: [organization]
+    define inspector: [user]
+    define can_delete: admin from organization
+    define can_approve: quality_inspector from organization or can_delete
+    define can_edit: inspector or can_approve
+    define can_view: member from organization or can_edit
+
+type part
+  relations
+    define organization: [organization]
+    define can_delete: admin from organization
+    define can_edit: engineer from organization or procurement from organization or can_delete
+    define can_view: member from organization or can_edit
+
+type supplier
+  relations
+    define organization: [organization]
+    define can_delete: admin from organization
+    define can_edit: procurement from organization or can_delete
+    define can_view: member from organization or can_edit

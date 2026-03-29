@@ -1,0 +1,353 @@
+name: Manufacturing
+model_file: model.fga
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:acme-manufacturing
+  - user: user:bob
+    relation: plant_manager
+    object: organization:acme-manufacturing
+  - user: user:charlie
+    relation: engineer
+    object: organization:acme-manufacturing
+  - user: user:diana
+    relation: quality_inspector
+    object: organization:acme-manufacturing
+  - user: user:eve
+    relation: operator
+    object: organization:acme-manufacturing
+  - user: user:frank
+    relation: procurement
+    object: organization:acme-manufacturing
+  - user: user:grace
+    relation: member
+    object: organization:acme-manufacturing
+
+  # Production line — bob is supervisor
+  - user: organization:acme-manufacturing
+    relation: organization
+    object: production_line:line-alpha
+  - user: user:bob
+    relation: supervisor
+    object: production_line:line-alpha
+
+  # Machine cnc-001 on line-alpha — eve is assigned operator
+  - user: production_line:line-alpha
+    relation: production_line
+    object: machine:cnc-001
+  - user: user:eve
+    relation: assigned_operator
+    object: machine:cnc-001
+
+  # Machine press-002 on line-alpha — no assigned operator
+  - user: production_line:line-alpha
+    relation: production_line
+    object: machine:press-002
+
+  # Work order on line-alpha — created by bob, assigned to eve
+  - user: production_line:line-alpha
+    relation: production_line
+    object: work_order:wo-001
+  - user: user:bob
+    relation: creator
+    object: work_order:wo-001
+  - user: user:eve
+    relation: assignee
+    object: work_order:wo-001
+
+  # Quality report — inspected by diana
+  - user: organization:acme-manufacturing
+    relation: organization
+    object: quality_report:qr-001
+  - user: user:diana
+    relation: inspector
+    object: quality_report:qr-001
+
+  # Part in the catalog
+  - user: organization:acme-manufacturing
+    relation: organization
+    object: part:gear-assembly
+
+  # Supplier
+  - user: organization:acme-manufacturing
+    relation: organization
+    object: supplier:steel-corp
+
+tests:
+  - name: Admin has full access to all resources
+    check:
+      - user: user:alice
+        object: production_line:line-alpha
+        assertions:
+          can_delete: true
+          can_create_work_order: true
+          can_create_machine: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: machine:cnc-001
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: work_order:wo-001
+        assertions:
+          can_delete: true
+          can_approve: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: quality_report:qr-001
+        assertions:
+          can_delete: true
+          can_approve: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: part:gear-assembly
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: supplier:steel-corp
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+
+  - name: Plant manager supervises production and approves work orders
+    check:
+      - user: user:bob
+        object: production_line:line-alpha
+        assertions:
+          can_delete: false
+          can_create_work_order: true
+          can_create_machine: true
+          can_edit: true
+          can_view: true
+      - user: user:bob
+        object: machine:cnc-001
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:bob
+        object: work_order:wo-001
+        assertions:
+          can_delete: false
+          can_approve: true
+          can_edit: true
+          can_view: true
+      - user: user:bob
+        object: quality_report:qr-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:bob
+        object: part:gear-assembly
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:bob
+        object: supplier:steel-corp
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+
+  - name: Engineer manages equipment and parts but not production
+    check:
+      - user: user:charlie
+        object: production_line:line-alpha
+        assertions:
+          can_delete: false
+          can_create_work_order: false
+          can_create_machine: true
+          can_edit: false
+          can_view: true
+      - user: user:charlie
+        object: machine:cnc-001
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+      - user: user:charlie
+        object: work_order:wo-001
+        assertions:
+          can_delete: false
+          can_approve: false
+          can_edit: false
+          can_view: true
+      - user: user:charlie
+        object: part:gear-assembly
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:charlie
+        object: supplier:steel-corp
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+
+  - name: Quality inspector manages reports but not production
+    check:
+      - user: user:diana
+        object: quality_report:qr-001
+        assertions:
+          can_delete: false
+          can_approve: true
+          can_edit: true
+          can_view: true
+      - user: user:diana
+        object: production_line:line-alpha
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:diana
+        object: work_order:wo-001
+        assertions:
+          can_delete: false
+          can_approve: false
+          can_edit: false
+          can_view: true
+      - user: user:diana
+        object: machine:cnc-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+
+  - name: Operator runs assigned machine and work order
+    check:
+      - user: user:eve
+        object: machine:cnc-001
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:eve
+        object: machine:press-002
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:eve
+        object: work_order:wo-001
+        assertions:
+          can_delete: false
+          can_approve: false
+          can_edit: true
+          can_view: true
+      - user: user:eve
+        object: production_line:line-alpha
+        assertions:
+          can_delete: false
+          can_create_work_order: false
+          can_create_machine: false
+          can_edit: false
+          can_view: true
+
+  - name: Procurement manages suppliers and parts catalog
+    check:
+      - user: user:frank
+        object: supplier:steel-corp
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:frank
+        object: part:gear-assembly
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:frank
+        object: machine:cnc-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:frank
+        object: work_order:wo-001
+        assertions:
+          can_delete: false
+          can_approve: false
+          can_edit: false
+          can_view: true
+      - user: user:frank
+        object: organization:acme-manufacturing
+        assertions:
+          can_create_part: true
+          can_create_supplier: true
+          can_create_quality_report: false
+
+  - name: Regular member has read-only access everywhere
+    check:
+      - user: user:grace
+        object: production_line:line-alpha
+        assertions:
+          can_delete: false
+          can_create_work_order: false
+          can_create_machine: false
+          can_edit: false
+          can_view: true
+      - user: user:grace
+        object: machine:cnc-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:grace
+        object: work_order:wo-001
+        assertions:
+          can_delete: false
+          can_approve: false
+          can_edit: false
+          can_view: true
+      - user: user:grace
+        object: quality_report:qr-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:grace
+        object: part:gear-assembly
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+      - user: user:grace
+        object: supplier:steel-corp
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+
+  - name: Organization creation permissions follow role boundaries
+    check:
+      - user: user:charlie
+        object: organization:acme-manufacturing
+        assertions:
+          can_create_part: true
+          can_create_supplier: false
+          can_create_quality_report: false
+      - user: user:diana
+        object: organization:acme-manufacturing
+        assertions:
+          can_create_part: false
+          can_create_supplier: false
+          can_create_quality_report: true
+      - user: user:alice
+        object: organization:acme-manufacturing
+        assertions:
+          can_create_part: true
+          can_create_supplier: true
+          can_create_quality_report: true

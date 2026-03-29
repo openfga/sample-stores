@@ -1,0 +1,313 @@
+name: Hospitality
+model_file: model.fga
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:grand-hotel-group
+  - user: user:bob
+    relation: revenue_manager
+    object: organization:grand-hotel-group
+
+  # All hotel staff are also org members
+  - user: user:charlie
+    relation: member
+    object: organization:grand-hotel-group
+  - user: user:maria
+    relation: member
+    object: organization:grand-hotel-group
+  - user: user:diana
+    relation: member
+    object: organization:grand-hotel-group
+  - user: user:eve
+    relation: member
+    object: organization:grand-hotel-group
+  - user: user:frank
+    relation: member
+    object: organization:grand-hotel-group
+
+  # Hotel: grand-plaza
+  - user: organization:grand-hotel-group
+    relation: organization
+    object: hotel:grand-plaza
+  - user: user:charlie
+    relation: general_manager
+    object: hotel:grand-plaza
+  - user: user:maria
+    relation: front_desk
+    object: hotel:grand-plaza
+  - user: user:diana
+    relation: housekeeping
+    object: hotel:grand-plaza
+  - user: user:eve
+    relation: concierge
+    object: hotel:grand-plaza
+
+  # Second hotel for isolation test (no staff assigned)
+  - user: organization:grand-hotel-group
+    relation: organization
+    object: hotel:seaside-resort
+
+  # Room at grand-plaza
+  - user: hotel:grand-plaza
+    relation: hotel
+    object: room:room-101
+
+  # Reservation at grand-plaza linked to guest
+  - user: hotel:grand-plaza
+    relation: hotel
+    object: reservation:res-001
+  - user: guest:guest-doe
+    relation: guest
+    object: reservation:res-001
+
+  # Guest profile
+  - user: organization:grand-hotel-group
+    relation: organization
+    object: guest:guest-doe
+
+  # Service at grand-plaza
+  - user: hotel:grand-plaza
+    relation: hotel
+    object: service:spa-treatment
+
+  # Reservation at seaside-resort (for isolation test)
+  - user: hotel:seaside-resort
+    relation: hotel
+    object: reservation:res-002
+
+tests:
+  - name: Admin has full access to all resources
+    check:
+      - user: user:alice
+        object: organization:grand-hotel-group
+        assertions:
+          can_create_hotel: true
+          can_create_guest: true
+      - user: user:alice
+        object: hotel:grand-plaza
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_create_room: true
+          can_create_reservation: true
+          can_create_service: true
+          can_view_revenue: true
+          can_view: true
+      - user: user:alice
+        object: room:room-101
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: reservation:res-001
+        assertions:
+          can_delete: true
+          can_cancel: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: guest:guest-doe
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: service:spa-treatment
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+
+  - name: Revenue manager views financial data but cannot edit operations
+    check:
+      - user: user:bob
+        object: organization:grand-hotel-group
+        assertions:
+          can_create_hotel: false
+          can_create_guest: false
+      - user: user:bob
+        object: hotel:grand-plaza
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view_revenue: true
+          can_view: true
+      - user: user:bob
+        object: room:room-101
+        assertions:
+          can_edit: false
+          can_view: true
+      - user: user:bob
+        object: reservation:res-001
+        assertions:
+          can_edit: false
+          can_cancel: false
+          can_view: true
+      - user: user:bob
+        object: guest:guest-doe
+        assertions:
+          can_edit: false
+          can_view: true
+
+  - name: General manager manages all hotel operations
+    check:
+      - user: user:charlie
+        object: hotel:grand-plaza
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_create_room: true
+          can_create_reservation: true
+          can_create_service: true
+          can_view_revenue: true
+          can_view: true
+      - user: user:charlie
+        object: room:room-101
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:charlie
+        object: reservation:res-001
+        assertions:
+          can_delete: false
+          can_cancel: true
+          can_edit: true
+          can_view: true
+      - user: user:charlie
+        object: service:spa-treatment
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+
+  - name: Front desk manages reservations and room assignments
+    check:
+      - user: user:maria
+        object: hotel:grand-plaza
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_create_reservation: true
+          can_view_revenue: false
+          can_view: true
+      - user: user:maria
+        object: room:room-101
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:maria
+        object: reservation:res-001
+        assertions:
+          can_delete: false
+          can_cancel: true
+          can_edit: true
+          can_view: true
+      - user: user:maria
+        object: service:spa-treatment
+        assertions:
+          can_edit: false
+          can_view: true
+
+  - name: Housekeeping manages room status only
+    check:
+      - user: user:diana
+        object: room:room-101
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:diana
+        object: reservation:res-001
+        assertions:
+          can_edit: false
+          can_cancel: false
+          can_view: true
+      - user: user:diana
+        object: service:spa-treatment
+        assertions:
+          can_edit: false
+          can_view: true
+      - user: user:diana
+        object: hotel:grand-plaza
+        assertions:
+          can_edit: false
+          can_create_reservation: false
+          can_view: true
+
+  - name: Concierge manages services and can create reservations
+    check:
+      - user: user:eve
+        object: hotel:grand-plaza
+        assertions:
+          can_edit: false
+          can_create_reservation: true
+          can_create_service: true
+          can_view_revenue: false
+          can_view: true
+      - user: user:eve
+        object: service:spa-treatment
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:eve
+        object: reservation:res-001
+        assertions:
+          can_edit: false
+          can_cancel: false
+          can_view: true
+      - user: user:eve
+        object: room:room-101
+        assertions:
+          can_edit: false
+          can_view: true
+
+  - name: Corporate member has read-only access across all hotels
+    check:
+      - user: user:frank
+        object: organization:grand-hotel-group
+        assertions:
+          can_create_hotel: false
+          can_create_guest: false
+      - user: user:frank
+        object: hotel:grand-plaza
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_create_reservation: false
+          can_view_revenue: false
+          can_view: true
+      - user: user:frank
+        object: room:room-101
+        assertions:
+          can_edit: false
+          can_view: true
+      - user: user:frank
+        object: reservation:res-001
+        assertions:
+          can_edit: false
+          can_view: true
+      - user: user:frank
+        object: guest:guest-doe
+        assertions:
+          can_edit: false
+          can_view: true
+
+  - name: Hotel staff cannot manage other hotels resources
+    check:
+      - user: user:maria
+        object: reservation:res-002
+        assertions:
+          can_edit: false
+          can_cancel: false
+          can_view: true
+      - user: user:maria
+        object: hotel:seaside-resort
+        assertions:
+          can_edit: false
+          can_create_reservation: false
+          can_view: true
