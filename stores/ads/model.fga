@@ -9,6 +9,7 @@ type organization
     define admin: [user]
     define campaign_manager: [user]
     define analyst: [user]
+    define can_create_report: campaign_manager or admin
 
 type campaign
   relations
@@ -29,9 +30,8 @@ type ad_group
     define organization_admin: organization_admin from campaign
     define organization_campaign_manager: organization_campaign_manager from campaign
     define organization_analyst: organization_analyst from campaign
-    define campaign_owner: owner from campaign
     define can_delete: organization_admin
-    define can_edit: owner or campaign_owner or organization_campaign_manager or can_delete
+    define can_edit: owner or can_edit from campaign
     define can_view: organization_analyst or can_edit
 
 type ad
@@ -40,7 +40,7 @@ type ad
     define creator: [user]
     define can_delete: organization_admin from ad_group
     define can_approve: can_delete
-    define can_edit: creator or campaign_owner from ad_group or organization_campaign_manager from ad_group or can_delete
+    define can_edit: creator or can_edit from ad_group
     define can_view: organization_analyst from ad_group or can_edit
 
 type creative
@@ -55,5 +55,4 @@ type report
   relations
     define organization: [organization]
     define can_delete: admin from organization
-    define can_create: campaign_manager from organization or can_delete
-    define can_view: analyst from organization or can_create
+    define can_view: analyst from organization or campaign_manager from organization or can_delete

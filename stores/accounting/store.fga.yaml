@@ -67,6 +67,11 @@ tests:
   - name: Admin has full accounting access
     check:
       - user: user:alice
+        object: organization:acme
+        assertions:
+          can_create_account: true
+          can_create_payment: true
+      - user: user:alice
         object: account:revenue
         assertions:
           can_view: true
@@ -82,6 +87,11 @@ tests:
   - name: Accountant can manage books
     check:
       - user: user:bob
+        object: organization:acme
+        assertions:
+          can_create_account: true
+          can_create_payment: true
+      - user: user:bob
         object: account:revenue
         assertions:
           can_view: true
@@ -95,6 +105,11 @@ tests:
 
   - name: Auditor has read-only access
     check:
+      - user: user:charlie
+        object: organization:acme
+        assertions:
+          can_create_account: false
+          can_create_payment: false
       - user: user:charlie
         object: account:revenue
         assertions:
@@ -149,6 +164,11 @@ tests:
 
   - name: Regular member cannot view accounting
     check:
+      - user: user:diana
+        object: organization:acme
+        assertions:
+          can_create_account: false
+          can_create_payment: false
       - user: user:diana
         object: account:revenue
         assertions:

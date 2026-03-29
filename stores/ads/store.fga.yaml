@@ -31,6 +31,9 @@ tuples:
   - user: user:bob
     relation: owner
     object: ad_group:us-targeting
+  - user: user:erin
+    relation: owner
+    object: ad_group:us-targeting
 
   # Ad linked to ad group
   - user: ad_group:us-targeting
@@ -56,6 +59,10 @@ tuples:
 tests:
   - name: Admin has full access to all resources
     check:
+      - user: user:alice
+        object: organization:adtech
+        assertions:
+          can_create_report: true
       - user: user:alice
         object: campaign:summer-sale
         assertions:
@@ -86,12 +93,15 @@ tests:
         object: report:q1-performance
         assertions:
           can_view: true
-          can_create: true
           can_delete: true
 
   - name: Campaign manager can create and edit but not publish or approve
     check:
       - user: user:bob
+        object: organization:adtech
+        assertions:
+          can_create_report: true
+      - user: user:bob
         object: campaign:summer-sale
         assertions:
           can_view: true
@@ -121,12 +131,15 @@ tests:
         object: report:q1-performance
         assertions:
           can_view: true
-          can_create: true
           can_delete: false
 
   - name: Analyst has read-only access
     check:
       - user: user:charlie
+        object: organization:adtech
+        assertions:
+          can_create_report: false
+      - user: user:charlie
         object: campaign:summer-sale
         assertions:
           can_view: true
@@ -156,12 +169,15 @@ tests:
         object: report:q1-performance
         assertions:
           can_view: true
-          can_create: false
           can_delete: false
 
   - name: Member has no access to ad resources
     check:
       - user: user:diana
+        object: organization:adtech
+        assertions:
+          can_create_report: false
+      - user: user:diana
         object: campaign:summer-sale
         assertions:
           can_view: false
@@ -191,7 +207,6 @@ tests:
         object: report:q1-performance
         assertions:
           can_view: false
-          can_create: false
           can_delete: false
 
   - name: Ad approval workflow - only admin can approve
@@ -207,6 +222,22 @@ tests:
       - user: user:charlie
         object: ad:banner-001
         assertions:
+          can_approve: false
+
+  - name: Ad group owner can edit ads in the group
+    check:
+      - user: user:erin
+        object: ad_group:us-targeting
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:erin
+        object: ad:banner-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
           can_approve: false
 
   - name: Campaign publishing - only admin can publish

@@ -7,6 +7,7 @@ This model represents the authorization needs of an **accounting platform**, lik
 The model captures the following requirements:
 
 - **Multi-tenancy**: Multiple organizations, each with their own chart of accounts, contacts, and financial records.
+- **Parent-scoped creation permissions**: Account and payment creation are checked on the organization (`can_create_account`, `can_create_payment`) rather than on account or payment objects that do not exist yet.
 - **Separation of duties**: Three distinct roles — `admin` (full control + approvals), `accountant` (day-to-day bookkeeping), and `auditor` (read-only access to all financial data). Regular members have no access to accounting data.
 - **Read-only audit access**: Auditors can view all financial data (accounts, invoices, expenses, payments, journal entries, financial statements) but cannot modify anything, supporting compliance and external audit requirements.
 - **Expense workflow**: Employees submit expenses they can view and edit; accountants and admins can approve them.

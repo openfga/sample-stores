@@ -55,6 +55,7 @@ tests:
         object: store:main-shop
         assertions:
           can_view: true
+          can_create_product: true
           can_edit: true
           can_delete: true
 
@@ -64,6 +65,7 @@ tests:
         object: store:main-shop
         assertions:
           can_view: true
+          can_create_product: true
           can_edit: true
           can_delete: true
 
@@ -73,16 +75,20 @@ tests:
         object: store:main-shop
         assertions:
           can_view: true
+          can_create_product: false
           can_edit: false
           can_delete: false
 
   - name: Store manager can manage products
     check:
       - user: user:bob
+        object: store:main-shop
+        assertions:
+          can_create_product: true
+      - user: user:bob
         object: product:sneakers
         assertions:
           can_view: true
-          can_create: true
           can_edit: true
           can_delete: true
 

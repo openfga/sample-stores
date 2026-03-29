@@ -5,23 +5,24 @@ type user
 
 type organization
   relations
-    define member: [user] or admin or accountant or auditor
     define admin: [user]
-    define accountant: [user]
-    define auditor: [user]
+    define accountant: [user] or admin
+    define auditor: [user] or accountant
+    define member: [user] or auditor
+    define can_create_account: accountant
+    define can_create_payment: accountant
 
 type account
   relations
     define organization: [organization]
-    define can_create: accountant from organization or admin from organization
-    define can_edit: can_create
+    define can_edit: accountant from organization
     define can_view: auditor from organization or can_edit
 
 type contact
   relations
     define organization: [organization]
     define owner: [user]
-    define can_edit: owner or accountant from organization or admin from organization
+    define can_edit: owner or accountant from organization
     define can_view: can_edit
 
 type invoice
@@ -31,22 +32,21 @@ type invoice
     define contact: [contact]
     define can_void: admin from organization
     define can_approve: can_void
-    define can_edit: creator or accountant from organization or can_approve
+    define can_edit: creator or accountant from organization
     define can_view: owner from contact or auditor from organization or can_edit
 
 type expense
   relations
     define organization: [organization]
     define submitter: [user]
-    define can_approve: accountant from organization or admin from organization
+    define can_approve: accountant from organization
     define can_edit: submitter or can_approve
     define can_view: auditor from organization or can_edit
 
 type payment
   relations
     define organization: [organization]
-    define can_create: accountant from organization or admin from organization
-    define can_edit: can_create
+    define can_edit: accountant from organization
     define can_view: auditor from organization or can_edit
 
 type journal_entry
@@ -54,7 +54,7 @@ type journal_entry
     define organization: [organization]
     define creator: [user]
     define can_post: admin from organization
-    define can_edit: creator or accountant from organization or can_post
+    define can_edit: creator or accountant from organization
     define can_view: auditor from organization or can_edit
 
 type purchase_order
@@ -63,10 +63,10 @@ type purchase_order
     define requester: [user]
     define approver: [user]
     define can_approve: approver or admin from organization
-    define can_edit: requester or accountant from organization or can_approve
+    define can_edit: requester or can_approve or accountant from organization
     define can_view: can_edit
 
 type financial_statement
   relations
     define organization: [organization]
-    define can_view: accountant from organization or admin from organization or auditor from organization
+    define can_view: auditor from organization

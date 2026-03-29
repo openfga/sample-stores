@@ -35,14 +35,14 @@ tuples:
     object: drive:bobs-drive
 
   - user: drive:shared-drive
-    relation: drive
+    relation: parent
     object: folder:projects
   - user: user:bob
     relation: owner
     object: folder:projects
 
   - user: folder:projects
-    relation: parent_folder
+    relation: parent
     object: folder:backend
   - user: group:engineering#member
     relation: writer

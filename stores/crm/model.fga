@@ -58,8 +58,8 @@ type note
     define organization: [organization]
     define owner: [user]
     define can_delete: owner or admin from organization
-    define can_edit: owner
-    define can_view: sales_manager from organization or can_delete
+    define can_edit: can_delete
+    define can_view: sales_manager from organization or can_edit
 
 type task
   relations

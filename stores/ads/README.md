@@ -8,6 +8,8 @@ The model captures the following requirements:
 
 - **Multi-tenancy**: Multiple organizations, each with their own advertising campaigns, creatives, and reporting data.
 - **Advertising roles**: Organization-level roles (`admin`, `campaign_manager`, `analyst`) control access to ad resources. Admins have full access, campaign managers can create and edit campaigns, and analysts have read-only access.
+- **Parent-scoped report creation**: Report creation is checked on the organization (`can_create_report`) instead of on report objects that do not exist yet.
+- **Hierarchical ad editing**: Ad groups inherit campaign editing rights, and ads inherit ad-group editing rights, so ad-group owners and campaign editors can manage contained ads without repeating the same role list on each child type.
 - **Ad approval workflow**: Campaign managers create ads, but only admins can approve them for publishing, ensuring quality control before ads go live.
 - **Campaign publishing**: Only admins can publish campaigns (go live), preventing unauthorized changes to active advertising spend.
 - **Analyst read-only access**: Analysts can view all campaigns, ads, creatives, and reports but cannot modify anything, enabling safe access to performance data.
