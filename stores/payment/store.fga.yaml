@@ -209,7 +209,7 @@ tests:
         assertions:
           can_approve: false
 
-  - name: Payment creator can view but not edit or refund
+  - name: Finance manager can view edit and refund payments
     check:
       - user: user:bob
         object: payment:txn-001

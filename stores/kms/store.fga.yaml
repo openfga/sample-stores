@@ -64,7 +64,7 @@ tests:
           can_edit: true
           can_delete: true
 
-  - name: Editor can edit pages but not spaces
+  - name: Editor can edit spaces and pages but not delete spaces
     check:
       - user: user:bob
         object: space:engineering

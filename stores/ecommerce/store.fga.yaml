@@ -253,7 +253,7 @@ tests:
           can_edit: false
           can_view: true
 
-  - name: Non-store member cannot see orders
+  - name: Non-store member cannot delete customers or view products
     check:
       - user: user:charlie
         object: customer:diana

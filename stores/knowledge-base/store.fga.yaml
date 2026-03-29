@@ -18,6 +18,9 @@ tuples:
   - user: user:bob
     relation: member
     object: group:docs-team
+  - user: user:dave
+    relation: member
+    object: group:docs-team
 
   # Top-level space container
   - user: organization:acme
@@ -137,12 +140,17 @@ tests:
 
   - name: Group-based access to containers
     check:
-      - user: user:bob
+      - user: user:dave
         object: container:engineering-space
         assertions:
           can_view: true
           can_edit: true
           can_create_article: true
+      - user: user:dave
+        object: article:getting-started
+        assertions:
+          can_view: true
+          can_edit: true
 
   - name: Attachment follows article visibility
     check:

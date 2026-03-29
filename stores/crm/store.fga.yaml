@@ -149,7 +149,7 @@ tests:
           can_view: true
           can_edit: false
 
-  - name: Note owner can edit but only admin can delete
+  - name: Note owner can edit and delete their own notes
     check:
       - user: user:charlie
         object: note:meeting-notes

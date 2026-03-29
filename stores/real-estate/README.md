@@ -13,7 +13,7 @@ The model captures the following requirements:
 - **Property management**: Properties are brokerage-wide records. Brokers and admins can edit property details. All brokerage members can view properties for market analysis.
 - **Inspection reports**: Appraisers create and edit inspection reports linked to properties. All brokerage members can view inspections. Only admins can delete inspection records.
 - **Neighborhood data**: Market and neighborhood data is viewable by all brokerage members for comparable analysis. Only admins can edit neighborhood records.
-- **Parent-scoped creation**: Listing and inspection creation are checked on the organization (`can_create_listing`, `can_create_inspection`) rather than on objects that do not exist yet.
+- **Parent-scoped creation**: Listing and inspection creation are checked on the property (`can_create_listing`, `can_create_inspection`). Transaction creation is checked on the listing (`can_create_transaction`). Property and neighborhood creation are checked on the organization (`can_create_property`, `can_create_neighborhood`).
 - **Financial data isolation**: Transaction financial details (commissions, sale prices) are only visible to the agents involved in the deal and brokerage management, not to general staff.
 
 The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).

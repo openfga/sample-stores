@@ -1,4 +1,4 @@
-name: Application Tracking System Authorization Model Tests
+name: Applicant Tracking System Authorization Model Tests
 model_file: ./model.fga
 
 tuples:

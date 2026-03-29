@@ -7,9 +7,9 @@ This model represents the authorization needs of a **healthcare platform**, like
 The model captures the following requirements:
 
 - **Multi-tenancy**: Multiple organizations, each with their own patients, providers, facilities, and clinical data.
-- **Healthcare roles**: Organization-level roles (`admin`, `provider`, `nurse`, `medical_records`) control access. Admins have full access, providers manage clinical care, nurses support care delivery, and medical records staff handle administrative record-keeping.
+- **Healthcare roles**: Organization-level roles (`admin`, `provider`, `nurse`, `medical_records_staff`) control access. Admins have full access, providers manage clinical care, nurses support care delivery, and medical records staff handle administrative record-keeping.
 - **Patient record protection**: Patient records are only accessible to the primary provider, care team members, medical records staff, and admins. Providers not involved in a patient's care cannot view their records, enforcing minimum necessary access.
-- **Sensitive data isolation**: Protected health information (allergies, blood type, date of birth) is gated behind `can_view_sensitive`, accessible only to the primary provider, care team, and admins. Medical records staff can edit demographics but cannot see sensitive clinical data.
+- **Sensitive data isolation**: Protected health information (allergies, blood type, date of birth) is gated behind `can_view_sensitive`, accessible to the primary provider, care team, medical records staff, and admins.
 - **Care team access**: Nurses and other staff on a patient's care team can view records and sensitive data, and create encounters, but cannot edit patient records or order treatments.
 - **Encounter management**: Encounters are linked to both patients and facilities. Attending providers can edit encounters and create treatment orders. Patient viewers inherit read access to all encounters.
 - **Diagnosis and treatment chains**: Diagnoses inherit visibility from the patient. Treatments inherit visibility from the encounter. Diagnosing and ordering providers can edit their respective records.

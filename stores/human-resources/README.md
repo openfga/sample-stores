@@ -12,7 +12,7 @@ The model captures the following requirements:
 - **Manager hierarchy**: Direct managers can view (but not edit) employee records, while HR managers and admins can edit them.
 - **Sensitive data isolation**: Personally identifiable information (SSN, date of birth) is gated behind `can_view_sensitive`, accessible only to the employee themselves and HR administrators.
 - **Payroll & benefits**: Only HR managers and admins can view payroll runs and benefits. Only admins can approve payroll.
-- **Time-off workflow**: Employees submit requests, designated approvers and HR managers can approve, and only the requester or admin can cancel.
+- **Time-off workflow**: Employees submit requests, designated approvers and HR managers can approve. The requester or anyone with employee management permissions (HR managers, admins) can cancel.
 - **Team hierarchy**: Teams support parent-child nesting — members of a parent team can view child teams. Group members and managers can view their groups, and only managers or admins can manage them.
 
 The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
