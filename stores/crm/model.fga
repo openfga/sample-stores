@@ -26,7 +26,7 @@ type contact
     define owner: [user]
     define can_delete: organization_admin from account
     define can_edit: owner or can_delete
-    define can_view: owner from account or organization_sales_manager from account or can_edit
+    define can_view: can_view from account or can_edit
 
 type lead
   relations
@@ -44,7 +44,7 @@ type opportunity
     define can_delete: organization_admin from account
     define can_close: owner or organization_sales_manager from account
     define can_edit: can_close or can_delete
-    define can_view: owner from account or can_edit
+    define can_view: can_view from account or can_edit
 
 type engagement
   relations

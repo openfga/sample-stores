@@ -32,7 +32,7 @@ type invoice
     define contact: [contact]
     define can_void: admin from organization
     define can_approve: can_void
-    define can_edit: creator or accountant from organization
+    define can_edit: creator or accountant from organization or can_approve
     define can_view: owner from contact or auditor from organization or can_edit
 
 type expense
@@ -54,7 +54,7 @@ type journal_entry
     define organization: [organization]
     define creator: [user]
     define can_post: admin from organization
-    define can_edit: creator or accountant from organization
+    define can_edit: creator or accountant from organization or can_post
     define can_view: auditor from organization or can_edit
 
 type purchase_order

@@ -16,7 +16,7 @@ type company
     define organization: [organization]
     define admin: [user] or admin from organization
     define member: [user] or member from organization
-    define can_manage_employees: can_manage_employees from organization or admin from organization
+    define can_manage_employees: can_manage_employees from organization
     define can_view_sensitive_data: can_view_sensitive_data from organization or can_manage_employees
     define can_edit: admin or can_manage_employees
     define can_view: member or can_edit
@@ -41,8 +41,8 @@ type team
 type location
   relations
     define organization: [organization]
-    define can_view: member from organization
     define can_edit: admin from organization
+    define can_view: member from organization or can_edit
 
 type employee
   relations
@@ -57,7 +57,7 @@ type employee
     define can_terminate: company_can_manage_employees
     define can_edit: hr_admin or can_terminate
     define can_view_sensitive: assignee or company_can_view_sensitive_data or can_edit
-    define can_view: assignee or manager or team_manager or can_edit
+    define can_view: manager or team_manager or can_view_sensitive
 
 type employment
   relations

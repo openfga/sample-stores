@@ -26,7 +26,7 @@ type collection
     define viewer: [user, team#member] or owner or organization_admin or viewer from parent_collection
     define can_delete: organization_admin
     define can_edit: owner or can_delete
-    define can_view: viewer
+    define can_view: viewer or can_edit
 
 type ticket
   relations
@@ -44,7 +44,7 @@ type ticket
     define can_assign: organization_agent or can_delete
     define can_close: assignee or team_lead or can_delete
     define can_edit: editor or can_assign
-    define can_view: viewer or team_lead or can_edit
+    define can_view: viewer or can_close or can_edit
 
 type comment
   relations

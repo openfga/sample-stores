@@ -18,7 +18,8 @@ type call
     define organization_supervisor: supervisor from organization
     define organization_agent: agent from organization
     define can_delete: organization_admin
-    define can_view: participant or organization_agent or organization_supervisor or can_delete
+    define can_edit: organization_supervisor or can_delete
+    define can_view: participant or organization_agent or can_edit
 
 type contact
   relations
@@ -40,4 +41,5 @@ type recording
   relations
     define call: [call]
     define can_delete: organization_admin from call
-    define can_view: organization_supervisor from call or can_delete
+    define can_edit: organization_supervisor from call or can_delete
+    define can_view: can_edit

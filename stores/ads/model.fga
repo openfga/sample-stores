@@ -20,7 +20,7 @@ type campaign
     define organization_analyst: analyst from organization
     define can_delete: organization_admin
     define can_publish: can_delete
-    define can_edit: owner or organization_campaign_manager or can_delete
+    define can_edit: owner or organization_campaign_manager or can_publish
     define can_view: organization_analyst or can_edit
 
 type ad_group

@@ -34,7 +34,7 @@ type class
     define can_delete: organization_admin
     define can_enroll: instructor or can_delete
     define can_edit: enrolled_instructor from course or can_enroll
-    define can_view: student or enrolled_student from course or organization_instructor or can_edit
+    define can_view: student or can_view from course or can_edit
 
 type content
   relations

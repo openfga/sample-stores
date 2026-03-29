@@ -19,13 +19,13 @@ type conversation
     define organization: [organization]
     define organization_admin: admin from organization
     define owner: [user]
-    define member: [user, group#member]
+    define member: [user, group#member] or owner
     define can_delete: owner or organization_admin
     define can_edit: can_delete
     define can_add_member: can_delete
     define can_remove_member: can_delete
-    define can_post: member or owner
-    define can_view: can_post or organization_admin
+    define can_post: member or can_edit
+    define can_view: can_post
 
 type message
   relations

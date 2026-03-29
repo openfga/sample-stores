@@ -23,14 +23,13 @@ type container
     define editor: [user, group#member] or owner or organization_admin or editor from parent_container
     define viewer: [user, group#member, user:*] or editor or viewer from parent_container or member from organization
     define can_delete: owner or organization_admin
-    define can_edit: editor
-    define can_create_article: editor
-    define can_view: viewer
+    define can_edit: editor or can_delete
+    define can_create_article: editor or can_delete
+    define can_view: viewer or can_edit
 
 type article
   relations
     define parent_container: [container]
-    define parent_article: [article]
     define organization_admin: organization_admin from parent_container
     define author: [user]
     define editor: [user, group#member] or author or editor from parent_container
@@ -38,8 +37,8 @@ type article
     define can_delete: author or organization_admin
     define can_archive: can_delete
     define can_publish: can_delete
-    define can_edit: editor
-    define can_view: viewer
+    define can_edit: editor or can_delete
+    define can_view: viewer or can_edit
 
 type attachment
   relations

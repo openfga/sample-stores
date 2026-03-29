@@ -19,8 +19,8 @@ type space
     define organization_viewer: viewer from organization
     define can_delete: organization_admin
     define can_manage_members: owner or can_delete
-    define can_edit: can_manage_members
-    define can_view: organization_viewer or organization_editor or can_edit
+    define can_edit: organization_editor or can_manage_members
+    define can_view: organization_viewer or can_edit
 
 type page
   relations
@@ -40,4 +40,4 @@ type comment
     define author: [user]
     define can_delete: author or organization_admin from page
     define can_edit: can_delete
-    define can_view: organization_viewer from page or organization_editor from page or can_edit
+    define can_view: can_view from page or can_edit

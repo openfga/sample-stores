@@ -19,8 +19,8 @@ type calendar
     define organization_viewer: viewer from organization
     define can_delete: organization_admin
     define can_share: owner or can_delete
-    define can_edit: can_share
-    define can_view: organization_viewer or organization_scheduler or can_edit
+    define can_edit: organization_scheduler or can_share
+    define can_view: organization_viewer or can_edit
 
 type event
   relations
