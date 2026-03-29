@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **File Storage platform**, like Google Drive, Box, OneDrive, or SharePoint. These platforms manage drives, folders, files, groups, and sharing permissions across an organization.
+This model represents the authorization needs of a **file storage platform**, like Google Drive, Box, OneDrive, or SharePoint. These platforms manage drives, folders, files, groups, and sharing permissions across an organization.
 
 The model captures the following requirements:
 
@@ -13,7 +13,7 @@ The model captures the following requirements:
 - **Group-based sharing**: Groups (e.g., "Engineering") can be granted read or write access to folders and files using usersets (`group#member`), enabling efficient team-based sharing.
 - **Owner propagation**: Folder ownership cascades to child folders and files, so the owner of a top-level folder owns the entire subtree.
 - **Granular file operations**: Separate permissions for viewing (`can_view`), editing (`can_edit`), downloading (`can_download`), and deleting (`can_delete`) files.
-- **Admin override**: Organization admins can delete any drive, regardless of individual ownership.
+- **Admin override**: Organization admins can delete drives, folders, and files, regardless of individual ownership.
 
 The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
 

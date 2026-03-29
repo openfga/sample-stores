@@ -8,10 +8,10 @@ The model captures the following requirements:
 
 - **Multi-tenancy**: Multiple organizations, each with their own jobs, candidates, and recruiting pipelines.
 - **Recruiting roles**: Organization-level roles (`admin`, `recruiter`, `hiring_manager`) control access to the hiring pipeline. Admins have full access, recruiters manage candidates and applications, and hiring managers own specific jobs.
-- **Job-scoped access**: Hiring managers and recruiters are assigned per-job, controlling who can view applications, change interview stages, and close positions.
-- **Candidate privacy**: Only the assigned recruiter and organization-level recruiters/admins can view candidate profiles. Hiring managers see candidates only through their job's applications.
-- **Interview workflow**: Organizers manage scheduled interviews, while interviewers can only view interviews they participate in.
-- **Scorecard confidentiality**: Scorecards are private to the interviewer who submitted them and organization admins. Other interviewers cannot see each other's feedback until designated.
+- **Job-scoped access**: Hiring managers and recruiters are assigned per job, controlling who can view applications, change interview stages, and close positions.
+- **Candidate privacy**: Candidate profiles can be viewed and edited by organization recruiters and admins. Hiring managers do not directly access candidate profiles; they only access candidates through job-linked applications.
+- **Interview workflow**: Organizers manage scheduled interviews, while interviewers can only view interviews in which they participate.
+- **Scorecard confidentiality**: Scorecards are visible to the interviewer, department heads in the application's hiring chain, and organization admins. Other interviewers cannot see each other's feedback.
 - **Offer management**: Offer creators can view and edit offers, but only admins can approve them, ensuring proper authorization in the hiring decision chain.
 - **Department & office structure**: Departments and offices are viewable by all organization members, providing organizational context for job listings.
 

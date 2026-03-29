@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Call Center Software**, like RingCentral, Zoom Phone, 8x8, or Vonage. These platforms manage calls, contacts, call comments, and recordings across communication teams.
+This model represents the authorization needs of a **call center software platform**, like RingCentral, Zoom Phone, 8x8, or Vonage. These platforms manage calls, contacts, call comments, and recordings across communication teams.
 
 The model captures the following requirements:
 

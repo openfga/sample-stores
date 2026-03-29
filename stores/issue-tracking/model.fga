@@ -52,7 +52,7 @@ type comment
     define author: [user]
     define can_delete: author or organization_admin from ticket
     define can_edit: author
-    define can_view: team_lead from ticket or can_view from ticket
+    define can_view: can_edit or can_view from ticket
 
 type attachment
   relations

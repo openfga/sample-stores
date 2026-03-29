@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of an **Accounting platform**, like QuickBooks Online, Xero, FreshBooks. These platforms manage charts of accounts, invoices, expenses, payments, journal entries, and financial statements.
+This model represents the authorization needs of an **accounting platform**, like QuickBooks Online, Xero, or FreshBooks. These platforms manage charts of accounts, invoices, expenses, payments, journal entries, and financial statements.
 
 The model captures the following requirements:
 

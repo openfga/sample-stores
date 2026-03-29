@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Knowledge Management System (KMS)**, like Confluence, Notion, or Guru. These platforms manage spaces, pages, and comments to organize team knowledge and documentation.
+This model represents the authorization needs of a **knowledge management system (KMS)**, like Confluence, Notion, or Guru. These platforms manage spaces, pages, and comments to organize team knowledge and documentation.
 
 The model captures the following requirements:
 

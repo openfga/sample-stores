@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of an **Advertising platform**, like Google Ads, Meta Ads, TikTok Ads, or LinkedIn Ads. These platforms manage campaigns, ad groups, ads, creatives, and performance reports across advertising accounts.
+This model represents the authorization needs of an **advertising platform**, like Google Ads, Meta Ads, TikTok Ads, or LinkedIn Ads. These platforms manage campaigns, ad groups, ads, creatives, and performance reports across advertising accounts.
 
 The model captures the following requirements:
 

@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Human Resources Information System (HRIS)**, like BambooHR, Workday or Rippling. These platforms manage employee records, payroll, benefits, time-off, and organizational structure.
+This model represents the authorization needs of a **human resources information system (HRIS)**, like BambooHR, Workday, or Rippling. These platforms manage employee records, payroll, benefits, time-off, and organizational structure.
 
 The model captures the following requirements:
 

@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Knowledge Base / Wiki platform**, like Confluence, or Notion. These platforms manage articles, pages, containers (spaces, folders, databases), groups, and access permissions for documentation and knowledge sharing.
+This model represents the authorization needs of a **knowledge base/wiki platform**, like Confluence or Notion. These platforms manage articles, pages, containers (spaces, folders, databases), groups, and access permissions for documentation and knowledge sharing.
 
 The model captures the following requirements:
 

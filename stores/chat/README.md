@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Chat / Messaging platform**, like Slack, Microsoft Teams, Discord, or Google Chat. These platforms manage conversations (channels, DMs, group chats), messages, threads, groups, and membership.
+This model represents the authorization needs of a **chat/messaging platform**, like Slack, Microsoft Teams, Discord, or Google Chat. These platforms manage conversations (channels, DMs, group chats), messages, threads, groups, and membership.
 
 The model captures the following requirements:
 

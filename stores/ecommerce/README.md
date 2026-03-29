@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of an **Ecommerce platform**, like Shopify, BigCommerce, WooCommerce, Magento, or Etsy. These platforms manage stores, product catalogs, customers, orders, fulfillment, and refunds.
+This model represents the authorization needs of an **ecommerce platform**, like Shopify, BigCommerce, WooCommerce, Magento, or Etsy. These platforms manage stores, product catalogs, customers, orders, fulfillment, and refunds.
 
 The model captures the following requirements:
 

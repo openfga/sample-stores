@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Issue Tracking/Project Management system**, like Jira, Linear, Asana. These platforms manage tickets, issues, tasks, collections/projects, comments, and attachments across support and engineering workflows.
+This model represents the authorization needs of an **issue tracking/project management system**, like Jira, Linear, or Asana. These platforms manage tickets, issues, tasks, collections/projects, comments, and attachments across support and engineering workflows.
 
 The model captures the following requirements:
 
@@ -12,7 +12,7 @@ The model captures the following requirements:
 - **Ticket access control**: Tickets inherit visibility from their collection. Assignees, creators, reporters, and team members can view tickets. Agents and admins get organization-wide ticket access.
 - **Team-based assignment**: Tickets can be assigned to teams. All team members gain edit access, and team leads can close tickets assigned to their team.
 - **Comment ownership**: Comment authors can edit and delete their own comments. Other ticket viewers can see comments but not modify them. Admins can delete any comment.
-- **Attachment lifecycle**: Attachment visibility follows the parent ticket. Only the uploader or an admin can delete attachments.
+- **Attachment lifecycle**: Attachment visibility follows the parent ticket. Uploaders, team leads on the assigned team, and admins can delete attachments.
 - **Contact management**: Only agents and admins can view and manage external contacts (customers, leads), keeping customer data restricted from regular members.
 
 The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).

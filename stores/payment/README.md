@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Payment platform**, like Stripe, PayPal, or Square. These platforms manage payment links, transactions, payouts, refunds, and subscriptions across merchant organizations.
+This model represents the authorization needs of a **payment platform**, like Stripe, PayPal, or Square. These platforms manage payment links, transactions, payouts, refunds, and subscriptions across merchant organizations.
 
 The model captures the following requirements:
 

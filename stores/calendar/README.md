@@ -11,7 +11,7 @@ The model captures the following requirements:
 - **Calendar ownership**: Calendar owners can view, edit, and share their calendars. Only admins can delete calendars.
 - **Event management**: Event organizers can edit, delete, and invite attendees. Schedulers can manage events across the organization. Attendees get view access to events they are invited to.
 - **Scheduling links**: Link owners and schedulers can manage booking pages. Viewers cannot access scheduling links.
-- **Recording access**: Recordings are viewable by all org roles except plain members. Only admins can delete recordings.
+- **Recording access**: Recordings are viewable by organization viewers, schedulers, and admins. Only admins can delete recordings.
 - **Webinar publishing**: Organizers and admins can publish webinars. Viewers can see webinars but cannot modify or publish them.
 
 The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).

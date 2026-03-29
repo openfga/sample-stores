@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Customer Relationship Management (CRM) system**, like Salesforce, or HubSpot. These platforms manage accounts (companies), contacts, leads, opportunities, engagements, notes, and tasks across the sales pipeline.
+This model represents the authorization needs of a **customer relationship management (CRM) system**, like Salesforce or HubSpot. These platforms manage accounts (companies), contacts, leads, opportunities, engagements, notes, and tasks across the sales pipeline.
 
 The model captures the following requirements:
 

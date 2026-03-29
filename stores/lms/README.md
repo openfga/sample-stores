@@ -2,7 +2,7 @@
 
 ## Use Case
 
-This model represents the authorization needs of a **Learning Management System (LMS)**, like Canvas, Moodle, or Blackboard. These platforms manage courses, classes, content, collections, and learning activities across educational organizations.
+This model represents the authorization needs of a **learning management system (LMS)**, like Canvas, Moodle, or Blackboard. These platforms manage courses, classes, content, collections, and learning activities across educational organizations.
 
 The model captures the following requirements:
 
