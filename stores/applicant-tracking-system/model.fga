@@ -16,12 +16,14 @@ type department
     define head: [user]
     define organization_admin: admin from organization
     define organization_recruiter: recruiter from organization
-    define can_view: head or member from organization
+    define can_manage: head or organization_admin
+    define can_view: member from organization or can_manage
 
 type office
   relations
     define organization: [organization]
-    define can_view: member from organization
+    define can_manage: admin from organization
+    define can_view: member from organization or can_manage
 
 type job
   relations

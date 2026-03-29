@@ -19,6 +19,8 @@ type call
     define organization_agent: agent from organization
     define can_delete: organization_admin
     define can_edit: organization_supervisor or can_delete
+    define can_create_comment: can_view
+    define can_create_recording: can_edit
     define can_view: participant or organization_agent or can_edit
 
 type contact

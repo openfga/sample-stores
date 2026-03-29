@@ -20,6 +20,7 @@ type calendar
     define can_delete: organization_admin
     define can_share: owner or can_delete
     define can_edit: organization_scheduler or can_share
+    define can_create_event: can_edit
     define can_view: organization_viewer or can_edit
 
 type event

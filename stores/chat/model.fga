@@ -12,7 +12,8 @@ type group
   relations
     define organization: [organization]
     define member: [user]
-    define can_view: member or admin from organization
+    define can_manage: admin from organization
+    define can_view: member or can_manage
 
 type conversation
   relations

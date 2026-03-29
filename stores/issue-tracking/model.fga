@@ -14,7 +14,8 @@ type team
     define organization: [organization]
     define member: [user]
     define lead: [user]
-    define can_view: member or lead or admin from organization
+    define can_manage: lead or admin from organization
+    define can_view: member or can_manage
 
 type collection
   relations
@@ -26,6 +27,7 @@ type collection
     define viewer: [user, team#member] or owner or organization_admin or viewer from parent_collection
     define can_delete: organization_admin
     define can_edit: owner or can_delete
+    define can_create_ticket: owner or organization_agent or can_delete
     define can_view: viewer or can_edit
 
 type ticket

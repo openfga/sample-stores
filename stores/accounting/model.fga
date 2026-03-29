@@ -69,4 +69,5 @@ type purchase_order
 type financial_statement
   relations
     define organization: [organization]
-    define can_view: auditor from organization
+    define can_edit: admin from organization
+    define can_view: auditor from organization or can_edit

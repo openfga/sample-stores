@@ -1,0 +1,65 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define admin: [user]
+    define provider: [user]
+    define nurse: [user]
+    define medical_records_staff: [user]
+    define member: [user] or admin or provider or nurse or medical_records_staff
+
+type facility
+  relations
+    define organization: [organization]
+    define director: [user]
+    define can_delete: admin from organization
+    define can_edit: director or can_delete
+    define can_view: member from organization or can_edit
+
+type patient
+  relations
+    define organization: [organization]
+    define primary_provider: [user]
+    define care_team: [user]
+    define org_admin: admin from organization
+    define org_medical_records: medical_records_staff from organization
+    define can_delete: org_admin
+    define can_edit: primary_provider or org_medical_records or can_delete
+    define can_view_sensitive: primary_provider or care_team or org_medical_records or can_delete
+    define can_create_encounter: can_view_sensitive
+    define can_create_diagnosis: can_edit
+    define can_view: can_view_sensitive or can_edit
+
+type encounter
+  relations
+    define patient: [patient]
+    define attending_provider: [user]
+    define org_admin: org_admin from patient
+    define can_delete: org_admin
+    define can_create_treatment: attending_provider or can_delete
+    define can_edit: attending_provider or can_delete
+    define can_view: can_view from patient or can_edit
+
+type diagnosis
+  relations
+    define patient: [patient]
+    define diagnosing_provider: [user]
+    define can_edit: diagnosing_provider or org_admin from patient
+    define can_view: can_view from patient or can_edit
+
+type treatment
+  relations
+    define encounter: [encounter]
+    define ordering_provider: [user]
+    define can_delete: can_delete from encounter
+    define can_edit: ordering_provider or can_delete
+    define can_view: can_view from encounter or can_edit
+
+type medication
+  relations
+    define organization: [organization]
+    define can_edit: admin from organization
+    define can_view: provider from organization or nurse from organization or can_edit

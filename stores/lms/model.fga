@@ -22,6 +22,8 @@ type course
     define can_delete: organization_admin
     define can_publish: owner or can_delete
     define can_edit: enrolled_instructor or can_publish
+    define can_create_class: can_edit
+    define can_create_content: can_edit
     define can_view: enrolled_student or organization_instructor or can_edit
 
 type class
@@ -58,7 +60,7 @@ type activity
     define creator: [user]
     define assignee: [user]
     define can_delete: organization_admin from class
-    define can_grade: creator or organization_instructor from class or can_delete
+    define can_grade: creator or instructor from class or organization_instructor from class or can_delete
     define can_edit: can_grade
     define can_view: assignee or can_edit
     define can_submit: assignee

@@ -27,7 +27,7 @@ type product
     define creator: [user]
     define viewer: [user]
     define can_delete: manager from store or organization_admin from store
-    define can_manage_inventory: staff from store or can_create_product from store
+    define can_manage_inventory: staff from store or organization_admin from store
     define can_edit: creator or can_manage_inventory
     define can_view: viewer or can_edit
 
