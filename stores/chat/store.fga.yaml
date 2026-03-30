@@ -180,3 +180,68 @@ tests:
         object: message:dm-001
         assertions:
           can_view: false
+
+  - name: List conversations bob can access
+    list_objects:
+      - user: user:bob
+        type: conversation
+        assertions:
+          owner:
+            - conversation:engineering-general
+          can_view:
+            - conversation:engineering-general
+            - conversation:bob-charlie-dm
+
+  - name: List conversations charlie can access
+    list_objects:
+      - user: user:charlie
+        type: conversation
+        assertions:
+          can_view:
+            - conversation:engineering-general
+            - conversation:bob-charlie-dm
+
+  - name: List messages alice can access
+    list_objects:
+      - user: user:alice
+        type: message
+        assertions:
+          can_view:
+            - message:msg-001
+            - message:dm-001
+
+  - name: List messages charlie can access
+    list_objects:
+      - user: user:charlie
+        type: message
+        assertions:
+          can_view:
+            - message:msg-001
+            - message:dm-001
+
+  - name: Users who can view conversation:engineering-general
+    list_users:
+      - object: conversation:engineering-general
+        user_filter:
+          - type: user
+        assertions:
+          owner:
+            users:
+              - user:bob
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: Users who can view conversation:bob-charlie-dm
+    list_users:
+      - object: conversation:bob-charlie-dm
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie

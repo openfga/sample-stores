@@ -263,3 +263,98 @@ tests:
           can_view: true
           can_edit: true
           can_delete: false
+
+  - name: List objects for campaign manager
+    list_objects:
+      - user: user:bob
+        type: campaign
+        assertions:
+          can_view:
+            - campaign:summer-sale
+          can_edit:
+            - campaign:summer-sale
+      - user: user:bob
+        type: ad
+        assertions:
+          can_view:
+            - ad:banner-001
+          can_edit:
+            - ad:banner-001
+
+  - name: List objects for analyst
+    list_objects:
+      - user: user:charlie
+        type: campaign
+        assertions:
+          can_view:
+            - campaign:summer-sale
+      - user: user:charlie
+        type: creative
+        assertions:
+          can_view:
+            - creative:video-spot
+
+  - name: List objects for ad group owner
+    list_objects:
+      - user: user:erin
+        type: ad_group
+        assertions:
+          can_view:
+            - ad_group:us-targeting
+          can_edit:
+            - ad_group:us-targeting
+      - user: user:erin
+        type: ad
+        assertions:
+          can_view:
+            - ad:banner-001
+          can_edit:
+            - ad:banner-001
+
+  - name: List users who can view campaign
+    list_users:
+      - object: campaign:summer-sale
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+
+  - name: List users who can view ad
+    list_users:
+      - object: ad:banner-001
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:erin
+          can_approve:
+            users:
+              - user:alice
+
+  - name: List users who can view creative
+    list_users:
+      - object: creative:video-spot
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob

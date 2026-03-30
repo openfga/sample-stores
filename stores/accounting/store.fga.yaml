@@ -216,3 +216,86 @@ tests:
           can_view: true
           can_edit: true
           can_post: true
+
+  - name: List objects for admin
+    list_objects:
+      - user: user:alice
+        type: account
+        assertions:
+          can_view:
+            - account:revenue
+          can_edit:
+            - account:revenue
+      - user: user:alice
+        type: invoice
+        assertions:
+          can_view:
+            - invoice:inv-001
+          can_edit:
+            - invoice:inv-001
+
+  - name: List objects for accountant
+    list_objects:
+      - user: user:bob
+        type: invoice
+        assertions:
+          can_view:
+            - invoice:inv-001
+          can_edit:
+            - invoice:inv-001
+      - user: user:bob
+        type: purchase_order
+        assertions:
+          can_edit:
+            - purchase_order:po-001
+          can_approve:
+            - purchase_order:po-001
+
+  - name: List objects for member
+    list_objects:
+      - user: user:diana
+        type: contact
+        assertions:
+          can_view:
+            - contact:vendor-abc
+          can_edit:
+            - contact:vendor-abc
+      - user: user:diana
+        type: expense
+        assertions:
+          can_view:
+            - expense:exp-001
+          can_edit:
+            - expense:exp-001
+
+  - name: List users who can view invoice
+    list_users:
+      - object: invoice:inv-001
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+
+  - name: List users who can manage purchase order
+    list_users:
+      - object: purchase_order:po-001
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:diana
+          can_approve:
+            users:
+              - user:alice
+              - user:bob

@@ -217,3 +217,80 @@ tests:
           can_view: true
           can_edit: true
           can_refund: true
+
+  - name: Admin can list all payment resources
+    list_objects:
+      - user: user:alice
+        type: link
+        assertions:
+          can_view:
+            - link:checkout-page
+      - user: user:alice
+        type: payment
+        assertions:
+          can_view:
+            - payment:txn-001
+      - user: user:alice
+        type: subscription
+        assertions:
+          can_view:
+            - subscription:plan-monthly
+
+  - name: Finance manager can list owned and organizational resources
+    list_objects:
+      - user: user:bob
+        type: link
+        assertions:
+          can_edit:
+            - link:checkout-page
+      - user: user:bob
+        type: payment
+        assertions:
+          can_refund:
+            - payment:txn-001
+
+  - name: Viewer can list viewable resources
+    list_objects:
+      - user: user:charlie
+        type: link
+        assertions:
+          can_view:
+            - link:checkout-page
+      - user: user:charlie
+        type: payment
+        assertions:
+          can_view:
+            - payment:txn-001
+
+  - name: List users with link access
+    list_users:
+      - object: link:checkout-page
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users who can refund payments
+    list_users:
+      - object: payment:txn-001
+        user_filter:
+          - type: user
+        assertions:
+          can_refund:
+            users:
+              - user:alice
+              - user:bob
+
+  - name: List users who can approve refunds
+    list_users:
+      - object: refund:refund-001
+        user_filter:
+          - type: user
+        assertions:
+          can_approve:
+            users:
+              - user:alice

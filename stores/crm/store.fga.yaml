@@ -178,3 +178,67 @@ tests:
           can_view: true
           can_edit: false
           can_complete: false
+
+  - name: List objects charlie can access
+    list_objects:
+      - user: user:charlie
+        type: account
+        assertions:
+          owner:
+            - account:mega-corp
+      - user: user:charlie
+        type: contact
+        assertions:
+          owner:
+            - contact:john-doe
+      - user: user:charlie
+        type: opportunity
+        assertions:
+          owner:
+            - opportunity:big-deal
+
+  - name: List objects bob can access
+    list_objects:
+      - user: user:bob
+        type: account
+        assertions:
+          can_view:
+            - account:mega-corp
+      - user: user:bob
+        type: lead
+        assertions:
+          can_view:
+            - lead:new-prospect
+
+  - name: List users with access to account
+    list_users:
+      - object: account:mega-corp
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users with access to note
+    list_users:
+      - object: note:meeting-notes
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:charlie

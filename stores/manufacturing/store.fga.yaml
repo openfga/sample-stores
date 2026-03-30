@@ -351,3 +351,82 @@ tests:
           can_create_part: true
           can_create_supplier: true
           can_create_quality_report: true
+
+  - name: Users can list objects they have roles in
+    list_objects:
+      - user: user:bob
+        type: production_line
+        assertions:
+          supervisor:
+            - production_line:line-alpha
+      - user: user:eve
+        type: machine
+        assertions:
+          assigned_operator:
+            - machine:cnc-001
+      - user: user:diana
+        type: quality_report
+        assertions:
+          inspector:
+            - quality_report:qr-001
+      - user: user:eve
+        type: work_order
+        assertions:
+          assignee:
+            - work_order:wo-001
+
+  - name: Admin can list all production and organizational resources
+    list_objects:
+      - user: user:alice
+        type: production_line
+        assertions:
+          org_admin:
+            - production_line:line-alpha
+      - user: user:charlie
+        type: machine
+        assertions:
+          org_engineer:
+            - machine:cnc-001
+            - machine:press-002
+
+  - name: List users with production line roles
+    list_users:
+      - object: production_line:line-alpha
+        user_filter:
+          - type: user
+        assertions:
+          supervisor:
+            users:
+              - user:bob
+          org_admin:
+            users:
+              - user:alice
+          org_plant_manager:
+            users:
+              - user:bob
+
+  - name: List users with machine assignments
+    list_users:
+      - object: machine:cnc-001
+        user_filter:
+          - type: user
+        assertions:
+          assigned_operator:
+            users:
+              - user:eve
+          org_engineer:
+            users:
+              - user:charlie
+
+  - name: List users with work order relationships
+    list_users:
+      - object: work_order:wo-001
+        user_filter:
+          - type: user
+        assertions:
+          creator:
+            users:
+              - user:bob
+          assignee:
+            users:
+              - user:eve

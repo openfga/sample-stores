@@ -260,3 +260,91 @@ tests:
         object: activity:homework-1
         assertions:
           can_submit: false
+
+  - name: Instructor can list all their managed courses and classes
+    list_objects:
+      - user: user:bob
+        type: course
+        assertions:
+          enrolled_instructor:
+            - course:intro-cs
+      - user: user:bob
+        type: class
+        assertions:
+          instructor:
+            - class:section-a
+      - user: user:bob
+        type: activity
+        assertions:
+          creator:
+            - activity:homework-1
+
+  - name: Student can list courses and activities they access
+    list_objects:
+      - user: user:charlie
+        type: course
+        assertions:
+          enrolled_student:
+            - course:intro-cs
+      - user: user:charlie
+        type: class
+        assertions:
+          student:
+            - class:section-a
+      - user: user:charlie
+        type: activity
+        assertions:
+          assignee:
+            - activity:homework-1
+
+  - name: Admin can list all organization resources
+    list_objects:
+      - user: user:alice
+        type: course
+        assertions:
+          organization_admin:
+            - course:intro-cs
+      - user: user:bob
+        type: collection
+        assertions:
+          owner:
+            - collection:cs-fundamentals
+
+  - name: List users with specific course roles
+    list_users:
+      - object: course:intro-cs
+        user_filter:
+          - type: user
+        assertions:
+          enrolled_instructor:
+            users:
+              - user:bob
+          enrolled_student:
+            users:
+              - user:charlie
+
+  - name: List users with activity relationships
+    list_users:
+      - object: activity:homework-1
+        user_filter:
+          - type: user
+        assertions:
+          creator:
+            users:
+              - user:bob
+          assignee:
+            users:
+              - user:charlie
+
+  - name: List users with class relationships
+    list_users:
+      - object: class:section-a
+        user_filter:
+          - type: user
+        assertions:
+          instructor:
+            users:
+              - user:bob
+          student:
+            users:
+              - user:charlie

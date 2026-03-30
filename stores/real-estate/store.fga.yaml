@@ -301,3 +301,85 @@ tests:
         assertions:
           can_close: false
           can_edit: false
+
+  - name: Admin can list all resource types
+    list_objects:
+      - user: user:alice
+        type: property
+        assertions:
+          can_view:
+            - property:prop-123
+      - user: user:alice
+        type: listing
+        assertions:
+          can_view:
+            - listing:listing-001
+            - listing:listing-002
+      - user: user:alice
+        type: transaction
+        assertions:
+          can_view:
+            - transaction:txn-001
+
+  - name: Broker can list all editable resources
+    list_objects:
+      - user: user:bob
+        type: property
+        assertions:
+          can_edit:
+            - property:prop-123
+      - user: user:bob
+        type: listing
+        assertions:
+          can_view:
+            - listing:listing-001
+            - listing:listing-002
+
+  - name: Agent can list own and viewable resources
+    list_objects:
+      - user: user:charlie
+        type: listing
+        assertions:
+          can_edit:
+            - listing:listing-001
+      - user: user:diana
+        type: inspection
+        assertions:
+          can_edit:
+            - inspection:insp-001
+
+  - name: List users with edit access to listing
+    list_users:
+      - object: listing:listing-001
+        user_filter:
+          - type: user
+        assertions:
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users involved in transaction
+    list_users:
+      - object: transaction:txn-001
+        user_filter:
+          - type: user
+        assertions:
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:eve
+
+  - name: List users who can inspect property
+    list_users:
+      - object: inspection:insp-001
+        user_filter:
+          - type: user
+        assertions:
+          can_edit:
+            users:
+              - user:alice
+              - user:diana

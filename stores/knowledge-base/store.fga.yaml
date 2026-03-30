@@ -164,3 +164,106 @@ tests:
         assertions:
           can_view: true
           can_delete: false
+
+  - name: List containers accessible by users
+    list_objects:
+      - user: user:alice
+        type: container
+        assertions:
+          can_view:
+            - container:engineering-space
+            - container:api-docs
+          can_edit:
+            - container:engineering-space
+            - container:api-docs
+      - user: user:bob
+        type: container
+        assertions:
+          can_view:
+            - container:engineering-space
+            - container:api-docs
+          can_edit:
+            - container:engineering-space
+            - container:api-docs
+      - user: user:dave
+        type: container
+        assertions:
+          can_view:
+            - container:engineering-space
+            - container:api-docs
+          can_edit:
+            - container:engineering-space
+            - container:api-docs
+
+  - name: List articles accessible by users
+    list_objects:
+      - user: user:bob
+        type: article
+        assertions:
+          can_view:
+            - article:getting-started
+            - article:public-faq
+          can_edit:
+            - article:getting-started
+            - article:public-faq
+          can_publish:
+            - article:getting-started
+            - article:public-faq
+      - user: user:charlie
+        type: article
+        assertions:
+          can_view:
+            - article:getting-started
+            - article:public-faq
+
+  - name: List attachments accessible by users
+    list_objects:
+      - user: user:bob
+        type: attachment
+        assertions:
+          can_view:
+            - attachment:diagram-png
+          can_delete:
+            - attachment:diagram-png
+
+  - name: List users with access to engineering container
+    list_users:
+      - object: container:engineering-space
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:dave
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:dave
+
+  - name: List users who can publish articles
+    list_users:
+      - object: article:getting-started
+        user_filter:
+          - type: user
+        assertions:
+          can_publish:
+            users:
+              - user:alice
+              - user:bob
+
+  - name: List users with access to attachment
+    list_users:
+      - object: attachment:diagram-png
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:dave

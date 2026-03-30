@@ -172,3 +172,63 @@ tests:
         assertions:
           can_edit: true
           can_delete: true
+
+  - name: List calls charlie can access
+    list_objects:
+      - user: user:charlie
+        type: call
+        assertions:
+          can_view:
+            - call:call-001
+
+  - name: List contacts bob can access
+    list_objects:
+      - user: user:bob
+        type: contact
+        assertions:
+          can_view:
+            - contact:john-doe
+          can_edit:
+            - contact:john-doe
+
+  - name: List comments alice can access
+    list_objects:
+      - user: user:alice
+        type: comment
+        assertions:
+          can_view:
+            - comment:note-001
+          can_edit:
+            - comment:note-001
+
+  - name: List recordings alice can access
+    list_objects:
+      - user: user:alice
+        type: recording
+        assertions:
+          can_view:
+            - recording:rec-001
+
+  - name: Users who can view call:call-001
+    list_users:
+      - object: call:call-001
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: Users who can view contact:john-doe
+    list_users:
+      - object: contact:john-doe
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie

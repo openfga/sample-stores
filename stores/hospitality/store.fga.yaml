@@ -311,3 +311,68 @@ tests:
           can_edit: false
           can_create_reservation: false
           can_view: true
+
+  - name: List hotels for staff roles
+    list_objects:
+      - user: user:charlie
+        type: hotel
+        assertions:
+          general_manager:
+            - hotel:grand-plaza
+      - user: user:maria
+        type: hotel
+        assertions:
+          front_desk:
+            - hotel:grand-plaza
+      - user: user:diana
+        type: hotel
+        assertions:
+          housekeeping:
+            - hotel:grand-plaza
+
+  - name: List reservations for guest
+    list_objects:
+      - user: guest:guest-doe
+        type: reservation
+        assertions:
+          guest:
+            - reservation:res-001
+
+  - name: List organizations for hotels
+    list_objects:
+      - user: organization:grand-hotel-group
+        type: hotel
+        assertions:
+          organization:
+            - hotel:grand-plaza
+            - hotel:seaside-resort
+
+  - name: List users with general manager access to hotel grand-plaza
+    list_users:
+      - object: hotel:grand-plaza
+        user_filter:
+          - type: user
+        assertions:
+          general_manager:
+            users:
+              - user:charlie
+
+  - name: List users with front desk access to hotel grand-plaza
+    list_users:
+      - object: hotel:grand-plaza
+        user_filter:
+          - type: user
+        assertions:
+          front_desk:
+            users:
+              - user:maria
+
+  - name: List users with guest access to reservation res-001
+    list_users:
+      - object: reservation:res-001
+        user_filter:
+          - type: guest
+        assertions:
+          guest:
+            users:
+              - guest:guest-doe

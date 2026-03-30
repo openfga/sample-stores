@@ -301,3 +301,75 @@ tests:
           can_delete: false
           can_edit: false
           can_view: false
+
+  - name: List patients for primary provider
+    list_objects:
+      - user: user:dr-smith
+        type: patient
+        assertions:
+          primary_provider:
+            - patient:doe
+      - user: user:dr-jones
+        type: patient
+        assertions:
+          primary_provider:
+            - patient:roe
+      - user: user:nurse-williams
+        type: patient
+        assertions:
+          care_team:
+            - patient:doe
+
+  - name: List encounters for attending provider
+    list_objects:
+      - user: user:dr-smith
+        type: encounter
+        assertions:
+          attending_provider:
+            - encounter:enc-001
+
+  - name: List diagnoses for diagnosing provider
+    list_objects:
+      - user: user:dr-smith
+        type: diagnosis
+        assertions:
+          diagnosing_provider:
+            - diagnosis:diag-001
+
+  - name: List treatments for ordering provider
+    list_objects:
+      - user: user:dr-smith
+        type: treatment
+        assertions:
+          ordering_provider:
+            - treatment:treat-001
+
+  - name: List users with primary provider access to patient doe
+    list_users:
+      - object: patient:doe
+        user_filter:
+          - type: user
+        assertions:
+          primary_provider:
+            users:
+              - user:dr-smith
+
+  - name: List users with care team access to patient doe
+    list_users:
+      - object: patient:doe
+        user_filter:
+          - type: user
+        assertions:
+          care_team:
+            users:
+              - user:nurse-williams
+
+  - name: List users with attending provider access to encounter enc-001
+    list_users:
+      - object: encounter:enc-001
+        user_filter:
+          - type: user
+        assertions:
+          attending_provider:
+            users:
+              - user:dr-smith

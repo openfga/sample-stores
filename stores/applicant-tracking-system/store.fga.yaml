@@ -198,3 +198,87 @@ tests:
         object: office:san-francisco
         assertions:
           can_view: true
+
+  - name: List objects for admin
+    list_objects:
+      - user: user:alice
+        type: job
+        assertions:
+          can_view:
+            - job:swe-senior
+          can_edit:
+            - job:swe-senior
+      - user: user:alice
+        type: candidate
+        assertions:
+          can_view:
+            - candidate:diana
+          can_edit:
+            - candidate:diana
+
+  - name: List objects for recruiter
+    list_objects:
+      - user: user:bob
+        type: job
+        assertions:
+          can_view:
+            - job:swe-senior
+          can_edit:
+            - job:swe-senior
+      - user: user:bob
+        type: application
+        assertions:
+          can_view:
+            - application:diana-swe
+          can_edit:
+            - application:diana-swe
+
+  - name: List objects for hiring manager
+    list_objects:
+      - user: user:charlie
+        type: job
+        assertions:
+          can_view:
+            - job:swe-senior
+          can_edit:
+            - job:swe-senior
+      - user: user:charlie
+        type: scheduled_interview
+        assertions:
+          can_view:
+            - scheduled_interview:diana-onsite
+
+  - name: List users who can view job
+    list_users:
+      - object: job:swe-senior
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users who can view application
+    list_users:
+      - object: application:diana-swe
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+          can_change_stage:
+            users:
+              - user:bob
+              - user:charlie

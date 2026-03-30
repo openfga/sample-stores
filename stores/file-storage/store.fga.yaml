@@ -123,3 +123,75 @@ tests:
         object: folder:projects
         assertions:
           can_view: true
+
+  - name: List objects alice can access
+    list_objects:
+      - user: user:alice
+        type: drive
+        assertions:
+          owner:
+            - drive:shared-drive
+      - user: user:alice
+        type: folder
+        assertions:
+          can_view:
+            - folder:projects
+            - folder:backend
+
+  - name: List objects charlie can access
+    list_objects:
+      - user: user:charlie
+        type: folder
+        assertions:
+          can_edit:
+            - folder:backend
+      - user: user:charlie
+        type: file
+        assertions:
+          owner:
+            - file:api-spec
+
+  - name: List objects bob can access
+    list_objects:
+      - user: user:bob
+        type: drive
+        assertions:
+          owner:
+            - drive:bobs-drive
+
+  - name: List users with access to drive
+    list_users:
+      - object: drive:shared-drive
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+
+  - name: List users with access to file
+    list_users:
+      - object: file:api-spec
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_delete:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie

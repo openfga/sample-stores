@@ -265,3 +265,82 @@ tests:
           can_view: false
           can_create_review: false
           can_edit: false
+
+  - name: List objects charlie can access
+    list_objects:
+      - user: user:charlie
+        type: store
+        assertions:
+          staff:
+            - store:main-shop
+      - user: user:charlie
+        type: product
+        assertions:
+          can_view:
+            - product:sneakers
+      - user: user:charlie
+        type: customer
+        assertions:
+          can_view:
+            - customer:diana
+
+  - name: List objects bob can access
+    list_objects:
+      - user: user:bob
+        type: store
+        assertions:
+          owner:
+            - store:main-shop
+      - user: user:bob
+        type: product
+        assertions:
+          can_edit:
+            - product:sneakers
+
+  - name: List objects diana can access
+    list_objects:
+      - user: user:diana
+        type: customer
+        assertions:
+          account_owner:
+            - customer:diana
+      - user: user:diana
+        type: order
+        assertions:
+          placed_by:
+            - order:ord-001
+
+  - name: List users with access to product
+    list_users:
+      - object: product:sneakers
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users with access to order
+    list_users:
+      - object: order:ord-001
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie

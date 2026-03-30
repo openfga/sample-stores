@@ -177,3 +177,88 @@ tests:
         object: contact:customer-xyz
         assertions:
           can_view: false
+
+  - name: Admin can access multiple tickets
+    list_objects:
+      - user: user:alice
+        type: ticket
+        assertions:
+          can_view:
+            - ticket:bug-123
+      - user: user:bob
+        type: ticket
+        assertions:
+          can_view:
+            - ticket:bug-123
+      - user: user:diana
+        type: ticket
+        assertions:
+          can_view:
+            - ticket:bug-123
+
+  - name: List collections accessible by users
+    list_objects:
+      - user: user:bob
+        type: collection
+        assertions:
+          can_view:
+            - collection:bugs
+            - collection:ui-bugs
+          can_edit:
+            - collection:bugs
+
+  - name: Attachment visibility by users
+    list_objects:
+      - user: user:diana
+        type: attachment
+        assertions:
+          can_view:
+            - attachment:screenshot
+          can_delete:
+            - attachment:screenshot
+
+  - name: Comments accessible by assignee and author
+    list_objects:
+      - user: user:bob
+        type: comment
+        assertions:
+          can_view:
+            - comment:c-001
+          can_edit:
+            - comment:c-001
+
+  - name: List users with access to ticket
+    list_users:
+      - object: ticket:bug-123
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:diana
+              - user:charlie
+
+  - name: List users who can close ticket
+    list_users:
+      - object: ticket:bug-123
+        user_filter:
+          - type: user
+        assertions:
+          can_close:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users with access to collection
+    list_users:
+      - object: collection:bugs
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob

@@ -255,3 +255,83 @@ tests:
         object: team:backend
         assertions:
           can_view: true
+
+  - name: List teams for organization members
+    list_objects:
+      - user: user:charlie
+        type: team
+        assertions:
+          manager:
+            - team:engineering
+      - user: user:diana
+        type: team
+        assertions:
+          member:
+            - team:engineering
+      - user: user:eve
+        type: team
+        assertions:
+          member:
+            - team:backend
+
+  - name: List employees assigned to users
+    list_objects:
+      - user: user:diana
+        type: employee
+        assertions:
+          assignee:
+            - employee:diana-record
+
+  - name: List groups for organization members
+    list_objects:
+      - user: user:diana
+        type: group
+        assertions:
+          member:
+            - group:developers
+
+  - name: List employment records for employees
+    list_objects:
+      - user: employee:diana-record
+        type: employment
+        assertions:
+          employee:
+            - employment:diana-swe
+
+  - name: List time off requests for employees
+    list_objects:
+      - user: user:diana
+        type: time_off
+        assertions:
+          requester:
+            - time_off:diana-vacation
+
+  - name: List users with manager access to employee diana-record
+    list_users:
+      - object: employee:diana-record
+        user_filter:
+          - type: user
+        assertions:
+          manager:
+            users:
+              - user:charlie
+
+  - name: List users with approver access to time off diana-vacation
+    list_users:
+      - object: time_off:diana-vacation
+        user_filter:
+          - type: user
+        assertions:
+          approver:
+            users:
+              - user:charlie
+
+  - name: List users who are team managers
+    list_users:
+      - object: team:engineering
+        user_filter:
+          - type: user
+        assertions:
+          manager:
+            users:
+              - user:charlie

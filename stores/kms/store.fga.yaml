@@ -154,3 +154,92 @@ tests:
           can_view: true
           can_edit: true
           can_delete: true
+
+  - name: List spaces accessible by users
+    list_objects:
+      - user: user:alice
+        type: space
+        assertions:
+          can_view:
+            - space:engineering
+          can_edit:
+            - space:engineering
+          can_delete:
+            - space:engineering
+      - user: user:bob
+        type: space
+        assertions:
+          can_view:
+            - space:engineering
+          can_edit:
+            - space:engineering
+      - user: user:charlie
+        type: space
+        assertions:
+          can_view:
+            - space:engineering
+
+  - name: List pages accessible by users
+    list_objects:
+      - user: user:alice
+        type: page
+        assertions:
+          can_view:
+            - page:architecture-guide
+          can_edit:
+            - page:architecture-guide
+          can_delete:
+            - page:architecture-guide
+      - user: user:bob
+        type: page
+        assertions:
+          can_view:
+            - page:architecture-guide
+          can_edit:
+            - page:architecture-guide
+
+  - name: List comments accessible by users
+    list_objects:
+      - user: user:charlie
+        type: comment
+        assertions:
+          can_view:
+            - comment:feedback-001
+          can_edit:
+            - comment:feedback-001
+          can_delete:
+            - comment:feedback-001
+
+  - name: List users with access to space
+    list_users:
+      - object: space:engineering
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users who can edit pages
+    list_users:
+      - object: page:architecture-guide
+        user_filter:
+          - type: user
+        assertions:
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+
+  - name: List users who can delete comments
+    list_users:
+      - object: comment:feedback-001
+        user_filter:
+          - type: user
+        assertions:
+          can_delete:
+            users:
+              - user:alice
+              - user:charlie
