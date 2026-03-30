@@ -261,40 +261,74 @@ tests:
         assertions:
           can_submit: false
 
-  - name: Instructor can list all their managed courses and classes
+  - name: Instructor can list all their managed resources
     list_objects:
       - user: user:bob
         type: course
         assertions:
-          enrolled_instructor:
+          can_view:
+            - course:intro-cs
+          can_edit:
             - course:intro-cs
       - user: user:bob
         type: class
         assertions:
-          instructor:
+          can_view:
             - class:section-a
+          can_edit:
+            - class:section-a
+      - user: user:bob
+        type: content
+        assertions:
+          can_view:
+            - content:lecture-slides
+          can_edit:
+            - content:lecture-slides
+      - user: user:bob
+        type: collection
+        assertions:
+          can_view:
+            - collection:cs-fundamentals
+          can_edit:
+            - collection:cs-fundamentals
       - user: user:bob
         type: activity
         assertions:
-          creator:
+          can_view:
+            - activity:homework-1
+          can_edit:
+            - activity:homework-1
+          can_grade:
             - activity:homework-1
 
-  - name: Student can list courses and activities they access
+  - name: Student can list resources they can access
     list_objects:
       - user: user:charlie
         type: course
         assertions:
-          enrolled_student:
+          can_view:
             - course:intro-cs
       - user: user:charlie
         type: class
         assertions:
-          student:
+          can_view:
             - class:section-a
+      - user: user:charlie
+        type: content
+        assertions:
+          can_view:
+            - content:lecture-slides
+      - user: user:charlie
+        type: collection
+        assertions:
+          can_view:
+            - collection:cs-fundamentals
       - user: user:charlie
         type: activity
         assertions:
-          assignee:
+          can_view:
+            - activity:homework-1
+          can_submit:
             - activity:homework-1
 
   - name: Admin can list all organization resources
@@ -302,49 +336,117 @@ tests:
       - user: user:alice
         type: course
         assertions:
-          organization_admin:
+          can_view:
             - course:intro-cs
-      - user: user:bob
+          can_edit:
+            - course:intro-cs
+          can_delete:
+            - course:intro-cs
+      - user: user:alice
+        type: class
+        assertions:
+          can_view:
+            - class:section-a
+          can_edit:
+            - class:section-a
+          can_delete:
+            - class:section-a
+      - user: user:alice
         type: collection
         assertions:
-          owner:
+          can_view:
             - collection:cs-fundamentals
+          can_edit:
+            - collection:cs-fundamentals
+          can_delete:
+            - collection:cs-fundamentals
+      - user: user:alice
+        type: activity
+        assertions:
+          can_view:
+            - activity:homework-1
+          can_edit:
+            - activity:homework-1
+          can_delete:
+            - activity:homework-1
+          can_grade:
+            - activity:homework-1
 
-  - name: List users with specific course roles
+  - name: List users with course permissions
     list_users:
       - object: course:intro-cs
         user_filter:
           - type: user
         assertions:
-          enrolled_instructor:
+          can_view:
             users:
+              - user:alice
               - user:bob
-          enrolled_student:
-            users:
               - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+          can_publish:
+            users:
+              - user:alice
+              - user:bob
 
-  - name: List users with activity relationships
+  - name: List users with activity permissions
     list_users:
       - object: activity:homework-1
         user_filter:
           - type: user
         assertions:
-          creator:
+          can_view:
             users:
+              - user:alice
               - user:bob
-          assignee:
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+          can_grade:
+            users:
+              - user:alice
+              - user:bob
+          can_submit:
             users:
               - user:charlie
 
-  - name: List users with class relationships
+  - name: List users with class permissions
     list_users:
       - object: class:section-a
         user_filter:
           - type: user
         assertions:
-          instructor:
+          can_view:
             users:
+              - user:alice
               - user:bob
-          student:
-            users:
               - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+          can_enroll:
+            users:
+              - user:alice
+              - user:bob
+
+  - name: List users with collection permissions
+    list_users:
+      - object: collection:cs-fundamentals
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob

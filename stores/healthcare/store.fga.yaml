@@ -364,6 +364,30 @@ tests:
             users:
               - user:nurse-williams
 
+  - name: List users with patient doe permissions
+    list_users:
+      - object: patient:doe
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:clerk-brown
+              - user:dr-smith
+              - user:nurse-williams
+          can_edit:
+            users:
+              - user:alice
+              - user:clerk-brown
+              - user:dr-smith
+          can_view_sensitive:
+            users:
+              - user:alice
+              - user:clerk-brown
+              - user:dr-smith
+              - user:nurse-williams
+
   - name: List users with attending provider access to encounter enc-001
     list_users:
       - object: encounter:enc-001

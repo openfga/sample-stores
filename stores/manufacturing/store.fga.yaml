@@ -352,81 +352,249 @@ tests:
           can_create_supplier: true
           can_create_quality_report: true
 
-  - name: Users can list objects they have roles in
+  - name: Users can list objects through effective permissions
     list_objects:
       - user: user:bob
         type: production_line
         assertions:
-          supervisor:
+          can_create_work_order:
+            - production_line:line-alpha
+          can_create_machine:
+            - production_line:line-alpha
+          can_edit:
+            - production_line:line-alpha
+          can_view:
             - production_line:line-alpha
       - user: user:eve
         type: machine
         assertions:
-          assigned_operator:
+          can_edit:
             - machine:cnc-001
+          can_view:
+            - machine:cnc-001
+            - machine:press-002
       - user: user:diana
         type: quality_report
         assertions:
-          inspector:
+          can_approve:
+            - quality_report:qr-001
+          can_edit:
+            - quality_report:qr-001
+          can_view:
             - quality_report:qr-001
       - user: user:eve
         type: work_order
         assertions:
-          assignee:
+          can_edit:
+            - work_order:wo-001
+          can_view:
             - work_order:wo-001
 
-  - name: Admin can list all production and organizational resources
+  - name: Organization members can list creation permissions
+    list_objects:
+      - user: user:alice
+        type: organization
+        assertions:
+          member:
+            - organization:acme-manufacturing
+          can_create_part:
+            - organization:acme-manufacturing
+          can_create_supplier:
+            - organization:acme-manufacturing
+          can_create_quality_report:
+            - organization:acme-manufacturing
+      - user: user:frank
+        type: organization
+        assertions:
+          member:
+            - organization:acme-manufacturing
+          can_create_part:
+            - organization:acme-manufacturing
+          can_create_supplier:
+            - organization:acme-manufacturing
+      - user: user:diana
+        type: organization
+        assertions:
+          member:
+            - organization:acme-manufacturing
+          can_create_quality_report:
+            - organization:acme-manufacturing
+      - user: user:grace
+        type: organization
+        assertions:
+          member:
+            - organization:acme-manufacturing
+
+  - name: Admin and engineer can list production resources by permission
     list_objects:
       - user: user:alice
         type: production_line
         assertions:
-          org_admin:
+          can_delete:
             - production_line:line-alpha
+          can_create_work_order:
+            - production_line:line-alpha
+          can_create_machine:
+            - production_line:line-alpha
+          can_edit:
+            - production_line:line-alpha
+          can_view:
+            - production_line:line-alpha
+      - user: user:alice
+        type: machine
+        assertions:
+          can_delete:
+            - machine:cnc-001
+            - machine:press-002
+          can_edit:
+            - machine:cnc-001
+            - machine:press-002
+          can_view:
+            - machine:cnc-001
+            - machine:press-002
+      - user: user:alice
+        type: work_order
+        assertions:
+          can_delete:
+            - work_order:wo-001
+          can_approve:
+            - work_order:wo-001
+          can_edit:
+            - work_order:wo-001
+          can_view:
+            - work_order:wo-001
+      - user: user:alice
+        type: quality_report
+        assertions:
+          can_delete:
+            - quality_report:qr-001
+          can_approve:
+            - quality_report:qr-001
+          can_edit:
+            - quality_report:qr-001
+          can_view:
+            - quality_report:qr-001
       - user: user:charlie
         type: machine
         assertions:
-          org_engineer:
+          can_delete:
+            - machine:cnc-001
+            - machine:press-002
+          can_edit:
+            - machine:cnc-001
+            - machine:press-002
+          can_view:
             - machine:cnc-001
             - machine:press-002
 
-  - name: List users with production line roles
+  - name: List users with production line permissions
     list_users:
       - object: production_line:line-alpha
         user_filter:
           - type: user
         assertions:
-          supervisor:
-            users:
-              - user:bob
-          org_admin:
+          can_delete:
             users:
               - user:alice
-          org_plant_manager:
+          can_create_work_order:
             users:
+              - user:alice
               - user:bob
+          can_create_machine:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+              - user:eve
+              - user:frank
+              - user:grace
 
-  - name: List users with machine assignments
+  - name: List users with machine permissions
     list_users:
       - object: machine:cnc-001
         user_filter:
           - type: user
         assertions:
-          assigned_operator:
+          can_delete:
             users:
-              - user:eve
-          org_engineer:
-            users:
+              - user:alice
               - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:eve
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+              - user:eve
+              - user:frank
+              - user:grace
 
-  - name: List users with work order relationships
+  - name: List users with work order permissions
     list_users:
       - object: work_order:wo-001
         user_filter:
           - type: user
         assertions:
-          creator:
+          can_approve:
             users:
+              - user:alice
               - user:bob
-          assignee:
+          can_edit:
             users:
+              - user:alice
+              - user:bob
               - user:eve
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+              - user:eve
+              - user:frank
+              - user:grace
+
+  - name: List users with organization permissions
+    list_users:
+      - object: organization:acme-manufacturing
+        user_filter:
+          - type: user
+        assertions:
+          member:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+              - user:eve
+              - user:frank
+              - user:grace
+          can_create_part:
+            users:
+              - user:alice
+              - user:charlie
+              - user:frank
+          can_create_supplier:
+            users:
+              - user:alice
+              - user:frank
+          can_create_quality_report:
+            users:
+              - user:alice
+              - user:diana

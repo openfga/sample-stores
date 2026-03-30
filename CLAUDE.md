@@ -2,7 +2,7 @@
 
 When working with OpenFGA models in this repository, install the OpenFGA skill:
 
-```
+```sh
 npx skills add openfga/agent-skills
 ```
 

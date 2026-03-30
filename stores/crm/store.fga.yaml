@@ -86,7 +86,7 @@ tests:
           can_edit: true
           can_delete: false
 
-  - name: Account owner has full access
+  - name: Account owner can view and edit but not delete
     check:
       - user: user:charlie
         object: account:mega-corp
@@ -184,17 +184,23 @@ tests:
       - user: user:charlie
         type: account
         assertions:
-          owner:
+          can_view:
+            - account:mega-corp
+          can_edit:
             - account:mega-corp
       - user: user:charlie
         type: contact
         assertions:
-          owner:
+          can_view:
+            - contact:john-doe
+          can_edit:
             - contact:john-doe
       - user: user:charlie
         type: opportunity
         assertions:
-          owner:
+          can_view:
+            - opportunity:big-deal
+          can_edit:
             - opportunity:big-deal
 
   - name: List objects bob can access

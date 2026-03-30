@@ -25,10 +25,10 @@ Key principles:
 - Use usersets (`type#relation`) for group-based access.
 - Use wildcards (`type:*`) only for intentional global/public or boolean-flag-like behavior, and avoid over-broad grants.
 - Follow consistent naming: snake_case relations and `can_` permission prefixes.
-- Test every model change by running the tests`fga model test --tests store.fga.yaml`.
+- Test every model change by running the tests `fga model test --tests store.fga.yaml`.
 
 For the complete set of rules, install the skill:
 
-```
+```sh
 npx skills add openfga/agent-skills
 ```

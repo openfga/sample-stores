@@ -7,8 +7,8 @@ This repository contains sample store models for [OpenFGA](https://openfga.dev).
 
 ## Table of Contents
 
-- [OpenFGA Features](#openfga-features)
 - [Authorization Patterns](#authorization-patterns)
+- [OpenFGA Features](#openfga-features)
 - [Industry Examples](#industry-examples)
 - [OpenFGA Models in Open Source Projects](#openfga-models-in-open-source-projects)
 - [Authoring Models using Coding Assistants](#authoring-models-using-coding-assistants)
