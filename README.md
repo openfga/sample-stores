@@ -1,7 +1,7 @@
 # OpenFGA Sample Stores
 
 [![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
-[![Twitter](https://img.shields.io/twitter/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on Twitter")](https://x.com/openfga)
+[![Twitter](https://img.shields.io/x/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on X")](https://x.com/openfga)
 
 This repository contains [sample store models](#sample-store-models) for [OpenFGA](https://openfga.dev).
 
@@ -15,25 +15,6 @@ This repository contains [sample store models](#sample-store-models) for [OpenFG
 - [Creating your store and loading sample data](#creating-your-store-and-loading-sample-data)
 - [Modeling Resources](#modeling-resources)
 
-## OpenFGA Features
-
-Examples that demonstrate specific OpenFGA features and capabilities.
-
-| Example | Description |
-|---------|-------------|
-| [Modeling ABAC with ReBAC](./stores/abac-with-rebac) | Combine attribute-based and relationship-based access control |
-| [Advanced Entitlements](./stores/advanced-entitlements) | Complex entitlement and feature-gating patterns |
-| [Condition Data Types](./stores/condition-data-types) | CEL condition expressions with different data types |
-| [Custom Roles](./stores/custom-roles) | User-defined roles with dynamic permission assignment |
-| [Multi-Product Custom Roles](./stores/multi-product-custom-roles) | Custom roles across multiple products |
-| [Entitlements](./stores/entitlements) | Feature entitlements and plan-based access |
-| [Group Resource Attributes](./stores/groups-resource-attributes) | Group-based access with resource attributes |
-| [IP-Based Access](./stores/ip-based-access) | Network-based access restrictions using conditions |
-| [Temporal Access](./stores/temporal-access) | Time-limited access grants with expiration |
-| [Role Assignments](./stores/role-assignments) | Role assignment patterns for resource-specific roles |
-| [SCIM Agents](./stores/scim-agents) | SCIM provisioning agent authorization |
-| [Super-Admin](./stores/superadmin) | Super-admin override patterns |
-
 ## Authorization Patterns
 
 Examples that demonstrate how to model authorization for well-known products and common patterns.
@@ -42,11 +23,27 @@ Examples that demonstrate how to model authorization for well-known products and
 |---------|-------------|
 | [Modeling Guide](./stores/modeling-guide) | Step-by-step introduction to OpenFGA modeling |
 | [Multi-Tenant RBAC](./stores/multitenant-rbac) | Multi-tenant role-based access control |
-| [Modular Models](./stores/modular) | Splitting models into modules for team collaboration |
 | [GitHub](./stores/github) | Repository, organization, and team permissions |
-| [GitHub Workflows](./stores/github-workflows) | CI/CD workflow and environment permissions |
 | [Google Drive](./stores/gdrive) | File, folder, and shared drive permissions |
+| [Entitlements](./stores/entitlements) | Feature entitlements and plan-based access |
 | [Slack](./stores/slack) | Workspace, channel, and messaging permissions |
+| [Role Assignments](./stores/role-assignments) | Role assignment patterns for resource-specific roles |
+| [Temporal Access](./stores/temporal-access) | Time-limited access grants with expiration |
+| [Super-Admin](./stores/superadmin) | Super-admin override patterns |
+
+## OpenFGA Features
+
+Examples that demonstrate specific OpenFGA features and capabilities.
+
+| Example | Description |
+|---------|-------------|
+| [Modeling ABAC with ReBAC](./stores/abac-with-rebac) | Combine attribute-based and relationship-based access control |
+| [Condition Data Types](./stores/condition-data-types) | CEL condition expressions with different data types |
+| [Custom Roles](./stores/custom-roles) | User-defined roles with dynamic permission assignment |
+| [Advanced Entitlements](./stores/advanced-entitlements) | Complex entitlement and feature-gating patterns |
+| [Group Resource Attributes](./stores/groups-resource-attributes) | Group-based access with resource attributes |
+| [IP-Based Access](./stores/ip-based-access) | Network-based access restrictions using conditions |
+| [Modular Models](./stores/modular) | Splitting models into modules for team collaboration |
 
 ## Industry Examples
 
