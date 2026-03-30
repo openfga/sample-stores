@@ -53,7 +53,7 @@ type application
     define department_head: department_head from job
     define can_edit: recruiter from job or organization_admin
     define can_change_stage: recruiter from job or hiring_manager from job
-    define can_view: can_view from job
+    define can_view: can_view from job or candidate 
 
 type scheduled_interview
   relations
