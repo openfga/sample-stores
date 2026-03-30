@@ -52,6 +52,9 @@ tuples:
   - user: store:main-shop
     relation: store
     object: order:ord-001
+  - user: customer:diana
+    relation: customer
+    object: order:ord-001
   - user: user:diana
     relation: placed_by
     object: order:ord-001
