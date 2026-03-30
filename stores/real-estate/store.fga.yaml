@@ -1,4 +1,4 @@
-name: RealEstate
+name: Real Estate
 model_file: model.fga
 tuples:
   # Organization roles

@@ -3,62 +3,112 @@
 [![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
 [![Twitter](https://img.shields.io/twitter/follow/openfga?color=%23179CF0&logo=twitter&style=flat-square "@openfga on Twitter")](https://x.com/openfga)
 
-This repository contains [sample store models](#sample-stores) for [OpenFGA](https://openfga.dev).
+This repository contains [sample store models](#sample-store-models) for [OpenFGA](https://openfga.dev).
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [Sample Store Models](#sample-store-models)
+- [OpenFGA Features](#openfga-features)
+- [Authorization Patterns](#authorization-patterns)
+- [Industry Examples](#industry-examples)
+- [OpenFGA Models in Open Source Projects](#openfga-models-in-open-source-projects)
+- [Authoring Models using Coding Assistants](#authoring-models-using-coding-assistants)
 - [Creating your store and loading sample data](#creating-your-store-and-loading-sample-data)
-- [OpenFGA models in open source projects](#openfga-models-in-open-source-projects)
 - [Modeling Resources](#modeling-resources)
 
-## Sample Store Models
+## OpenFGA Features
 
-- [Modeling ABAC with ReBAC](./stores/abac-with-rebac)
-- [Advanced Entitlements](./stores/advanced-entitlements)
-- [Banking](./stores/banking)
-- [Condition Data Types](./stores/condition-data-types)
-- [Custom Roles](./stores/custom-roles)
-- [Developer Portal](./stores/developer-portal)
-- [Entitlements](./stores/entitlements)
-- [Expenses](./stores/expenses)
-- [GitHub](./stores/github)
-- [Google Drive](./stores/gdrive)
-- [Group Resource Attributes](./stores/groups-resource-attributes)
-- [IoT](./stores/iot)
-- [IP-Based Access](./stores/ip-based-access)
-- [Modeling Guide](./stores/modeling-guide)
-- [Modeling Multi-Tenant Role-Based Access Control](./stores/multitenant-rbac)
-- [Modular Models](./stores/modular)
-- [Role Assignments](./stores/role-assignments)
-- [Slack](./stores/slack)
-- [Super-Admin](./stores/superadmin)
-- [Temporal Access](./stores/temporal-access)
+Examples that demonstrate specific OpenFGA features and capabilities.
+
+| Example | Description |
+|---------|-------------|
+| [Modeling ABAC with ReBAC](./stores/abac-with-rebac) | Combine attribute-based and relationship-based access control |
+| [Advanced Entitlements](./stores/advanced-entitlements) | Complex entitlement and feature-gating patterns |
+| [Condition Data Types](./stores/condition-data-types) | CEL condition expressions with different data types |
+| [Custom Roles](./stores/custom-roles) | User-defined roles with dynamic permission assignment |
+| [Multi-Product Custom Roles](./stores/multi-product-custom-roles) | Custom roles across multiple products |
+| [Entitlements](./stores/entitlements) | Feature entitlements and plan-based access |
+| [Group Resource Attributes](./stores/groups-resource-attributes) | Group-based access with resource attributes |
+| [IP-Based Access](./stores/ip-based-access) | Network-based access restrictions using conditions |
+| [Temporal Access](./stores/temporal-access) | Time-limited access grants with expiration |
+| [Role Assignments](./stores/role-assignments) | Role assignment patterns for resource-specific roles |
+| [SCIM Agents](./stores/scim-agents) | SCIM provisioning agent authorization |
+| [Super-Admin](./stores/superadmin) | Super-admin override patterns |
+
+## Authorization Patterns
+
+Examples that demonstrate how to model authorization for well-known products and common patterns.
+
+| Example | Description |
+|---------|-------------|
+| [Modeling Guide](./stores/modeling-guide) | Step-by-step introduction to OpenFGA modeling |
+| [Multi-Tenant RBAC](./stores/multitenant-rbac) | Multi-tenant role-based access control |
+| [Modular Models](./stores/modular) | Splitting models into modules for team collaboration |
+| [GitHub](./stores/github) | Repository, organization, and team permissions |
+| [GitHub Workflows](./stores/github-workflows) | CI/CD workflow and environment permissions |
+| [Google Drive](./stores/gdrive) | File, folder, and shared drive permissions |
+| [Slack](./stores/slack) | Workspace, channel, and messaging permissions |
+
+## Industry Examples
+
+Full authorization models for different verticals and industries. Each includes a model, sample tuples, tests, and a README explaining the use case.
+
+| Example | Description |
+|---------|-------------|
+| [Accounting](./stores/accounting) | Charts of accounts, invoices, expenses, payments, journal entries |
+| [Advertising](./stores/ads) | Campaigns, ad groups, ads, creatives, reports |
+| [Applicant Tracking](./stores/applicant-tracking-system) | Jobs, candidates, applications, interviews, offers |
+| [Banking](./stores/banking) | Accounts, transactions, and financial operations |
+| [Calendar](./stores/calendar) | Calendars, events, scheduling links, recordings, webinars |
+| [Call Center](./stores/call-center) | Calls, contacts, comments, recordings |
+| [Chat & Messaging](./stores/chat) | Conversations, messages, groups, membership |
+| [CRM](./stores/crm) | Accounts, contacts, leads, opportunities, pipeline |
+| [Developer Portal](./stores/developer-portal) | API keys, applications, and developer access |
+| [E-Commerce](./stores/ecommerce) | Stores, products, customers, orders, reviews |
+| [Expenses](./stores/expenses) | Expense reports, approvals, and reimbursements |
+| [File Storage](./stores/file-storage) | Drives, folders, files with hierarchical permissions |
+| [Healthcare](./stores/healthcare) | Patients, encounters, diagnoses, treatments, medications |
+| [Hospitality](./stores/hospitality) | Hotels, rooms, reservations, guest services |
+| [Human Resources](./stores/human-resources) | Employees, teams, payroll, benefits, time-off |
+| [IoT](./stores/iot) | Device management and telemetry access |
+| [Issue Tracking](./stores/issue-tracking) | Collections, tickets, comments, attachments |
+| [Knowledge Base](./stores/knowledge-base) | Containers, articles, attachments, public content |
+| [Knowledge Management](./stores/kms) | Spaces, pages, comments with publishing workflow |
+| [Learning Management](./stores/lms) | Courses, classes, content, activities, grading |
+| [Manufacturing](./stores/manufacturing) | Production lines, machines, work orders, quality reports |
+| [Payment](./stores/payment) | Payments, payouts, refunds, subscriptions |
+| [Real Estate](./stores/real-estate) | Properties, listings, transactions, inspections |
 
 ## Authoring Models using Coding Assistants
 
-This repository includes a [copilot-instructions](.github/copilot-instructions.md) file that can help you author OpenFGA models. It can be used in VS Code or in any AI-assisted IDE. You can also use it as a prompt, or system prompt, in any LLM. 
+AI coding assistants can help you author OpenFGA models. The modeling guidelines are maintained in the [OpenFGA Best Practices Skill](https://github.com/openfga/agent-skills).
 
 Some prompts you can try:
 
 - Create an OpenFGA authorization model for an insurance company.
 - Create an OpenFGA authorization model for B2B SaaS project management system.
-- Create an OpenFGA authorization model for <Product Name> (e.g. create a model for Figma).
+- Create an OpenFGA authorization model for \<Product Name\> (e.g. create a model for Figma).
 
 It will create a model in an `.fga` file, and a `.fga.yaml` with tuples/tests, and use the [CLI](https://github.com/openfga/cli) to run the tests.
 
-To use it in Visual Studio Code:
-- Setup [VS Code with Copilot](https://code.visualstudio.com/docs/copilot/setup-simplified)
-- Create a new folder, with a .github folder, and copy the [copilot-instructions](.github/copilot-instructions.md) file.
-- Open Copilot
-- Prompt
+### Claude Code
 
-Other coding assistants look for other file names (CLAUDE.md, AGENTS.md, Cursor rules).
+Install the skill, then prompt:
 
-You can also use the [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or the [Context7 MCP](https://github.com/upstash/context7) to provide AI agents with OpenFGA context to help you implement OpenFGA using different SDKs. 
+```sh
+npx skills add openfga/agent-skills
+```
 
-For modeling assistance, we you use [copilot-instructions](.github/copilot-instructions.md) even if you configure an MCP.
+### GitHub Copilot
+
+Guidance is auto-loaded from [`.github/copilot-instructions.md`](.github/copilot-instructions.md) when you open this repository in VS Code with [Copilot](https://code.visualstudio.com/docs/copilot/setup-simplified) enabled.
+
+### Other Tools (Cursor, generic LLMs)
+
+Reference the full guidelines from `openfga/agent-skills`:
+- **AGENTS.md:** https://raw.githubusercontent.com/openfga/agent-skills/main/skills/openfga/AGENTS.md
+- **Cursor rules:** Copy AGENTS.md content into `.cursorrules`
+
+You can also use the [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or the [Context7 MCP](https://github.com/upstash/context7) to provide AI agents with OpenFGA context to help you implement OpenFGA using different SDKs.
 
 ## Creating your store and loading sample data
 
@@ -77,7 +127,7 @@ To try this out, you need the following tools installed:
   fga model test --tests "stores/${SAMPLE_STORE}/store.fga.yaml"
   ```
 
-## OpenFGA models in open source projects
+## OpenFGA Models in Open Source Projects
 
 - [Linux Foundation](https://github.com/linuxfoundation/lfx-v2-helm/blob/main/charts/lfx-platform/templates/openfga/model.yaml)
 - [canonical/lxd](https://github.com/canonical/lxd/blob/main/lxd/auth/drivers/openfga_model.openfga)
@@ -101,8 +151,3 @@ If you are using OpenFGA in your open source project, please let us know by open
 ## Modeling Resources
 - [Modeling Guide](https://www.youtube.com/watch?v=5Lwy9aHXXHE&list=PLUR5l-oTFZqWaDdhEOVt_IfPOIbKo1Ypt)
 - [OpenFGA Documentation](https://openfga.dev/docs/modeling)
-- [Zanzibar Academy](https://zanzibar.academy)
-- [Implementing Multi-Tenancy in Chroma: Part 2 - Authorization Model with OpenFGA](https://cookbook.chromadb.dev/strategies/multi-tenancy/authorization-model-with-openfga/)
-- [Introduction into OpenFGA](https://www.ericksegaar.com/2024/03/04/introduction-into-openfga/)
-
-
