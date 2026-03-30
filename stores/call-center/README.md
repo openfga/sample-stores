@@ -11,7 +11,7 @@ The model captures the following requirements:
 - **Call visibility**: Call participants and agents can view call logs. Only admins can delete call records.
 - **Contact management**: Agents can create and edit contacts. Supervisors and admins can delete contacts, providing oversight over the contact directory.
 - **Comment authorship**: Comment authors can edit and delete their own call notes. Supervisors can edit any comment for quality assurance. Only authors and admins can delete comments.
-- **Recording privacy**: Call recordings are restricted to supervisors and admins for compliance and quality monitoring. Agents cannot access recordings unless they are explicitly granted access. Only admins can delete recordings.
+- **Recording privacy**: Call recordings are restricted to supervisors and admins for compliance and quality monitoring. Agents cannot access recordings. Only admins can delete recordings.
 
 The model, tuples, and tests are in [model.fga](./model.fga) and [store.fga.yaml](./store.fga.yaml).
 
