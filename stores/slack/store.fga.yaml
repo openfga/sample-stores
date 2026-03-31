@@ -1,7 +1,7 @@
 # Documentation: https://openfga.dev/docs/modeling/advanced/slack
 # FGA Playground: https://play.fga.dev/sandbox/?store=slack
 name: Slack
-model_file: ./model.fga
+model_file: model.fga
 tuples:
   # The Sandcastle workspace is the parent workspace of the #general channel
   - user: workspace:sandcastle

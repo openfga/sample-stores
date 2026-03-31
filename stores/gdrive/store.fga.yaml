@@ -1,7 +1,7 @@
 # Documentation: https://openfga.dev/docs/modeling/advanced/gdrive
 # FGA Playground: https://play.fga.dev/sandbox/?store=gdrive
 name: Google Drive
-model_file: ./model.fga
+model_file: model.fga
 tuples:
   # Anne is a member of the Contoso group
   - user: user:anne

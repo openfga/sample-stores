@@ -1,5 +1,5 @@
 name: Payment Platform Authorization Model Tests
-model_file: ./model.fga
+model_file: model.fga
 
 tuples:
   # Organization roles
@@ -117,7 +117,7 @@ tests:
           can_cancel: true
           can_delete: false
 
-  - name: Viewer has read-only access
+  - name: Viewer can read most resources but cannot view payouts
     check:
       - user: user:charlie
         object: link:checkout-page

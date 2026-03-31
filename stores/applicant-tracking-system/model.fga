@@ -40,9 +40,10 @@ type job
 type candidate
   relations
     define organization: [organization]
+    define subject: [user]
     define can_delete: admin from organization
     define can_edit: recruiter from organization or can_delete
-    define can_view: can_edit
+    define can_view: subject or can_edit
 
 type application
   relations
@@ -53,7 +54,7 @@ type application
     define department_head: department_head from job
     define can_edit: recruiter from job or organization_admin
     define can_change_stage: recruiter from job or hiring_manager from job
-    define can_view: can_view from job or candidate 
+    define can_view: can_view from job or can_view from candidate
 
 type scheduled_interview
   relations

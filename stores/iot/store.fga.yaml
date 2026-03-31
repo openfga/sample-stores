@@ -1,7 +1,7 @@
 # Documentation: https://openfga.dev/docs/modeling/advanced/iot
 # FGA Playground: https://play.fga.dev/sandbox/?store=iot
 name: IoT
-model_file: ./model.fga
+model_file: model.fga
 tuples:
   # Beth is an IT Admin on Device 1
   - user: user:beth

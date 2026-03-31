@@ -89,11 +89,13 @@ It will create a model in an `.fga` file, and a `.fga.yaml` with tuples/tests, a
 
 ### Claude Code
 
-Install the skill, then prompt:
+Install the skill, then prompt Claude Code with a modeling request:
 
 ```sh
 npx skills add openfga/agent-skills
 ```
+
+Example prompt: `/openfga Create an OpenFGA authorization model for an insurance company.`
 
 ### GitHub Copilot
 

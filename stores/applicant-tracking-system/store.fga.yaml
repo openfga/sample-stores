@@ -1,5 +1,5 @@
 name: Applicant Tracking System Authorization Model Tests
-model_file: ./model.fga
+model_file: model.fga
 
 tuples:
   # Organization
@@ -44,11 +44,26 @@ tuples:
   - user: organization:acme
     relation: organization
     object: candidate:diana
+  - user: organization:acme
+    relation: organization
+    object: candidate:eve
+  - user: user:eve
+    relation: subject
+    object: candidate:eve
 
   # Application
   - user: job:swe-senior
     relation: job
     object: application:diana-swe
+  - user: candidate:diana
+    relation: candidate
+    object: application:diana-swe
+  - user: job:swe-senior
+    relation: job
+    object: application:eve-swe
+  - user: candidate:eve
+    relation: candidate
+    object: application:eve-swe
 
   # Scheduled Interview
   - user: application:diana-swe
@@ -132,6 +147,21 @@ tests:
           can_edit: false
           can_change_stage: true
 
+  - name: Candidate can view own profile and application
+    check:
+      - user: user:eve
+        object: candidate:eve
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:eve
+        object: application:eve-swe
+        assertions:
+          can_view: true
+          can_edit: false
+          can_change_stage: false
+
   - name: Interview permissions
     check:
       - user: user:charlie
@@ -212,8 +242,10 @@ tests:
         type: candidate
         assertions:
           can_view:
+            - candidate:eve
             - candidate:diana
           can_edit:
+            - candidate:eve
             - candidate:diana
 
   - name: List objects for recruiter
@@ -229,8 +261,10 @@ tests:
         type: application
         assertions:
           can_view:
+            - application:eve-swe
             - application:diana-swe
           can_edit:
+            - application:eve-swe
             - application:diana-swe
 
   - name: List objects for hiring manager
@@ -247,6 +281,19 @@ tests:
         assertions:
           can_view:
             - scheduled_interview:diana-onsite
+
+  - name: List objects for candidate subject
+    list_objects:
+      - user: user:eve
+        type: candidate
+        assertions:
+          can_view:
+            - candidate:eve
+      - user: user:eve
+        type: application
+        assertions:
+          can_view:
+            - application:eve-swe
 
   - name: List users who can view job
     list_users:
@@ -278,6 +325,21 @@ tests:
               - user:bob
               - user:charlie
               - user:diana
+          can_change_stage:
+            users:
+              - user:bob
+              - user:charlie
+      - object: application:eve-swe
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+              - user:eve
           can_change_stage:
             users:
               - user:bob

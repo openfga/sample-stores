@@ -1,5 +1,5 @@
 name: Learning Management System Authorization Model Tests
-model_file: ./model.fga
+model_file: model.fga
 
 tuples:
   # Organization roles

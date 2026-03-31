@@ -1,7 +1,7 @@
 # Documentation: https://openfga.dev/docs/modeling/advanced/github
 # FGA Playground: https://play.fga.dev/sandbox/?store=github
 name: GitHub
-model_file: ./model.fga
+model_file: model.fga
 tuples:
   # The OpenFGA organization is the owner of the openfga/openfga repository
   - user: organization:openfga

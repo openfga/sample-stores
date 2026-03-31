@@ -1,7 +1,7 @@
 # Documentation: https://openfga.dev/docs/modeling/advanced/entitlements
 # FGA Playground: https://play.fga.dev/sandbox/?store=entitlements
 name: Entitlements
-model_file: ./model.fga
+model_file: model.fga
 tuples:
   # The Enterprise plan grants access to the Draft PRs feature
   - user: plan:enterprise

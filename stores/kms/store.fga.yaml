@@ -1,5 +1,5 @@
 name: Knowledge Management System Authorization Model Tests
-model_file: ./model.fga
+model_file: model.fga
 
 tuples:
   # Organization roles
@@ -87,7 +87,7 @@ tests:
           can_edit: false
           can_delete: false
 
-  - name: Viewer has read-only access
+  - name: Viewer has read-only access except on own comments
     check:
       - user: user:charlie
         object: space:engineering
