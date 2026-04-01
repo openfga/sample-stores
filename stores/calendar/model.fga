@@ -1,0 +1,60 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or scheduler or viewer
+    define admin: [user]
+    define scheduler: [user]
+    define viewer: [user]
+
+type calendar
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define organization_admin: admin from organization
+    define organization_scheduler: scheduler from organization
+    define organization_viewer: viewer from organization
+    define can_delete: organization_admin
+    define can_share: owner or can_delete
+    define can_edit: organization_scheduler or can_share
+    define can_create_event: can_edit
+    define can_view: organization_viewer or can_edit
+
+type event
+  relations
+    define calendar: [calendar]
+    define organizer: [user]
+    define attendee: [user]
+    define organization_admin: organization_admin from calendar
+    define organization_scheduler: organization_scheduler from calendar
+    define organization_viewer: organization_viewer from calendar
+    define can_delete: organizer or organization_admin
+    define can_invite: organization_scheduler or can_delete
+    define can_edit: can_invite
+    define can_view: attendee or organization_viewer or can_edit
+
+type link
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define can_delete: owner or admin from organization
+    define can_edit: scheduler from organization or can_delete
+    define can_view: can_edit
+
+type recording
+  relations
+    define event: [event]
+    define can_delete: organization_admin from event
+    define can_view: organization_viewer from event or organization_scheduler from event or can_delete
+
+type webinar
+  relations
+    define organization: [organization]
+    define organizer: [user]
+    define can_delete: admin from organization
+    define can_publish: organizer or can_delete
+    define can_edit: scheduler from organization or can_publish
+    define can_view: viewer from organization or can_edit

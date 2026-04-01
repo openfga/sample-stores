@@ -1,0 +1,38 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin
+    define admin: [user]
+
+type group
+  relations
+    define organization: [organization]
+    define member: [user]
+    define can_manage: admin from organization
+    define can_view: member or can_manage
+
+type conversation
+  relations
+    define organization: [organization]
+    define organization_admin: admin from organization
+    define owner: [user]
+    define member: [user, group#member] or owner
+    define can_delete: owner or organization_admin
+    define can_edit: can_delete
+    define can_add_member: can_delete
+    define can_remove_member: can_delete
+    define can_post: member or can_edit
+    define can_view: can_post
+
+type message
+  relations
+    define conversation: [conversation]
+    define sender: [user]
+    define can_view: sender or can_view from conversation
+    define can_edit: sender
+    define can_delete: sender or organization_admin from conversation
+    define can_reply: can_view from conversation

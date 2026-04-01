@@ -1,6 +1,6 @@
 # FGA Playground: https://play.fga.dev/sandbox/?store=expenses
 name: Expenses
-model_file: ./model.fga
+model_file: model.fga
 tuples:
   # Matt is Daniel's manager
   - user: employee:matt

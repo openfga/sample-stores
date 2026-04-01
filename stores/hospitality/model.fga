@@ -1,0 +1,60 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define admin: [user]
+    define revenue_manager: [user]
+    define member: [user] or admin or revenue_manager
+    define can_create_hotel: admin
+    define can_create_guest: admin
+
+type hotel
+  relations
+    define organization: [organization]
+    define general_manager: [user]
+    define front_desk: [user]
+    define housekeeping: [user]
+    define concierge: [user]
+    define org_admin: admin from organization
+    define org_revenue_manager: revenue_manager from organization
+    define staff: [user] or general_manager or front_desk or housekeeping or concierge
+    define can_delete: org_admin
+    define can_edit: general_manager or can_delete
+    define can_create_room: can_edit
+    define can_create_reservation: front_desk or concierge or can_edit
+    define can_create_service: concierge or can_edit
+    define can_view_revenue: org_revenue_manager or can_edit
+    define can_view: staff or member from organization or can_edit
+
+type room
+  relations
+    define hotel: [hotel]
+    define can_delete: can_delete from hotel
+    define can_edit: front_desk from hotel or housekeeping from hotel or can_edit from hotel
+    define can_view: can_view from hotel or can_edit
+
+type reservation
+  relations
+    define hotel: [hotel]
+    define guest: [guest]
+    define can_delete: can_delete from hotel
+    define can_cancel: front_desk from hotel or can_edit from hotel
+    define can_edit: can_cancel
+    define can_view: can_view from hotel or can_edit
+
+type guest
+  relations
+    define organization: [organization]
+    define can_delete: admin from organization
+    define can_edit: can_delete
+    define can_view: member from organization or can_edit
+
+type service
+  relations
+    define hotel: [hotel]
+    define can_delete: can_delete from hotel
+    define can_edit: concierge from hotel or can_edit from hotel
+    define can_view: can_view from hotel or can_edit

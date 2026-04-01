@@ -1,0 +1,48 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or editor
+    define admin: [user]
+    define editor: [user]
+
+type group
+  relations
+    define organization: [organization]
+    define member: [user]
+
+type container
+  relations
+    define organization: [organization]
+    define organization_admin: admin from organization
+    define parent_container: [container]
+    define owner: [user]
+    define editor: [user, group#member] or owner or organization_admin or editor from parent_container
+    define viewer: [user, group#member, user:*] or editor or viewer from parent_container or member from organization
+    define can_delete: owner or organization_admin
+    define can_edit: editor or can_delete
+    define can_create_article: editor or can_delete
+    define can_view: viewer or can_edit
+
+type article
+  relations
+    define parent_container: [container]
+    define organization_admin: organization_admin from parent_container
+    define author: [user]
+    define editor: [user, group#member] or author or editor from parent_container
+    define viewer: [user, group#member, user:*] or editor or viewer from parent_container
+    define can_delete: author or organization_admin
+    define can_archive: can_delete
+    define can_publish: can_delete
+    define can_edit: editor or can_delete
+    define can_view: viewer or can_edit
+
+type attachment
+  relations
+    define article: [article]
+    define uploader: [user]
+    define can_view: uploader or can_view from article
+    define can_delete: uploader or organization_admin from article

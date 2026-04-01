@@ -1,0 +1,385 @@
+name: Real Estate
+model_file: model.fga
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:skyline-realty
+  - user: user:bob
+    relation: broker
+    object: organization:skyline-realty
+  - user: user:charlie
+    relation: agent
+    object: organization:skyline-realty
+  - user: user:diana
+    relation: appraiser
+    object: organization:skyline-realty
+  - user: user:eve
+    relation: agent
+    object: organization:skyline-realty
+  - user: user:frank
+    relation: member
+    object: organization:skyline-realty
+
+  # Property
+  - user: organization:skyline-realty
+    relation: organization
+    object: property:prop-123
+
+  # Listing for prop-123 — charlie is the listing agent
+  - user: organization:skyline-realty
+    relation: organization
+    object: listing:listing-001
+  - user: property:prop-123
+    relation: property
+    object: listing:listing-001
+  - user: user:charlie
+    relation: listing_agent
+    object: listing:listing-001
+
+  # Second listing — eve is the listing agent (for isolation test)
+  - user: organization:skyline-realty
+    relation: organization
+    object: listing:listing-002
+  - user: user:eve
+    relation: listing_agent
+    object: listing:listing-002
+
+  # Transaction on listing-001 — charlie is seller agent, eve is buyer agent
+  - user: listing:listing-001
+    relation: listing
+    object: transaction:txn-001
+  - user: user:charlie
+    relation: seller_agent
+    object: transaction:txn-001
+  - user: user:eve
+    relation: buyer_agent
+    object: transaction:txn-001
+
+  # Inspection on prop-123 — diana is inspector
+  - user: property:prop-123
+    relation: property
+    object: inspection:insp-001
+  - user: user:diana
+    relation: inspector
+    object: inspection:insp-001
+
+  # Neighborhood
+  - user: organization:skyline-realty
+    relation: organization
+    object: neighborhood:downtown
+
+tests:
+  - name: Admin has full access to all resources
+    check:
+      - user: user:alice
+        object: organization:skyline-realty
+        assertions:
+          can_create_property: true
+          can_create_neighborhood: true
+      - user: user:alice
+        object: property:prop-123
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_create_listing: true
+          can_create_inspection: true
+          can_view: true
+      - user: user:alice
+        object: listing:listing-001
+        assertions:
+          can_delete: true
+          can_create_transaction: true
+          can_close: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: transaction:txn-001
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view_financial: true
+          can_view: true
+      - user: user:alice
+        object: inspection:insp-001
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+      - user: user:alice
+        object: neighborhood:downtown
+        assertions:
+          can_edit: true
+          can_view: true
+
+  - name: Broker oversees all listings and transactions
+    check:
+      - user: user:bob
+        object: organization:skyline-realty
+        assertions:
+          can_create_property: false
+          can_create_neighborhood: false
+      - user: user:bob
+        object: property:prop-123
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_create_listing: true
+          can_create_inspection: true
+          can_view: true
+      - user: user:bob
+        object: listing:listing-001
+        assertions:
+          can_delete: false
+          can_create_transaction: true
+          can_close: true
+          can_edit: true
+          can_view: true
+      - user: user:bob
+        object: listing:listing-002
+        assertions:
+          can_create_transaction: true
+          can_close: true
+          can_edit: true
+          can_view: true
+      - user: user:bob
+        object: transaction:txn-001
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view_financial: true
+          can_view: true
+
+  - name: Listing agent manages own listings and transactions
+    check:
+      - user: user:charlie
+        object: organization:skyline-realty
+        assertions:
+          can_create_property: false
+          can_create_neighborhood: false
+      - user: user:charlie
+        object: listing:listing-001
+        assertions:
+          can_delete: false
+          can_create_transaction: true
+          can_close: true
+          can_edit: true
+          can_view: true
+      - user: user:charlie
+        object: listing:listing-002
+        assertions:
+          can_create_transaction: false
+          can_close: false
+          can_edit: false
+          can_view: true
+      - user: user:charlie
+        object: transaction:txn-001
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view_financial: true
+          can_view: true
+      - user: user:charlie
+        object: property:prop-123
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_create_listing: true
+          can_create_inspection: false
+          can_view: true
+
+  - name: Appraiser manages inspections but not listings
+    check:
+      - user: user:diana
+        object: organization:skyline-realty
+        assertions:
+          can_create_property: false
+          can_create_neighborhood: false
+      - user: user:diana
+        object: inspection:insp-001
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view: true
+      - user: user:diana
+        object: listing:listing-001
+        assertions:
+          can_close: false
+          can_edit: false
+          can_view: true
+      - user: user:diana
+        object: transaction:txn-001
+        assertions:
+          can_edit: false
+          can_view_financial: false
+          can_view: true
+      - user: user:diana
+        object: property:prop-123
+        assertions:
+          can_create_listing: false
+          can_create_inspection: true
+
+  - name: Buyer agent can edit transaction but not the listing
+    check:
+      - user: user:eve
+        object: organization:skyline-realty
+        assertions:
+          can_create_property: false
+          can_create_neighborhood: false
+      - user: user:eve
+        object: transaction:txn-001
+        assertions:
+          can_delete: false
+          can_edit: true
+          can_view_financial: true
+          can_view: true
+      - user: user:eve
+        object: listing:listing-001
+        assertions:
+          can_create_transaction: false
+          can_close: false
+          can_edit: false
+          can_view: true
+      - user: user:eve
+        object: listing:listing-002
+        assertions:
+          can_create_transaction: true
+          can_close: true
+          can_edit: true
+          can_view: true
+
+  - name: Regular member has read-only access
+    check:
+      - user: user:frank
+        object: organization:skyline-realty
+        assertions:
+          can_create_property: false
+          can_create_neighborhood: false
+      - user: user:frank
+        object: property:prop-123
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_create_listing: false
+          can_create_inspection: false
+          can_view: true
+      - user: user:frank
+        object: listing:listing-001
+        assertions:
+          can_delete: false
+          can_create_transaction: false
+          can_close: false
+          can_edit: false
+          can_view: true
+      - user: user:frank
+        object: transaction:txn-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view_financial: false
+          can_view: true
+      - user: user:frank
+        object: inspection:insp-001
+        assertions:
+          can_edit: false
+          can_view: true
+      - user: user:frank
+        object: neighborhood:downtown
+        assertions:
+          can_edit: false
+          can_view: true
+
+  - name: Agent isolation across listings
+    check:
+      - user: user:charlie
+        object: listing:listing-002
+        assertions:
+          can_close: false
+          can_edit: false
+      - user: user:eve
+        object: listing:listing-001
+        assertions:
+          can_close: false
+          can_edit: false
+
+  - name: Admin can list all resource types
+    list_objects:
+      - user: user:alice
+        type: property
+        assertions:
+          can_view:
+            - property:prop-123
+      - user: user:alice
+        type: listing
+        assertions:
+          can_view:
+            - listing:listing-001
+            - listing:listing-002
+      - user: user:alice
+        type: transaction
+        assertions:
+          can_view:
+            - transaction:txn-001
+
+  - name: Broker can list all editable resources
+    list_objects:
+      - user: user:bob
+        type: property
+        assertions:
+          can_edit:
+            - property:prop-123
+      - user: user:bob
+        type: listing
+        assertions:
+          can_view:
+            - listing:listing-001
+            - listing:listing-002
+
+  - name: Agent can list own and viewable resources
+    list_objects:
+      - user: user:charlie
+        type: listing
+        assertions:
+          can_edit:
+            - listing:listing-001
+      - user: user:diana
+        type: inspection
+        assertions:
+          can_edit:
+            - inspection:insp-001
+
+  - name: List users with edit access to listing
+    list_users:
+      - object: listing:listing-001
+        user_filter:
+          - type: user
+        assertions:
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users involved in transaction
+    list_users:
+      - object: transaction:txn-001
+        user_filter:
+          - type: user
+        assertions:
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:eve
+
+  - name: List users who can inspect property
+    list_users:
+      - object: inspection:insp-001
+        user_filter:
+          - type: user
+        assertions:
+          can_edit:
+            users:
+              - user:alice
+              - user:diana

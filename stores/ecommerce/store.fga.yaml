@@ -1,0 +1,349 @@
+name: Ecommerce Authorization Model Tests
+model_file: model.fga
+
+tuples:
+  # Organization
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: store_manager
+    object: organization:acme
+  - user: user:charlie
+    relation: member
+    object: organization:acme
+
+  # Store
+  - user: organization:acme
+    relation: organization
+    object: store:main-shop
+  - user: user:bob
+    relation: owner
+    object: store:main-shop
+  - user: user:charlie
+    relation: staff
+    object: store:main-shop
+
+  # Product
+  - user: store:main-shop
+    relation: store
+    object: product:sneakers
+  - user: user:charlie
+    relation: creator
+    object: product:sneakers
+
+  # Customer
+  - user: store:main-shop
+    relation: store
+    object: customer:diana
+  - user: user:diana
+    relation: account_owner
+    object: customer:diana
+
+  # Review on product by diana
+  - user: product:sneakers
+    relation: product
+    object: review:rev-001
+  - user: user:diana
+    relation: author
+    object: review:rev-001
+
+  # Order placed by the customer
+  - user: store:main-shop
+    relation: store
+    object: order:ord-001
+  - user: customer:diana
+    relation: customer
+    object: order:ord-001
+  - user: user:diana
+    relation: placed_by
+    object: order:ord-001
+
+tests:
+  - name: Admin has full access to store
+    check:
+      - user: user:alice
+        object: organization:acme
+        assertions:
+          can_create_store: true
+      - user: user:alice
+        object: store:main-shop
+        assertions:
+          can_view: true
+          can_create_product: true
+          can_create_customer: true
+          can_create_order: true
+          can_edit: true
+          can_delete: true
+
+  - name: Store owner can manage store
+    check:
+      - user: user:bob
+        object: organization:acme
+        assertions:
+          can_create_store: false
+      - user: user:bob
+        object: store:main-shop
+        assertions:
+          can_view: true
+          can_create_product: true
+          can_create_customer: true
+          can_create_order: true
+          can_edit: true
+          can_delete: true
+
+  - name: Store staff can view but not edit store
+    check:
+      - user: user:charlie
+        object: organization:acme
+        assertions:
+          can_create_store: false
+      - user: user:charlie
+        object: store:main-shop
+        assertions:
+          can_view: true
+          can_create_product: false
+          can_create_customer: true
+          can_create_order: true
+          can_edit: false
+          can_delete: false
+
+  - name: Store manager can manage products
+    check:
+      - user: user:bob
+        object: store:main-shop
+        assertions:
+          can_create_product: true
+      - user: user:bob
+        object: product:sneakers
+        assertions:
+          can_view: true
+          can_create_review: true
+          can_edit: true
+          can_delete: true
+
+  - name: Product creator can edit own product
+    check:
+      - user: user:charlie
+        object: product:sneakers
+        assertions:
+          can_view: true
+          can_create_review: true
+          can_edit: true
+          can_delete: false
+          can_manage_inventory: true
+
+  - name: Staff can view and manage inventory but not delete products
+    check:
+      - user: user:charlie
+        object: product:sneakers
+        assertions:
+          can_view: true
+          can_create_review: true
+          can_manage_inventory: true
+          can_delete: false
+
+  - name: Customer can view own account
+    check:
+      - user: user:diana
+        object: customer:diana
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:diana
+        object: store:main-shop
+        assertions:
+          can_create_customer: false
+          can_create_order: false
+
+  - name: Store staff can view customers
+    check:
+      - user: user:charlie
+        object: customer:diana
+        assertions:
+          can_view: true
+          can_edit: false
+
+  - name: Store manager can edit customers
+    check:
+      - user: user:bob
+        object: customer:diana
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+
+  - name: Only admin can delete customers
+    check:
+      - user: user:alice
+        object: customer:diana
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Customer can view own order
+    check:
+      - user: user:diana
+        object: order:ord-001
+        assertions:
+          can_view: true
+          can_cancel: true
+          can_edit: false
+          can_refund: false
+          can_fulfill: false
+
+  - name: Store staff can view and fulfill orders
+    check:
+      - user: user:charlie
+        object: order:ord-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_fulfill: true
+          can_cancel: false
+          can_refund: false
+
+  - name: Store manager can refund and cancel orders
+    check:
+      - user: user:bob
+        object: order:ord-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_cancel: true
+          can_refund: true
+          can_fulfill: true
+          can_delete: false
+
+  - name: Admin has full order access
+    check:
+      - user: user:alice
+        object: order:ord-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_cancel: true
+          can_refund: true
+          can_fulfill: true
+          can_delete: true
+
+  - name: Review author can edit and delete own review
+    check:
+      - user: user:diana
+        object: review:rev-001
+        assertions:
+          can_delete: true
+          can_edit: true
+          can_view: true
+
+  - name: Store manager can delete reviews but not edit them
+    check:
+      - user: user:bob
+        object: review:rev-001
+        assertions:
+          can_delete: true
+          can_edit: false
+          can_view: true
+
+  - name: Store staff can view reviews but not edit or delete
+    check:
+      - user: user:charlie
+        object: review:rev-001
+        assertions:
+          can_delete: false
+          can_edit: false
+          can_view: true
+
+  - name: Non-store member cannot delete customers or view products
+    check:
+      - user: user:charlie
+        object: customer:diana
+        assertions:
+          can_delete: false
+      - user: user:diana
+        object: product:sneakers
+        assertions:
+          can_view: false
+          can_create_review: false
+          can_edit: false
+
+  - name: List objects charlie can access
+    list_objects:
+      - user: user:charlie
+        type: store
+        assertions:
+          staff:
+            - store:main-shop
+      - user: user:charlie
+        type: product
+        assertions:
+          can_view:
+            - product:sneakers
+      - user: user:charlie
+        type: customer
+        assertions:
+          can_view:
+            - customer:diana
+
+  - name: List objects bob can access
+    list_objects:
+      - user: user:bob
+        type: store
+        assertions:
+          owner:
+            - store:main-shop
+      - user: user:bob
+        type: product
+        assertions:
+          can_edit:
+            - product:sneakers
+
+  - name: List objects diana can access
+    list_objects:
+      - user: user:diana
+        type: customer
+        assertions:
+          account_owner:
+            - customer:diana
+      - user: user:diana
+        type: order
+        assertions:
+          placed_by:
+            - order:ord-001
+
+  - name: List users with access to product
+    list_users:
+      - object: product:sneakers
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users with access to order
+    list_users:
+      - object: order:ord-001
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie

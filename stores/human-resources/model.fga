@@ -1,0 +1,91 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or hr_manager
+    define admin: [user]
+    define hr_manager: [user]
+    define can_manage_employees: admin or hr_manager
+    define can_view_sensitive_data: admin or hr_manager
+
+type company
+  relations
+    define organization: [organization]
+    define admin: [user] or admin from organization
+    define member: [user] or member from organization
+    define can_manage_employees: can_manage_employees from organization
+    define can_view_sensitive_data: can_view_sensitive_data from organization or can_manage_employees
+    define can_edit: admin or can_manage_employees
+    define can_view: member or can_edit
+
+type group
+  relations
+    define organization: [organization]
+    define manager: [user]
+    define member: [user]
+    define can_manage: manager or admin from organization
+    define can_view: member or can_manage
+
+type team
+  relations
+    define organization: [organization]
+    define manager: [user]
+    define member: [user]
+    define parent_team: [team]
+    define can_manage: manager or admin from organization
+    define can_view: member or member from parent_team or can_manage
+
+type location
+  relations
+    define organization: [organization]
+    define can_edit: admin from organization
+    define can_view: member from organization or can_edit
+
+type employee
+  relations
+    define company: [company]
+    define assignee: [user]
+    define manager: [user]
+    define team: [team]
+    define company_can_manage_employees: can_manage_employees from company
+    define company_can_view_sensitive_data: can_view_sensitive_data from company
+    define hr_admin: [user] or company_can_manage_employees
+    define team_manager: manager from team
+    define can_terminate: company_can_manage_employees
+    define can_edit: hr_admin or can_terminate
+    define can_view_sensitive: assignee or company_can_view_sensitive_data or can_edit
+    define can_view: manager or team_manager or can_view_sensitive
+
+type employment
+  relations
+    define employee: [employee]
+    define viewer: [user]
+    define can_edit: can_edit from employee
+    define can_view_sensitive: can_view_sensitive from employee
+    define can_view: viewer or manager from employee or can_view_sensitive or can_edit
+
+type benefit
+  relations
+    define employee: [employee]
+    define viewer: [user]
+    define can_edit: can_edit from employee
+    define can_view_sensitive: can_view_sensitive from employee
+    define can_view: viewer or can_view_sensitive or can_edit
+
+type payroll_run
+  relations
+    define organization: [organization]
+    define can_approve: admin from organization
+    define can_view: hr_manager from organization or can_approve
+
+type time_off
+  relations
+    define employee: [employee]
+    define requester: [user]
+    define approver: [user]
+    define can_cancel: requester or company_can_manage_employees from employee
+    define can_approve: approver or company_can_manage_employees from employee
+    define can_view: manager from employee or can_approve or can_cancel

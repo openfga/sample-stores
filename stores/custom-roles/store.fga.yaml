@@ -1,7 +1,7 @@
 # Documentation: https://openfga.dev/docs/modeling/custom-roles
 # FGA Playground: https://play.fga.dev/sandbox/?store=custom-roles
 name: Custom Roles
-model_file: ./model.fga
+model_file: model.fga
 tuples:
   # Assignees of the "Content Manager" role are can create assets in the "Website Content" asset category
   - user: role:content-manager#assignee

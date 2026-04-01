@@ -1,0 +1,245 @@
+name: Knowledge Management System Authorization Model Tests
+model_file: model.fga
+
+tuples:
+  # Organization roles
+  - user: user:alice
+    relation: admin
+    object: organization:wiki-co
+  - user: user:bob
+    relation: editor
+    object: organization:wiki-co
+  - user: user:charlie
+    relation: viewer
+    object: organization:wiki-co
+  - user: user:diana
+    relation: member
+    object: organization:wiki-co
+
+  # Space
+  - user: organization:wiki-co
+    relation: organization
+    object: space:engineering
+  - user: user:bob
+    relation: owner
+    object: space:engineering
+
+  # Page in space
+  - user: space:engineering
+    relation: space
+    object: page:architecture-guide
+  - user: user:bob
+    relation: author
+    object: page:architecture-guide
+
+  # Comment on page
+  - user: page:architecture-guide
+    relation: page
+    object: comment:feedback-001
+  - user: user:charlie
+    relation: author
+    object: comment:feedback-001
+
+tests:
+  - name: Admin has full access to all resources
+    check:
+      - user: user:alice
+        object: space:engineering
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_manage_members: true
+      - user: user:alice
+        object: page:architecture-guide
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_publish: true
+      - user: user:alice
+        object: comment:feedback-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Editor can edit spaces and pages but not delete spaces
+    check:
+      - user: user:bob
+        object: space:engineering
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+          can_manage_members: true
+      - user: user:bob
+        object: page:architecture-guide
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          can_publish: false
+      - user: user:bob
+        object: comment:feedback-001
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+
+  - name: Viewer has read-only access except on own comments
+    check:
+      - user: user:charlie
+        object: space:engineering
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_manage_members: false
+      - user: user:charlie
+        object: page:architecture-guide
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+          can_publish: false
+      - user: user:charlie
+        object: comment:feedback-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: Member has no access to resources
+    check:
+      - user: user:diana
+        object: space:engineering
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: page:architecture-guide
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:diana
+        object: comment:feedback-001
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+
+  - name: Page publishing requires admin
+    check:
+      - user: user:alice
+        object: page:architecture-guide
+        assertions:
+          can_publish: true
+      - user: user:bob
+        object: page:architecture-guide
+        assertions:
+          can_publish: false
+      - user: user:charlie
+        object: page:architecture-guide
+        assertions:
+          can_publish: false
+
+  - name: Comment author can edit and delete own comments
+    check:
+      - user: user:charlie
+        object: comment:feedback-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+  - name: List spaces accessible by users
+    list_objects:
+      - user: user:alice
+        type: space
+        assertions:
+          can_view:
+            - space:engineering
+          can_edit:
+            - space:engineering
+          can_delete:
+            - space:engineering
+      - user: user:bob
+        type: space
+        assertions:
+          can_view:
+            - space:engineering
+          can_edit:
+            - space:engineering
+      - user: user:charlie
+        type: space
+        assertions:
+          can_view:
+            - space:engineering
+
+  - name: List pages accessible by users
+    list_objects:
+      - user: user:alice
+        type: page
+        assertions:
+          can_view:
+            - page:architecture-guide
+          can_edit:
+            - page:architecture-guide
+          can_delete:
+            - page:architecture-guide
+      - user: user:bob
+        type: page
+        assertions:
+          can_view:
+            - page:architecture-guide
+          can_edit:
+            - page:architecture-guide
+
+  - name: List comments accessible by users
+    list_objects:
+      - user: user:charlie
+        type: comment
+        assertions:
+          can_view:
+            - comment:feedback-001
+          can_edit:
+            - comment:feedback-001
+          can_delete:
+            - comment:feedback-001
+
+  - name: List users with access to space
+    list_users:
+      - object: space:engineering
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users who can edit pages
+    list_users:
+      - object: page:architecture-guide
+        user_filter:
+          - type: user
+        assertions:
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+
+  - name: List users who can delete comments
+    list_users:
+      - object: comment:feedback-001
+        user_filter:
+          - type: user
+        assertions:
+          can_delete:
+            users:
+              - user:alice
+              - user:charlie

@@ -1,0 +1,43 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or editor or viewer
+    define admin: [user]
+    define editor: [user]
+    define viewer: [user]
+
+type space
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define organization_admin: admin from organization
+    define organization_editor: editor from organization
+    define organization_viewer: viewer from organization
+    define can_delete: organization_admin
+    define can_manage_members: owner or can_delete
+    define can_edit: organization_editor or can_manage_members
+    define can_view: organization_viewer or can_edit
+
+type page
+  relations
+    define space: [space]
+    define author: [user]
+    define organization_admin: organization_admin from space
+    define organization_editor: organization_editor from space
+    define organization_viewer: organization_viewer from space
+    define can_publish: organization_admin
+    define can_delete: author or can_publish
+    define can_edit: organization_editor or can_delete
+    define can_view: organization_viewer or can_edit
+
+type comment
+  relations
+    define page: [page]
+    define author: [user]
+    define can_delete: author or organization_admin from page
+    define can_edit: can_delete
+    define can_view: can_view from page or can_edit

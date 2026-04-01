@@ -1,0 +1,58 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or campaign_manager or analyst
+    define admin: [user]
+    define campaign_manager: [user]
+    define analyst: [user]
+    define can_create_report: campaign_manager or admin
+
+type campaign
+  relations
+    define organization: [organization]
+    define owner: [user]
+    define organization_admin: admin from organization
+    define organization_campaign_manager: campaign_manager from organization
+    define organization_analyst: analyst from organization
+    define can_delete: organization_admin
+    define can_publish: can_delete
+    define can_edit: owner or organization_campaign_manager or can_publish
+    define can_view: organization_analyst or can_edit
+
+type ad_group
+  relations
+    define campaign: [campaign]
+    define owner: [user]
+    define organization_admin: organization_admin from campaign
+    define organization_campaign_manager: organization_campaign_manager from campaign
+    define organization_analyst: organization_analyst from campaign
+    define can_delete: organization_admin
+    define can_edit: owner or can_edit from campaign
+    define can_view: organization_analyst or can_edit
+
+type ad
+  relations
+    define ad_group: [ad_group]
+    define creator: [user]
+    define can_delete: organization_admin from ad_group
+    define can_approve: can_delete
+    define can_edit: creator or can_edit from ad_group
+    define can_view: organization_analyst from ad_group or can_edit
+
+type creative
+  relations
+    define organization: [organization]
+    define creator: [user]
+    define can_delete: admin from organization
+    define can_edit: creator or campaign_manager from organization or can_delete
+    define can_view: analyst from organization or can_edit
+
+type report
+  relations
+    define organization: [organization]
+    define can_delete: admin from organization
+    define can_view: analyst from organization or campaign_manager from organization or can_delete

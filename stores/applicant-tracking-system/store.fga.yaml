@@ -1,0 +1,346 @@
+name: Applicant Tracking System Authorization Model Tests
+model_file: model.fga
+
+tuples:
+  # Organization
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: recruiter
+    object: organization:acme
+  - user: user:diana
+    relation: recruiter
+    object: organization:acme
+  - user: user:charlie
+    relation: hiring_manager
+    object: organization:acme
+
+  # Department
+  - user: organization:acme
+    relation: organization
+    object: department:engineering
+  - user: user:charlie
+    relation: head
+    object: department:engineering
+
+  # Office
+  - user: organization:acme
+    relation: organization
+    object: office:san-francisco
+
+  # Job
+  - user: department:engineering
+    relation: department
+    object: job:swe-senior
+  - user: user:charlie
+    relation: hiring_manager
+    object: job:swe-senior
+  - user: user:bob
+    relation: recruiter
+    object: job:swe-senior
+
+  # Candidate
+  - user: organization:acme
+    relation: organization
+    object: candidate:diana
+  - user: organization:acme
+    relation: organization
+    object: candidate:eve
+  - user: user:eve
+    relation: subject
+    object: candidate:eve
+
+  # Application
+  - user: job:swe-senior
+    relation: job
+    object: application:diana-swe
+  - user: candidate:diana
+    relation: candidate
+    object: application:diana-swe
+  - user: job:swe-senior
+    relation: job
+    object: application:eve-swe
+  - user: candidate:eve
+    relation: candidate
+    object: application:eve-swe
+
+  # Scheduled Interview
+  - user: application:diana-swe
+    relation: application
+    object: scheduled_interview:diana-onsite
+  - user: user:bob
+    relation: organizer
+    object: scheduled_interview:diana-onsite
+  - user: user:charlie
+    relation: interviewer
+    object: scheduled_interview:diana-onsite
+
+  # Scorecard
+  - user: scheduled_interview:diana-onsite
+    relation: interview
+    object: scorecard:charlie-feedback
+  - user: user:charlie
+    relation: interviewer
+    object: scorecard:charlie-feedback
+
+  # Offer
+  - user: application:diana-swe
+    relation: application
+    object: offer:diana-offer
+  - user: user:bob
+    relation: creator
+    object: offer:diana-offer
+
+tests:
+  - name: Admin has full access to jobs
+    check:
+      - user: user:alice
+        object: job:swe-senior
+        assertions:
+          can_view: true
+          can_edit: true
+          can_close: true
+
+  - name: Hiring manager can view and close jobs
+    check:
+      - user: user:charlie
+        object: job:swe-senior
+        assertions:
+          can_view: true
+          can_edit: true
+          can_close: true
+
+  - name: Org recruiter can view job without direct assignment
+    check:
+      - user: user:diana
+        object: job:swe-senior
+        assertions:
+          can_view: true
+          can_edit: false
+          can_close: false
+
+  - name: Recruiter can view and edit candidates
+    check:
+      - user: user:bob
+        object: candidate:diana
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+
+  - name: Recruiter can manage applications
+    check:
+      - user: user:bob
+        object: application:diana-swe
+        assertions:
+          can_view: true
+          can_edit: true
+          can_change_stage: true
+
+  - name: Hiring manager can view application and change stage
+    check:
+      - user: user:charlie
+        object: application:diana-swe
+        assertions:
+          can_view: true
+          can_edit: false
+          can_change_stage: true
+
+  - name: Candidate can view own profile and application
+    check:
+      - user: user:eve
+        object: candidate:eve
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:eve
+        object: application:eve-swe
+        assertions:
+          can_view: true
+          can_edit: false
+          can_change_stage: false
+
+  - name: Interview permissions
+    check:
+      - user: user:charlie
+        object: scheduled_interview:diana-onsite
+        assertions:
+          can_view: true
+          can_edit: false
+      - user: user:bob
+        object: scheduled_interview:diana-onsite
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: Scorecard permissions
+    check:
+      - user: user:charlie
+        object: scorecard:charlie-feedback
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:bob
+        object: scorecard:charlie-feedback
+        assertions:
+          can_view: false
+          can_edit: false
+
+  - name: Offer permissions
+    check:
+      - user: user:bob
+        object: offer:diana-offer
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: false
+      - user: user:alice
+        object: offer:diana-offer
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: true
+
+  - name: Hiring manager cannot directly view candidate
+    check:
+      - user: user:charlie
+        object: candidate:diana
+        assertions:
+          can_view: false
+          can_edit: false
+
+  - name: Department visibility for org members
+    check:
+      - user: user:bob
+        object: department:engineering
+        assertions:
+          can_view: true
+      - user: user:charlie
+        object: department:engineering
+        assertions:
+          can_view: true
+
+  - name: Office visibility
+    check:
+      - user: user:bob
+        object: office:san-francisco
+        assertions:
+          can_view: true
+
+  - name: List objects for admin
+    list_objects:
+      - user: user:alice
+        type: job
+        assertions:
+          can_view:
+            - job:swe-senior
+          can_edit:
+            - job:swe-senior
+      - user: user:alice
+        type: candidate
+        assertions:
+          can_view:
+            - candidate:eve
+            - candidate:diana
+          can_edit:
+            - candidate:eve
+            - candidate:diana
+
+  - name: List objects for recruiter
+    list_objects:
+      - user: user:bob
+        type: job
+        assertions:
+          can_view:
+            - job:swe-senior
+          can_edit:
+            - job:swe-senior
+      - user: user:bob
+        type: application
+        assertions:
+          can_view:
+            - application:eve-swe
+            - application:diana-swe
+          can_edit:
+            - application:eve-swe
+            - application:diana-swe
+
+  - name: List objects for hiring manager
+    list_objects:
+      - user: user:charlie
+        type: job
+        assertions:
+          can_view:
+            - job:swe-senior
+          can_edit:
+            - job:swe-senior
+      - user: user:charlie
+        type: scheduled_interview
+        assertions:
+          can_view:
+            - scheduled_interview:diana-onsite
+
+  - name: List objects for candidate subject
+    list_objects:
+      - user: user:eve
+        type: candidate
+        assertions:
+          can_view:
+            - candidate:eve
+      - user: user:eve
+        type: application
+        assertions:
+          can_view:
+            - application:eve-swe
+
+  - name: List users who can view job
+    list_users:
+      - object: job:swe-senior
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+
+  - name: List users who can view application
+    list_users:
+      - object: application:diana-swe
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+          can_change_stage:
+            users:
+              - user:bob
+              - user:charlie
+      - object: application:eve-swe
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+              - user:diana
+              - user:eve
+          can_change_stage:
+            users:
+              - user:bob
+              - user:charlie

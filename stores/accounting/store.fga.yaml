@@ -1,0 +1,301 @@
+name: Accounting Authorization Model Tests
+model_file: model.fga
+
+tuples:
+  - user: user:alice
+    relation: admin
+    object: organization:acme
+  - user: user:bob
+    relation: accountant
+    object: organization:acme
+  - user: user:charlie
+    relation: auditor
+    object: organization:acme
+  - user: user:diana
+    relation: member
+    object: organization:acme
+
+  - user: organization:acme
+    relation: organization
+    object: account:revenue
+  - user: organization:acme
+    relation: organization
+    object: contact:vendor-abc
+  - user: user:diana
+    relation: owner
+    object: contact:vendor-abc
+
+  - user: organization:acme
+    relation: organization
+    object: invoice:inv-001
+  - user: user:bob
+    relation: creator
+    object: invoice:inv-001
+
+  - user: organization:acme
+    relation: organization
+    object: expense:exp-001
+  - user: user:diana
+    relation: submitter
+    object: expense:exp-001
+
+  - user: organization:acme
+    relation: organization
+    object: payment:pay-001
+  - user: organization:acme
+    relation: organization
+    object: journal_entry:je-001
+  - user: user:bob
+    relation: creator
+    object: journal_entry:je-001
+
+  - user: organization:acme
+    relation: organization
+    object: purchase_order:po-001
+  - user: user:diana
+    relation: requester
+    object: purchase_order:po-001
+  - user: user:bob
+    relation: approver
+    object: purchase_order:po-001
+
+  - user: organization:acme
+    relation: organization
+    object: financial_statement:balance-sheet-q1
+
+tests:
+  - name: Admin has full accounting access
+    check:
+      - user: user:alice
+        object: organization:acme
+        assertions:
+          can_create_account: true
+          can_create_payment: true
+      - user: user:alice
+        object: account:revenue
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:alice
+        object: invoice:inv-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: true
+          can_void: true
+
+  - name: Accountant can manage books
+    check:
+      - user: user:bob
+        object: organization:acme
+        assertions:
+          can_create_account: true
+          can_create_payment: true
+      - user: user:bob
+        object: account:revenue
+        assertions:
+          can_view: true
+          can_edit: true
+      - user: user:bob
+        object: invoice:inv-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: false
+
+  - name: Auditor has read-only access
+    check:
+      - user: user:charlie
+        object: organization:acme
+        assertions:
+          can_create_account: false
+          can_create_payment: false
+      - user: user:charlie
+        object: account:revenue
+        assertions:
+          can_view: true
+          can_edit: false
+      - user: user:charlie
+        object: invoice:inv-001
+        assertions:
+          can_view: true
+          can_edit: false
+      - user: user:charlie
+        object: financial_statement:balance-sheet-q1
+        assertions:
+          can_view: true
+
+  - name: Auditor can view but not edit expenses payments and journal entries
+    check:
+      - user: user:charlie
+        object: expense:exp-001
+        assertions:
+          can_view: true
+          can_edit: false
+      - user: user:charlie
+        object: payment:pay-001
+        assertions:
+          can_view: true
+          can_edit: false
+      - user: user:charlie
+        object: journal_entry:je-001
+        assertions:
+          can_view: true
+          can_edit: false
+          can_post: false
+
+  - name: Non-admin cannot void invoice
+    check:
+      - user: user:bob
+        object: invoice:inv-001
+        assertions:
+          can_void: false
+      - user: user:charlie
+        object: invoice:inv-001
+        assertions:
+          can_void: false
+
+  - name: Regular member cannot view financial statements
+    check:
+      - user: user:diana
+        object: financial_statement:balance-sheet-q1
+        assertions:
+          can_view: false
+
+  - name: Regular member cannot view accounting
+    check:
+      - user: user:diana
+        object: organization:acme
+        assertions:
+          can_create_account: false
+          can_create_payment: false
+      - user: user:diana
+        object: account:revenue
+        assertions:
+          can_view: false
+      - user: user:diana
+        object: payment:pay-001
+        assertions:
+          can_view: false
+
+  - name: Expense submitter can view own expense
+    check:
+      - user: user:diana
+        object: expense:exp-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: false
+
+  - name: Purchase order flow
+    check:
+      - user: user:diana
+        object: purchase_order:po-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: false
+      - user: user:bob
+        object: purchase_order:po-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_approve: true
+
+  - name: Journal entry permissions
+    check:
+      - user: user:bob
+        object: journal_entry:je-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_post: false
+      - user: user:alice
+        object: journal_entry:je-001
+        assertions:
+          can_view: true
+          can_edit: true
+          can_post: true
+
+  - name: List objects for admin
+    list_objects:
+      - user: user:alice
+        type: account
+        assertions:
+          can_view:
+            - account:revenue
+          can_edit:
+            - account:revenue
+      - user: user:alice
+        type: invoice
+        assertions:
+          can_view:
+            - invoice:inv-001
+          can_edit:
+            - invoice:inv-001
+
+  - name: List objects for accountant
+    list_objects:
+      - user: user:bob
+        type: invoice
+        assertions:
+          can_view:
+            - invoice:inv-001
+          can_edit:
+            - invoice:inv-001
+      - user: user:bob
+        type: purchase_order
+        assertions:
+          can_edit:
+            - purchase_order:po-001
+          can_approve:
+            - purchase_order:po-001
+
+  - name: List objects for member
+    list_objects:
+      - user: user:diana
+        type: contact
+        assertions:
+          can_view:
+            - contact:vendor-abc
+          can_edit:
+            - contact:vendor-abc
+      - user: user:diana
+        type: expense
+        assertions:
+          can_view:
+            - expense:exp-001
+          can_edit:
+            - expense:exp-001
+
+  - name: List users who can view invoice
+    list_users:
+      - object: invoice:inv-001
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:charlie
+          can_edit:
+            users:
+              - user:alice
+              - user:bob
+
+  - name: List users who can manage purchase order
+    list_users:
+      - object: purchase_order:po-001
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:alice
+              - user:bob
+              - user:diana
+          can_approve:
+            users:
+              - user:alice
+              - user:bob

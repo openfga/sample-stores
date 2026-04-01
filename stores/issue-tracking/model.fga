@@ -1,0 +1,70 @@
+model
+  schema 1.1
+
+type user
+
+type organization
+  relations
+    define member: [user] or admin or agent
+    define admin: [user]
+    define agent: [user]
+
+type team
+  relations
+    define organization: [organization]
+    define member: [user]
+    define lead: [user]
+    define can_manage: lead or admin from organization
+    define can_view: member or can_manage
+
+type collection
+  relations
+    define organization: [organization]
+    define parent_collection: [collection]
+    define owner: [user]
+    define organization_admin: admin from organization
+    define organization_agent: agent from organization
+    define viewer: [user, team#member] or owner or organization_admin or viewer from parent_collection
+    define can_delete: organization_admin
+    define can_edit: owner or can_delete
+    define can_create_ticket: owner or organization_agent or can_delete
+    define can_view: viewer or can_edit
+
+type ticket
+  relations
+    define collection: [collection]
+    define assignee: [user]
+    define assigned_team: [team]
+    define creator: [user]
+    define reporter: [user]
+    define organization_admin: organization_admin from collection
+    define organization_agent: organization_agent from collection
+    define viewer: [user, team#member] or assignee or creator or reporter or member from assigned_team or viewer from collection
+    define editor: [user] or assignee or member from assigned_team
+    define team_lead: lead from assigned_team
+    define can_delete: organization_admin
+    define can_assign: organization_agent or can_delete
+    define can_close: assignee or team_lead or can_delete
+    define can_edit: editor or can_assign
+    define can_view: viewer or can_close or can_edit
+
+type comment
+  relations
+    define ticket: [ticket]
+    define author: [user]
+    define can_delete: author or organization_admin from ticket
+    define can_edit: author
+    define can_view: can_edit or can_view from ticket
+
+type attachment
+  relations
+    define ticket: [ticket]
+    define uploader: [user]
+    define can_delete: uploader or team_lead from ticket or organization_admin from ticket
+    define can_view: can_view from ticket
+
+type contact
+  relations
+    define organization: [organization]
+    define can_edit: agent from organization or admin from organization
+    define can_view: can_edit
