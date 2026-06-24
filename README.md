@@ -1,8 +1,7 @@
 # OpenFGA Sample Stores
 
 [![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
-![X](https://img.shields.io/twitter/follow/openfga?style=flat-square&label=%40openfga%20on%20X&color=23179CF0)(https://x.com/openfga)
-
+[![X](https://img.shields.io/twitter/follow/openfga?style=flat-square&label=%40openfga%20on%20X&color=23179CF0)](https://x.com/openfga)
 
 This repository contains sample store models for [OpenFGA](https://openfga.dev).
 
