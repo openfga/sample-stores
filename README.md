@@ -1,4 +1,4 @@
-# OpenFGA Sample Stores
+<img width="1702" height="912" alt="image" src="https://github.com/user-attachments/assets/b35fdf79-ccb7-4aca-830e-22f39b72d641" /># OpenFGA Sample Stores
 
 [![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
 [![X](https://img.shields.io/twitter/follow/openfga?style=flat-square&label=%40openfga%20on%20X&color=23179CF0)](https://x.com/openfga)
@@ -132,6 +132,7 @@ To try this out, you need the following tools installed:
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
 - [ZEISS/knox](https://github.com/ZEISS/knox/blob/main/schema/auth.fga)
 - [Lakekeeper](https://github.com/lakekeeper/lakekeeper/tree/main/authz/openfga/v3.2)
+- [SigNoz](https://github.com/SigNoz/signoz/blob/main/ee/authz/openfgaschema/base.fga) 
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
