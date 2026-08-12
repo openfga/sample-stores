@@ -1,4 +1,4 @@
-<img width="1702" height="912" alt="image" src="https://github.com/user-attachments/assets/b35fdf79-ccb7-4aca-830e-22f39b72d641" /># OpenFGA Sample Stores
+# OpenFGA Sample Stores
 
 [![Join our community](https://img.shields.io/badge/slack-cncf_%23openfga-40abb8.svg?logo=slack)](https://openfga.dev/community)
 [![X](https://img.shields.io/twitter/follow/openfga?style=flat-square&label=%40openfga%20on%20X&color=23179CF0)](https://x.com/openfga)
