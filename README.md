@@ -118,7 +118,7 @@ To try this out, you need the following tools installed:
 
 ## OpenFGA Models in Open Source Projects
 
-- [Linux Foundation](https://github.com/linuxfoundation/lfx-v2-helm/blob/main/charts/lfx-platform/templates/openfga/model.yaml)
+- [Linux Foundation](https://github.com/linuxfoundation/lfx-v2-helm/blob/main/charts/lfx-platform/files/model.fga)
 - [canonical/lxd](https://github.com/canonical/lxd/blob/main/lxd/auth/drivers/openfga_model.openfga)
 - [canonical/identity-platform-login-ui](https://github.com/canonical/identity-platform-login-ui/blob/main/internal/authorization/schema.openfga)
 - [canonical/jimm](https://github.com/canonical/jimm/blob/v3/openfga/authorisation_model.fga)
@@ -128,12 +128,11 @@ To try this out, you need the following tools installed:
 - [grafana/grafana](https://github.com/grafana/grafana/tree/main/pkg/services/authz/zanzana/schema)
 - [lxc/incus](https://github.com/lxc/incus/blob/main/internal/server/auth/driver_openfga_model.openfga)
 - [mindersec/minder](https://github.com/mindersec/minder/blob/main/internal/authz/model/minder.fga)
-- [theopenlane/core](https://github.com/theopenlane/core/blob/main/fga/model/model.fga)
-- [instill-ai/pipeline-backend](https://github.com/instill-ai/pipeline-backend/blob/main/pkg/acl/model.go)
+- [theopenlane/core](https://github.com/theopenlane/core/blob/main/fga/model/fga.mod)
+- [instill-ai/mgmt-backend](https://github.com/instill-ai/mgmt-backend/blob/main/pkg/acl/fga/fga.fga)
 - [virtool/virtool](https://github.com/virtool/virtool/blob/c621ba6a22bfe3464fe59287337029e42295cfcb/virtool/authorization/openfga.py#L123)
 - [concrete-utopia/utopia](https://github.com/concrete-utopia/utopia/blob/master/utopia-remix/fga/model.fga)
 - [Cross-Lab-Project/crosslab](https://github.com/Cross-Lab-Project/crosslab/blob/main/services/authorization/relation_model.fga)
-- [sourcegraph/sourcegraph-public-snapshot](https://github.com/sourcegraph/sourcegraph-public-snapshot/blob/main/cmd/enterprise-portal/service/iam_model.fga)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
 - [ZEISS/knox](https://github.com/ZEISS/knox/blob/main/schema/auth.fga)
 - [Lakekeeper](https://github.com/lakekeeper/lakekeeper/tree/main/authz/openfga/v3.2)
