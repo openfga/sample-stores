@@ -97,16 +97,6 @@ npx skills add openfga/agent-skills
 
 Example prompt: `/openfga Create an OpenFGA authorization model for an insurance company.`
 
-### GitHub Copilot
-
-Guidance is auto-loaded from [`.github/copilot-instructions.md`](.github/copilot-instructions.md) when you open this repository in VS Code with [Copilot](https://code.visualstudio.com/docs/copilot/setup-simplified) enabled.
-
-### Other Tools (Cursor, generic LLMs)
-
-Reference the full guidelines from `openfga/agent-skills`:
-- **AGENTS.md:** https://raw.githubusercontent.com/openfga/agent-skills/main/skills/openfga/AGENTS.md
-- **Cursor rules:** Copy AGENTS.md content into `.cursorrules`
-
 You can also use the [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or the [Context7 MCP](https://github.com/upstash/context7) to provide AI agents with OpenFGA context to help you implement OpenFGA using different SDKs.
 
 ## Creating your store and loading sample data
@@ -132,6 +122,9 @@ To try this out, you need the following tools installed:
 - [canonical/lxd](https://github.com/canonical/lxd/blob/main/lxd/auth/drivers/openfga_model.openfga)
 - [canonical/identity-platform-login-ui](https://github.com/canonical/identity-platform-login-ui/blob/main/internal/authorization/schema.openfga)
 - [canonical/jimm](https://github.com/canonical/jimm/blob/v3/openfga/authorisation_model.fga)
+- [canonical/lx4dmaas](https://github.com/canonical/lxd4maas/blob/main/lxd/auth/drivers/openfga_model.openfga)       
+- [Community AI Platform Engineering ReBAC model for AgentGateway + OpenFGA](https://github.com/cnoe-io/ai-platform-engineering/blob/main/deploy/openfga/model.fga)
+- [zeroroot-ai/gibson](https://github.com/zeroroot-ai/gibson/blob/main/internal/platform/authz/model.fga)
 - [grafana/grafana](https://github.com/grafana/grafana/tree/main/pkg/services/authz/zanzana/schema)
 - [lxc/incus](https://github.com/lxc/incus/blob/main/internal/server/auth/driver_openfga_model.openfga)
 - [mindersec/minder](https://github.com/mindersec/minder/blob/main/internal/authz/model/minder.fga)
