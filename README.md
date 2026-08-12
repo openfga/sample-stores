@@ -79,6 +79,12 @@ Full authorization models for different verticals and industries. Each includes 
 
 AI coding assistants can help you author OpenFGA models. The modeling guidelines are maintained in the [OpenFGA Best Practices Skill](https://github.com/openfga/agent-skills).
 
+To install the skill, run:
+
+```sh
+npx skills add openfga/agent-skills
+```
+
 Some prompts you can try:
 
 - Create an OpenFGA authorization model for an insurance company.
@@ -86,16 +92,6 @@ Some prompts you can try:
 - Create an OpenFGA authorization model for \<Product Name\> (e.g. create a model for Figma).
 
 It will create a model in an `.fga` file, and a `.fga.yaml` with tuples/tests, and use the [CLI](https://github.com/openfga/cli) to run the tests.
-
-### Claude Code
-
-Install the skill, then prompt Claude Code with a modeling request:
-
-```sh
-npx skills add openfga/agent-skills
-```
-
-Example prompt: `/openfga Create an OpenFGA authorization model for an insurance company.`
 
 You can also use the [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or the [Context7 MCP](https://github.com/upstash/context7) to provide AI agents with OpenFGA context to help you implement OpenFGA using different SDKs.
 
