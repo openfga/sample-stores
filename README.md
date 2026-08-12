@@ -79,6 +79,12 @@ Full authorization models for different verticals and industries. Each includes 
 
 AI coding assistants can help you author OpenFGA models. The modeling guidelines are maintained in the [OpenFGA Best Practices Skill](https://github.com/openfga/agent-skills).
 
+To install the skill, run:
+
+```sh
+npx skills add openfga/agent-skills
+```
+
 Some prompts you can try:
 
 - Create an OpenFGA authorization model for an insurance company.
@@ -86,26 +92,6 @@ Some prompts you can try:
 - Create an OpenFGA authorization model for \<Product Name\> (e.g. create a model for Figma).
 
 It will create a model in an `.fga` file, and a `.fga.yaml` with tuples/tests, and use the [CLI](https://github.com/openfga/cli) to run the tests.
-
-### Claude Code
-
-Install the skill, then prompt Claude Code with a modeling request:
-
-```sh
-npx skills add openfga/agent-skills
-```
-
-Example prompt: `/openfga Create an OpenFGA authorization model for an insurance company.`
-
-### GitHub Copilot
-
-Guidance is auto-loaded from [`.github/copilot-instructions.md`](.github/copilot-instructions.md) when you open this repository in VS Code with [Copilot](https://code.visualstudio.com/docs/copilot/setup-simplified) enabled.
-
-### Other Tools (Cursor, generic LLMs)
-
-Reference the full guidelines from `openfga/agent-skills`:
-- **AGENTS.md:** https://raw.githubusercontent.com/openfga/agent-skills/main/skills/openfga/AGENTS.md
-- **Cursor rules:** Copy AGENTS.md content into `.cursorrules`
 
 You can also use the [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or the [Context7 MCP](https://github.com/upstash/context7) to provide AI agents with OpenFGA context to help you implement OpenFGA using different SDKs.
 
@@ -128,22 +114,25 @@ To try this out, you need the following tools installed:
 
 ## OpenFGA Models in Open Source Projects
 
-- [Linux Foundation](https://github.com/linuxfoundation/lfx-v2-helm/blob/main/charts/lfx-platform/templates/openfga/model.yaml)
+- [Linux Foundation](https://github.com/linuxfoundation/lfx-v2-helm/blob/main/charts/lfx-platform/files/model.fga)
 - [canonical/lxd](https://github.com/canonical/lxd/blob/main/lxd/auth/drivers/openfga_model.openfga)
 - [canonical/identity-platform-login-ui](https://github.com/canonical/identity-platform-login-ui/blob/main/internal/authorization/schema.openfga)
 - [canonical/jimm](https://github.com/canonical/jimm/blob/v3/openfga/authorisation_model.fga)
+- [canonical/lx4dmaas](https://github.com/canonical/lxd4maas/blob/main/lxd/auth/drivers/openfga_model.openfga)       
+- [Community AI Platform Engineering ReBAC model for AgentGateway + OpenFGA](https://github.com/cnoe-io/ai-platform-engineering/blob/main/deploy/openfga/model.fga)
+- [zeroroot-ai/gibson](https://github.com/zeroroot-ai/gibson/blob/main/internal/platform/authz/model.fga)
 - [grafana/grafana](https://github.com/grafana/grafana/tree/main/pkg/services/authz/zanzana/schema)
 - [lxc/incus](https://github.com/lxc/incus/blob/main/internal/server/auth/driver_openfga_model.openfga)
 - [mindersec/minder](https://github.com/mindersec/minder/blob/main/internal/authz/model/minder.fga)
-- [theopenlane/core](https://github.com/theopenlane/core/blob/main/fga/model/model.fga)
-- [instill-ai/pipeline-backend](https://github.com/instill-ai/pipeline-backend/blob/main/pkg/acl/model.go)
+- [theopenlane/core](https://github.com/theopenlane/core/blob/main/fga/model/fga.mod)
+- [instill-ai/mgmt-backend](https://github.com/instill-ai/mgmt-backend/blob/main/pkg/acl/fga/fga.fga)
 - [virtool/virtool](https://github.com/virtool/virtool/blob/c621ba6a22bfe3464fe59287337029e42295cfcb/virtool/authorization/openfga.py#L123)
 - [concrete-utopia/utopia](https://github.com/concrete-utopia/utopia/blob/master/utopia-remix/fga/model.fga)
 - [Cross-Lab-Project/crosslab](https://github.com/Cross-Lab-Project/crosslab/blob/main/services/authorization/relation_model.fga)
-- [sourcegraph/sourcegraph-public-snapshot](https://github.com/sourcegraph/sourcegraph-public-snapshot/blob/main/cmd/enterprise-portal/service/iam_model.fga)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
 - [ZEISS/knox](https://github.com/ZEISS/knox/blob/main/schema/auth.fga)
 - [Lakekeeper](https://github.com/lakekeeper/lakekeeper/tree/main/authz/openfga/v3.2)
+- [SigNoz](https://github.com/SigNoz/signoz/blob/main/ee/authz/openfgaschema/base.fga) 
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
