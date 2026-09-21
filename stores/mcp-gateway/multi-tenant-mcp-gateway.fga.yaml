@@ -1,0 +1,96 @@
+name: MCP Gateway for B2B use cases
+model: |
+  model
+    schema 1.1
+
+  type agent
+
+  type organization
+    relations
+        define agent : [agent]
+
+  type tool
+    relations
+      define organization : [organization]
+      define can_call: [agent:*, agent, agent with $expression] and agent from organization
+
+tuples:
+  - user: agent:triage-bot
+    relation: agent
+    object: organization:acme
+
+  - user: agent:assistant
+    relation: agent
+    object: organization:acme
+
+  - user: agent:external
+    relation: agent
+    object: organization:globex
+
+  # The Slack tools are enabled for the organization
+  - user: organization:acme
+    relation: organization
+    object: tool:acme_slack_send_message
+
+  - user: organization:acme
+    relation: organization
+    object: tool:acme_slack_read_channel
+
+  # Every agent in the acme organization can call acme_slack_read_channel.
+  - user: agent:*
+    relation: can_call
+    object: tool:acme_slack_read_channel
+
+  # The assistant agent can call acme_slack_send_message for every channel:
+  - user: agent:assistant
+    relation: can_call
+    object: tool:acme_slack_send_message
+
+  # The triage-bot agent can only use acme_slack_send_message for product-announcements
+  - user: agent:triage-bot
+    relation: can_call
+    object: tool:acme_slack_send_message
+    condition:
+      name: $expression
+      context:
+        expression: "channel_name == '#product-announcements'"
+        parameters:
+          channel_name: string
+
+tests:
+  - name: dynamic-rbac-example
+    check:
+      - user: agent:triage-bot
+        object: tool:acme_slack_send_message
+        context:
+          channel_name: "#product-announcements"
+        assertions:
+          can_call: true
+
+      - user: agent:assistant
+        object: tool:acme_slack_send_message
+        context:
+          channel_name: "#general"
+        assertions:
+          can_call: true
+
+      # An agent from another organization cannot call Acme's tools
+      - user: agent:external
+        object: tool:acme_slack_read_channel
+        assertions:
+          can_call: false
+
+      - user: agent:triage-bot
+        object: tool:acme_slack_send_message
+        context:
+          channel_name: "#general"
+        assertions:
+          can_call: false
+
+      - user: agent:triage-bot
+        object: tool:acme_slack_read_channel
+        assertions:
+          # No need to send the channel name for 'read' operations
+          # if you are not allowing defining policies for 'read'. 
+          # If you do, you should send it
+          can_call: true

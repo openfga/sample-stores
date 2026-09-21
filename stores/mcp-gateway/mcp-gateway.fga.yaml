@@ -1,0 +1,142 @@
+name: MCP Gateway for Workforce use cases
+model: |
+  model
+    schema 1.1
+
+  type gateway
+    relations
+      # Gateway-level policies. 
+      # If you write a user:* tuple, no gateway-level restrictions applied
+      # You can write any arbitrary policy with a dynamic condition
+      # This model shows a IP-based policy, abritrarily defined by the Gateway administrator
+      define allow_policies : [user:*, user:* with in_company_network]
+
+  type user
+
+  type role
+    relations
+      define assignee : [user]
+
+  type mcp_server
+    relations
+      # Adds the MCP server to the Gateway instance, to inherit its policies
+      define gateway : [gateway]
+      # Allows assigning access to all RO or RW tools
+      define readonly_access : [user, role#assignee] 
+      define readwrite_access : [user, role#assignee] 
+
+      define can_call_readonly : readonly_access and allow_policies from gateway
+      define can_call_readwrite : readwrite_access and allow_policies from gateway
+      define can_call_any: allow_policies from gateway
+
+  type tool
+    relations
+      define mcp_server : [mcp_server]
+      define is_readonly : [user:*]
+      define is_readwrite : [user:*]
+
+      define caller : [user, role#assignee, role#assignee with $expression,  user with $expression]
+
+      define can_call : (caller and can_call_any from mcp_server) or (is_readonly and can_call_readonly from mcp_server) or (is_readwrite and can_call_readwrite from mcp_server)
+
+  condition in_company_network(user_ip: ipaddress, cidr: string) {
+    user_ip.in_cidr(cidr)
+  }
+
+tuples:
+
+  ### Gateway level tuples
+
+
+  # If you write this tuple, there won't be global level policies
+  #- user: user:*
+  #  relation: allow_policies
+  #  object: gateway:mcp-gateway
+  # Note, the devloper building the MCP Gatweay will need to allow admins to enter
+  # these kind of policies
+
+  - user: user:*
+    relation: allow_policies
+    object: gateway:mcp-gateway
+    condition:
+      name: in_company_network
+      context:
+        cidr: '192.168.0.0/24'
+
+  ### MCP configuration
+  - user: gateway:mcp-gateway
+    relation: gateway
+    object: mcp_server:slack
+
+  ## These tuples are created based on MCP server tools definitions
+  - user: user:*
+    relation: is_readwrite
+    object: tool:slack_send_message 
+
+  - user: mcp_server:slack
+    relation: mcp_server
+    object: tool:slack_send_message
+
+  ### Users/Roles tuples
+  - user: user:anne
+    relation: assignee
+    object: role:devops
+
+  - user: user:bob
+    relation: assignee
+    object: role:product
+
+  - user: role:devops#assignee
+    relation: readwrite_access
+    object: mcp_server:slack
+
+   # Assignees to the product role are the only ones that can post in product announcements
+  - user: role:product#assignee
+    relation: caller
+    object: tool:slack_send_message
+    condition:
+      name: $expression
+      context:
+        expression: "channel_name == '#product-announcements'"
+        parameters:
+          channel_name: string
+
+tests:
+  - name: dynamic-rbac-example
+    check:
+      # Anne has access as the devops team has write access
+      - user: user:anne
+        object: tool:slack_send_message
+        context:
+          channel_name: "#product-announcements"
+          user_ip: 192.168.0.1
+        assertions:
+          can_call: true
+
+      # Bob has access as he is assigned to the product role
+      - user: user:bob
+        object: tool:slack_send_message
+        context:
+          channel_name: "#product-announcements"
+          user_ip: 192.168.0.1
+        assertions:
+          can_call: true
+
+     # Bob does not have access when using another IP
+      - user: user:bob
+        object: tool:slack_send_message
+        context:
+          channel_name: "#product-announcements"
+          user_ip: 200.168.0.1
+        assertions:
+          can_call: false
+
+      # Bob does not have access to channels outside the product announcements policy
+      - user: user:bob
+        object: tool:slack_send_message
+        context:
+          channel_name: "#general"
+          user_ip: 192.168.0.1
+        assertions:
+          can_call: false
+

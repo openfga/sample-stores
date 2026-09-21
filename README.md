@@ -23,6 +23,7 @@ Examples that demonstrate how to model authorization for well-known products and
 |---------|-------------|
 | [Modeling Guide](./stores/modeling-guide) | Step-by-step introduction to OpenFGA modeling |
 | [Multi-Tenant RBAC](./stores/multitenant-rbac) | Multi-tenant role-based access control |
+| [MCP Gateway](./stores/mcp-gateway) | Authorization for employee-facing and customer-facing multi-tenant MCP gateways |
 | [GitHub](./stores/github) | Repository, organization, and team permissions |
 | [Google Drive](./stores/gdrive) | File, folder, and shared drive permissions |
 | [Entitlements](./stores/entitlements) | Feature entitlements and plan-based access |
