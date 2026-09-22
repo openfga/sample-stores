@@ -8,7 +8,7 @@ This folder demonstrates three different models for MCP Gateway use cases:
 *   **A customer-facing multi-tenant MCP Gateway:** Where you write your own agents and want to control what the agents can do when interacting with each tenant's tools. Permissions are based on agent identity.
 *   **An intent-based authorization scenario:** An iteration of the previous one showing how to apply the same ideas for authorizing calls based on inferred intent.
 
-These examples leverage the **Dynamic Conditions** experimental feature. They can be run with the latest OpenFGA CLI, or by enabling the experimental flag in OpenFGA
+These examples use the **Dynamic Conditions** experimental feature. The FGA CLI enables inline expressions automatically when running model tests. When testing against an OpenFGA server, enable the feature explicitly:
 
 ```bash
 openfga run --experimentals inline_expressions
@@ -23,7 +23,7 @@ openfga run --experimentals inline_expressions
 *   **Specific tool access:** Allow access to specific tools per user or role.
 *   **Parameter-based access:** Allow calling tools with specific parameter values per user or role. This is implemented using Dynamic Conditions.
 
-You can view the example configuration [here](mcp-gateway.fga.yaml).
+You can view the [mcp-gateway.fga.yaml](mcp-gateway.fga.yaml) example configuration.
 
 ## Multi-Tenant Agent Authorization
 
@@ -34,7 +34,7 @@ You can view the example configuration [here](mcp-gateway.fga.yaml).
 
 For example, you can configure that the `triage-bot` can only send Slack messages to `#product-announcements` for the organization `Acme`.
 
-You can view the example configuration [here](multi-tenant-mcp-gateway.fga.yaml).
+You can view the [multi-tenant-mcp-gateway.fga.yaml](multi-tenant-mcp-gateway.fga.yaml) example configuration.
 
 ## Intent-Based Authorization
 
@@ -46,9 +46,9 @@ This builds on the previous example, but agents do not have any permissions pers
 *   Agents begin with zero permissions.
 *   An intent inference engine (out of scope for this example) will infer which tools the agent should call and with which parameters. This information is sent to OpenFGA as contextual tuples.
 
-Note that even this is applicable to Intent based Authorization, it can be applied to any solution where the granted permissions can be inferred from the context. They can come from an intent-inference engine, or a token that grants the agent fine grained contextual permissions.
+This pattern also applies to intent-based authorization. Permissions can come from an intent-inference engine or a token that grants the agent fine-grained contextual permissions.
 
-You can view the example configuration [here](multi-tenant-mcp-gateway-intent.fga.yaml).
+You can view the [multi-tenant-mcp-gateway-intent.fga.yaml](multi-tenant-mcp-gateway-intent.fga.yaml) example configuration.
 
 ## Try It Out
 

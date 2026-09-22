@@ -12,7 +12,8 @@ model: |
   type tool
     relations
       define organization : [organization]
-      define can_call: [agent, agent with $expression] and agent from organization
+      define caller: [agent, agent with $expression]
+      define can_call: caller and agent from organization
 
 tuples:
   - user: agent:triage-bot
@@ -50,7 +51,7 @@ tests:
   - name: test
     tuples:
       - user: agent:triage-bot
-        relation: can_call
+        relation: caller
         object: tool:acme_slack_send_message
         condition:
           name: $expression
@@ -60,7 +61,7 @@ tests:
               channel_name: string
 
       - user: agent:triage-bot
-        relation: can_call
+        relation: caller
         object: tool:acme_slack_search_channels
         condition:
           name: $expression
@@ -70,7 +71,7 @@ tests:
               query: string
       - user: agent:triage-bot
 
-        relation: can_call
+        relation: caller
         object: tool:acme_slack_read_channel
                             
     check:

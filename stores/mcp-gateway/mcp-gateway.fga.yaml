@@ -25,7 +25,7 @@ model: |
       define readonly_access : [user, role#assignee] 
       define readwrite_access : [user, role#assignee] 
 
-      define can_call_readonly : readonly_access and allow_policies from gateway
+      define can_call_readonly : (readonly_access or readwrite_access) and allow_policies from gateway
       define can_call_readwrite : readwrite_access and allow_policies from gateway
       define can_call_any: allow_policies from gateway
 
@@ -73,9 +73,17 @@ tuples:
     relation: is_readwrite
     object: tool:slack_send_message 
 
+  - user: user:*
+    relation: is_readonly
+    object: tool:slack_read_channel
+
   - user: mcp_server:slack
     relation: mcp_server
     object: tool:slack_send_message
+
+  - user: mcp_server:slack
+    relation: mcp_server
+    object: tool:slack_read_channel
 
   ### Users/Roles tuples
   - user: user:anne
@@ -109,6 +117,14 @@ tests:
         object: tool:slack_send_message
         context:
           channel_name: "#product-announcements"
+          user_ip: 192.168.0.1
+        assertions:
+          can_call: true
+
+      # Anne's read-write access also grants access to read-only tools
+      - user: user:anne
+        object: tool:slack_read_channel
+        context:
           user_ip: 192.168.0.1
         assertions:
           can_call: true
