@@ -52,8 +52,8 @@ tuples:
   #- user: user:*
   #  relation: allow_policies
   #  object: gateway:mcp-gateway
-  # Note, the devloper building the MCP Gatweay will need to allow admins to enter
-  # these kind of policies
+  # Note that the developer building the MCP Gateway will need to allow admins to enter
+  # these kinds of policies
 
   - user: user:*
     relation: allow_policies
