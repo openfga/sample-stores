@@ -8,7 +8,7 @@ model: |
       # Gateway-level policies. 
       # If you write a user:* tuple, no gateway-level restrictions applied
       # You can write any arbitrary policy with a dynamic condition
-      # This model shows a IP-based policy, abritrarily defined by the Gateway administrator
+      # This model shows an IP-based policy, arbitrarily defined by the Gateway administrator
       define allow_policies : [user:*, user:* with in_company_network]
 
   type user
