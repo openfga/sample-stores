@@ -8,7 +8,7 @@ This folder demonstrates three different models for MCP Gateway use cases:
 *   **A customer-facing multi-tenant MCP Gateway:** Where you write your own agents and want to control what the agents can do when interacting with each tenant's tools. Permissions are based on agent identity.
 *   **An intent-based authorization scenario:** An iteration of the previous one showing how to apply the same ideas for authorizing calls based on inferred intent.
 
-These examples use the **Dynamic Conditions** experimental feature. The FGA CLI enables inline expressions automatically when running model tests. When testing against an OpenFGA server, enable the feature explicitly:
+These examples depend on the experimental **Dynamic Conditions** feature, whose syntax, behavior, API, and tuple format may change. The FGA CLI enables inline expressions automatically when running model tests. When testing against an OpenFGA server, enable the feature explicitly:
 
 ```bash
 openfga run --experimentals inline_expressions
