@@ -47,7 +47,7 @@ tuples:
 
   ### Gateway level tuples
 
-  # If you write this tuple, there won't be global level policies
+  # If you write this tuple, there won't be any network restriction conditions.
   #- user: user:*
   #  relation: allow_policies
   #  object: gateway:mcp-gateway
