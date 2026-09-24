@@ -18,10 +18,10 @@ model: |
 
   type mcp_server
     relations
-      # Adds the MCP server to the Gateway instance, to inherit its policies
+      # Adds the MCP server to the gateway instance so it inherits its policies
       define gateway : [gateway]
 
-      # Allows assigning access to all RO or RW tools
+      # Allows assigning access to all read-only or read-write tools
       define readonly_access : [user, role#assignee]
       define readwrite_access : [user, role#assignee]
 
@@ -32,12 +32,12 @@ model: |
   type tool
     relations
       define mcp_server : [mcp_server]
+      # Tools without the read-only flag are treated as read-write
       define is_readonly : [user:*]
-      define is_readwrite : [user:*]
 
       define caller : [user, role#assignee, role#assignee with $expression,  user with $expression]
 
-      define can_call : (caller and passes_gateway_policies from mcp_server) or (is_readonly and can_call_readonly from mcp_server) or (is_readwrite and can_call_readwrite from mcp_server)
+      define can_call : (caller and passes_gateway_policies from mcp_server) or (is_readonly and can_call_readonly from mcp_server) or can_call_readwrite from mcp_server
 
   condition in_company_network(user_ip: ipaddress, cidr: string) {
     user_ip.in_cidr(cidr)
@@ -65,19 +65,19 @@ tuples:
     relation: gateway
     object: mcp_server:slack
 
-  ## These tuples are created based on MCP server tools definitions
-  - user: user:*
-    relation: is_readwrite
-    object: tool:slack_send_message
+  ## These tuples are created from MCP server tool definitions
 
+  # slack_read_channel has the 'readOnlyHint' hint in the MCP Tool definition
   - user: user:*
     relation: is_readonly
     object: tool:slack_read_channel
 
+  # The Slack MCP server owns the slack_send_message tool
   - user: mcp_server:slack
     relation: mcp_server
     object: tool:slack_send_message
 
+  # The Slack MCP server owns the slack_read_channel tool
   - user: mcp_server:slack
     relation: mcp_server
     object: tool:slack_read_channel
