@@ -26,7 +26,7 @@ model: |
       define readwrite_access : [user, role#assignee]
 
       define can_call_readonly : (readonly_access or readwrite_access) and passes_gateway_policies
-      define can_call_readwrite : readwrite_access and allow_policies from gateway
+      define can_call_readwrite : readwrite_access and passes_gateway_policies
       define passes_gateway_policies: allow_policies from gateway
 
   type tool
