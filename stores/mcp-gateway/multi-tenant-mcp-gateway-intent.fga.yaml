@@ -1,4 +1,4 @@
-name: MCP Gateway for B2B use cases, showing how to use OpenFGA for intent-based authorization
+name: Customer-facing multi-tenant MCP Gateway with intent-based authorization
 model: |
   model
     schema 1.1
@@ -7,7 +7,7 @@ model: |
 
   type organization
     relations
-        define agent : [agent]
+      define agent : [agent]
 
   type tool
     relations
@@ -69,18 +69,14 @@ tests:
             expression: "query == 'product-announcements'"
             parameters:
               query: string
-      - user: agent:triage-bot
 
-        relation: caller
-        object: tool:acme_slack_read_channel
-                            
     check:
       - user: agent:triage-bot
         object: tool:acme_slack_search_channels
         context:
           query: "product-announcements"
         assertions:
-          can_call: true    
+          can_call: true
 
       - user: agent:triage-bot
         object: tool:acme_slack_send_message
@@ -102,11 +98,6 @@ tests:
           query: "general"
         assertions:
           can_call: false
-
-      - user: agent:triage-bot
-        object: tool:acme_slack_read_channel
-        assertions:
-          can_call: true          
 
       - user: agent:triage-bot
         object: tool:acme_slack_schedule_message

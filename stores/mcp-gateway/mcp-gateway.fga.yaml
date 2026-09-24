@@ -5,10 +5,9 @@ model: |
 
   type gateway
     relations
-      # Gateway-level policies. 
-      # If you write a user:* tuple, no gateway-level restrictions applied
-      # You can write any arbitrary policy with a dynamic condition
-      # This model shows an IP-based policy, arbitrarily defined by the Gateway administrator
+      # Gateway-level policies.
+      # If you write a user:* tuple, no gateway-level restrictions are applied
+      # This example restricts gateway access by IP using a condition defined in the model
       define allow_policies : [user:*, user:* with in_company_network]
 
   type user
@@ -21,13 +20,14 @@ model: |
     relations
       # Adds the MCP server to the Gateway instance, to inherit its policies
       define gateway : [gateway]
+
       # Allows assigning access to all RO or RW tools
-      define readonly_access : [user, role#assignee] 
-      define readwrite_access : [user, role#assignee] 
+      define readonly_access : [user, role#assignee]
+      define readwrite_access : [user, role#assignee]
 
       define can_call_readonly : (readonly_access or readwrite_access) and allow_policies from gateway
       define can_call_readwrite : readwrite_access and allow_policies from gateway
-      define can_call_any: allow_policies from gateway
+      define passes_gateway_policies: allow_policies from gateway
 
   type tool
     relations
@@ -37,7 +37,7 @@ model: |
 
       define caller : [user, role#assignee, role#assignee with $expression,  user with $expression]
 
-      define can_call : (caller and can_call_any from mcp_server) or (is_readonly and can_call_readonly from mcp_server) or (is_readwrite and can_call_readwrite from mcp_server)
+      define can_call : (caller and passes_gateway_policies from mcp_server) or (is_readonly and can_call_readonly from mcp_server) or (is_readwrite and can_call_readwrite from mcp_server)
 
   condition in_company_network(user_ip: ipaddress, cidr: string) {
     user_ip.in_cidr(cidr)
@@ -47,13 +47,10 @@ tuples:
 
   ### Gateway level tuples
 
-
   # If you write this tuple, there won't be global level policies
   #- user: user:*
   #  relation: allow_policies
   #  object: gateway:mcp-gateway
-  # Note that the developer building the MCP Gateway will need to allow admins to enter
-  # these kinds of policies
 
   - user: user:*
     relation: allow_policies
@@ -71,7 +68,7 @@ tuples:
   ## These tuples are created based on MCP server tools definitions
   - user: user:*
     relation: is_readwrite
-    object: tool:slack_send_message 
+    object: tool:slack_send_message
 
   - user: user:*
     relation: is_readonly
@@ -98,7 +95,10 @@ tuples:
     relation: readwrite_access
     object: mcp_server:slack
 
-   # Assignees to the product role are the only ones that can post in product announcements
+  # Assignees to the product role are the only ones that can post in product announcements
+  # Note that the developer building the MCP Gateway will need to allow users to enter
+  # these kinds of policies
+
   - user: role:product#assignee
     relation: caller
     object: tool:slack_send_message
@@ -138,7 +138,7 @@ tests:
         assertions:
           can_call: true
 
-     # Bob does not have access when using another IP
+      # Bob does not have access when using another IP
       - user: user:bob
         object: tool:slack_send_message
         context:

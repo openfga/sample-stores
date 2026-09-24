@@ -1,4 +1,4 @@
-name: MCP Gateway for B2B use cases
+name: Customer-facing multi-tenant MCP Gateway
 model: |
   model
     schema 1.1
@@ -7,10 +7,11 @@ model: |
 
   type organization
     relations
-        define agent : [agent]
+      define agent : [agent]
 
   type tool
     relations
+      # The tool policies are per-organization
       define organization : [organization]
       define caller: [agent:*, agent, agent with $expression]
       define can_call: caller and agent from organization
@@ -61,6 +62,7 @@ tuples:
 tests:
   - name: dynamic-rbac-example
     check:
+      # triage-bot can post to the channel allowed by its expression
       - user: agent:triage-bot
         object: tool:acme_slack_send_message
         context:
@@ -68,6 +70,7 @@ tests:
         assertions:
           can_call: true
 
+      # assistant has an unconditional grant, so any channel is allowed
       - user: agent:assistant
         object: tool:acme_slack_send_message
         context:
@@ -81,6 +84,7 @@ tests:
         assertions:
           can_call: false
 
+      # triage-bot cannot post to channels outside its expression
       - user: agent:triage-bot
         object: tool:acme_slack_send_message
         context:
@@ -88,10 +92,8 @@ tests:
         assertions:
           can_call: false
 
+      # Channel context isn't needed because no conditional grant exists for this tool
       - user: agent:triage-bot
         object: tool:acme_slack_read_channel
         assertions:
-          # No need to send the channel name for 'read' operations
-          # if you are not allowing defining policies for 'read'. 
-          # If you do, you should send it
           can_call: true
