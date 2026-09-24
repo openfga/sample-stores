@@ -147,7 +147,7 @@ tests:
         assertions:
           can_call: false
 
-      # Bob does not have access to channels outside the product announcements policy
+      # Bob does not have access to channels outside the product announcements policy, even when on the correct IP
       - user: user:bob
         object: tool:slack_send_message
         context:
