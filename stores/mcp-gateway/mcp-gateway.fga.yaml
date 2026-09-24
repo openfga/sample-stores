@@ -1,0 +1,158 @@
+name: MCP Gateway for Workforce use cases
+model: |
+  model
+    schema 1.1
+
+  type gateway
+    relations
+      # Gateway-level policies.
+      # If you write a user:* tuple, no gateway-level restrictions are applied
+      # This example restricts gateway access by IP using a condition defined in the model
+      define allow_policies : [user:*, user:* with in_company_network]
+
+  type user
+
+  type role
+    relations
+      define assignee : [user]
+
+  type mcp_server
+    relations
+      # Adds the MCP server to the gateway instance so it inherits its policies
+      define gateway : [gateway]
+
+      # Allows assigning access to all read-only or read-write tools
+      define readonly_access : [user, role#assignee]
+      define readwrite_access : [user, role#assignee]
+
+      define can_call_readonly : (readonly_access or readwrite_access) and passes_gateway_policies
+      define can_call_readwrite : readwrite_access and passes_gateway_policies
+      define passes_gateway_policies: allow_policies from gateway
+
+  type tool
+    relations
+      define mcp_server : [mcp_server]
+      # Tools without the read-only flag are treated as read-write
+      define is_readonly : [user:*]
+
+      define caller : [user, role#assignee, role#assignee with $expression,  user with $expression]
+
+      define can_call : (caller and passes_gateway_policies from mcp_server) or (is_readonly and can_call_readonly from mcp_server) or can_call_readwrite from mcp_server
+
+  condition in_company_network(user_ip: ipaddress, cidr: string) {
+    user_ip.in_cidr(cidr)
+  }
+
+tuples:
+
+  ### Gateway level tuples
+
+  # If you write this tuple, there won't be any network restriction conditions.
+  #- user: user:*
+  #  relation: allow_policies
+  #  object: gateway:mcp-gateway
+
+  - user: user:*
+    relation: allow_policies
+    object: gateway:mcp-gateway
+    condition:
+      name: in_company_network
+      context:
+        cidr: '192.168.0.0/24'
+
+  ### MCP configuration
+  - user: gateway:mcp-gateway
+    relation: gateway
+    object: mcp_server:slack
+
+  ## These tuples are created from MCP server tool definitions
+
+  # slack_read_channel has the 'readOnlyHint' hint in the MCP Tool definition
+  - user: user:*
+    relation: is_readonly
+    object: tool:slack_read_channel
+
+  # The Slack MCP server owns the slack_send_message tool
+  - user: mcp_server:slack
+    relation: mcp_server
+    object: tool:slack_send_message
+
+  # The Slack MCP server owns the slack_read_channel tool
+  - user: mcp_server:slack
+    relation: mcp_server
+    object: tool:slack_read_channel
+
+  ### Users/Roles tuples
+  - user: user:anne
+    relation: assignee
+    object: role:devops
+
+  - user: user:bob
+    relation: assignee
+    object: role:product
+
+  - user: role:devops#assignee
+    relation: readwrite_access
+    object: mcp_server:slack
+
+  # Assignees to the product role are the only ones that can post in product announcements
+  # Note that the developer building the MCP Gateway will need to allow users to enter
+  # these kinds of policies
+
+  - user: role:product#assignee
+    relation: caller
+    object: tool:slack_send_message
+    condition:
+      name: $expression
+      context:
+        expression: "channel_name == '#product-announcements'"
+        parameters:
+          channel_name: string
+
+tests:
+  - name: dynamic-rbac-example
+    check:
+      # Anne has access as the devops team has write access to all channels
+      - user: user:anne
+        object: tool:slack_send_message
+        context:
+          channel_name: "#product-announcements"
+          user_ip: 192.168.0.1
+        assertions:
+          can_call: true
+
+      # Anne's read-write access also grants access to read-only tools
+      - user: user:anne
+        object: tool:slack_read_channel
+        context:
+          user_ip: 192.168.0.1
+        assertions:
+          can_call: true
+
+      # Bob has access to this channel as he is assigned to the product role
+      - user: user:bob
+        object: tool:slack_send_message
+        context:
+          channel_name: "#product-announcements"
+          user_ip: 192.168.0.1
+        assertions:
+          can_call: true
+
+      # Bob does not have access when using another IP
+      - user: user:bob
+        object: tool:slack_send_message
+        context:
+          channel_name: "#product-announcements"
+          user_ip: 200.168.0.1
+        assertions:
+          can_call: false
+
+      # Bob does not have access to channels outside the product announcements policy, even when on the correct IP
+      - user: user:bob
+        object: tool:slack_send_message
+        context:
+          channel_name: "#general"
+          user_ip: 192.168.0.1
+        assertions:
+          can_call: false
+

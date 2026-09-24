@@ -1,0 +1,105 @@
+name: Customer-facing multi-tenant MCP Gateway with intent-based authorization
+model: |
+  model
+    schema 1.1
+
+  type agent
+
+  type organization
+    relations
+      define agent : [agent]
+
+  type tool
+    relations
+      define organization : [organization]
+      define caller: [agent, agent with $expression]
+      define can_call: caller and agent from organization
+
+tuples:
+  - user: agent:triage-bot
+    relation: agent
+    object: organization:acme
+
+  - user: agent:assistant
+    relation: agent
+    object: organization:acme
+
+  # The Slack tools are enabled for the organization
+  - user: organization:acme
+    relation: organization
+    object: tool:acme_slack_send_message
+
+  - user: organization:acme
+    relation: organization
+    object: tool:acme_slack_read_channel
+
+  - user: organization:acme
+    relation: organization
+    object: tool:acme_slack_search_channels
+
+  - user: organization:acme
+    relation: organization
+    object: tool:acme_slack_schedule_message
+
+  # Agents start with zero permissions
+
+tests:
+  # We assume that the intent engine inferred the agent needs to find a specific
+  # Slack channel and post a message there.
+  # This is sent by the Intent engine as contextual tuples
+
+  - name: test
+    tuples:
+      - user: agent:triage-bot
+        relation: caller
+        object: tool:acme_slack_send_message
+        condition:
+          name: $expression
+          context:
+            expression: "channel_name == '#product-announcements'"
+            parameters:
+              channel_name: string
+
+      - user: agent:triage-bot
+        relation: caller
+        object: tool:acme_slack_search_channels
+        condition:
+          name: $expression
+          context:
+            expression: "query == 'product-announcements'"
+            parameters:
+              query: string
+
+    check:
+      - user: agent:triage-bot
+        object: tool:acme_slack_search_channels
+        context:
+          query: "product-announcements"
+        assertions:
+          can_call: true
+
+      - user: agent:triage-bot
+        object: tool:acme_slack_send_message
+        context:
+          channel_name: "#product-announcements"
+        assertions:
+          can_call: true
+
+      - user: agent:triage-bot
+        object: tool:acme_slack_send_message
+        context:
+          channel_name: "#general"
+        assertions:
+          can_call: false
+
+      - user: agent:triage-bot
+        object: tool:acme_slack_search_channels
+        context:
+          query: "general"
+        assertions:
+          can_call: false
+
+      - user: agent:triage-bot
+        object: tool:acme_slack_schedule_message
+        assertions:
+          can_call: false
