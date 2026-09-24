@@ -112,7 +112,7 @@ tuples:
 tests:
   - name: dynamic-rbac-example
     check:
-      # Anne has access as the devops team has write access
+      # Anne has access as the devops team has write access to all channels
       - user: user:anne
         object: tool:slack_send_message
         context:
