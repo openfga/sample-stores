@@ -129,7 +129,7 @@ tests:
         assertions:
           can_call: true
 
-      # Bob has access as he is assigned to the product role
+      # Bob has access to this channel as he is assigned to the product role
       - user: user:bob
         object: tool:slack_send_message
         context:
