@@ -10,14 +10,14 @@ This repository contains sample store models for [OpenFGA](https://openfga.dev).
 - [Authorization Patterns](#authorization-patterns)
 - [OpenFGA Features](#openfga-features)
 - [Industry Examples](#industry-examples)
-- [OpenFGA Models in Open Source Projects](#openfga-models-in-open-source-projects)
+- [OpenFGA Models and Sources in Open Source Projects](#openfga-models-and-sources-in-open-source-projects)
 - [Authoring Models using Coding Assistants](#authoring-models-using-coding-assistants)
-- [Creating your store and loading sample data](#creating-your-store-and-loading-sample-data)
+- [Testing a sample store](#testing-a-sample-store)
 - [Modeling Resources](#modeling-resources)
 
 ## Authorization Patterns
 
-Examples that demonstrate how to model authorization for well-known products and common patterns.
+Models for common products and authorization patterns.
 
 | Example | Description |
 |---------|-------------|
@@ -34,7 +34,7 @@ Examples that demonstrate how to model authorization for well-known products and
 
 ## OpenFGA Features
 
-Examples that demonstrate specific OpenFGA features and capabilities.
+Examples focused on specific OpenFGA features.
 
 | Example | Description |
 |---------|-------------|
@@ -48,7 +48,7 @@ Examples that demonstrate specific OpenFGA features and capabilities.
 
 ## Industry Examples
 
-Full authorization models for different verticals and industries. Each includes a model, sample tuples, tests, and a README explaining the use case.
+Complete authorization models for industry use cases. Each includes a model, sample tuples, tests, and a README describing the scenario.
 
 | Example | Description |
 |---------|-------------|
@@ -92,38 +92,41 @@ Some prompts you can try:
 - Create an OpenFGA authorization model for B2B SaaS project management system.
 - Create an OpenFGA authorization model for \<Product Name\> (e.g. create a model for Figma).
 
-It will create a model in an `.fga` file, and a `.fga.yaml` with tuples/tests, and use the [CLI](https://github.com/openfga/cli) to run the tests.
+With the skill installed, an assistant can help create an `.fga` model and a `.fga.yaml` file with tuples and tests. Run the tests with the [CLI](https://github.com/openfga/cli).
 
-You can also use the [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or the [Context7 MCP](https://github.com/upstash/context7) to provide AI agents with OpenFGA context to help you implement OpenFGA using different SDKs.
+You can also use [DeepWiki MCP](https://docs.devin.ai/work-with-devin/deepwiki-mcp) or [Context7 MCP](https://github.com/upstash/context7) to give AI agents context when implementing OpenFGA models with an SDK.
 
-## Creating your store and loading sample data
+## Testing a sample store
 
-To try this out, you need the following tools installed:
+To run a sample store's tests locally, install the following tools:
 - The `fga` CLI, follow the [installation instructions](https://github.com/openfga/cli/?tab=readme-ov-file#installation) here to get it
 - `git`
 
-1.  Clone this repository
+1. Clone this repository
   ```sh
-  git clone https://github.com/openfga/sample-stores.git openfga-sample-stores && cd $_
+  git clone https://github.com/openfga/sample-stores.git openfga-sample-stores
+  cd openfga-sample-stores
   ```
 
-2. Use the `fga` CLI to test the store you choose (e.g. `github`, `custom-roles`, etc..)
+2. Run the tests for a sample store, for example `github`:
   ```sh
   SAMPLE_STORE=github
   fga model test --tests "stores/${SAMPLE_STORE}/store.fga.yaml"
   ```
 
-## OpenFGA Models in Open Source Projects
+## OpenFGA Models and Sources in Open Source Projects
 
 - [Linux Foundation](https://github.com/linuxfoundation/lfx-v2-helm/blob/main/charts/lfx-platform/files/model.fga)
+- [agent-substrate](https://github.com/agent-substrate/substrate/blob/main/cmd/ateapi/internal/authz/model.fga)
 - [canonical/lxd](https://github.com/canonical/lxd/blob/main/lxd/auth/drivers/openfga_model.openfga)
 - [canonical/identity-platform-login-ui](https://github.com/canonical/identity-platform-login-ui/blob/main/internal/authorization/schema.openfga)
 - [canonical/jimm](https://github.com/canonical/jimm/blob/v3/openfga/authorisation_model.fga)
 - [canonical/lx4dmaas](https://github.com/canonical/lxd4maas/blob/main/lxd/auth/drivers/openfga_model.openfga)       
+- [grafana/grafana (modular schema directory)](https://github.com/grafana/grafana/tree/main/pkg/services/authz/zanzana/schema)
+- [SigNoz](https://github.com/SigNoz/signoz/blob/main/ee/authz/openfgaschema/base.fga)
 - [Community AI Platform Engineering ReBAC model for AgentGateway + OpenFGA](https://github.com/cnoe-io/ai-platform-engineering/blob/main/deploy/openfga/model.fga)
-- [zeroroot-ai/gibson](https://github.com/zeroroot-ai/gibson/blob/main/internal/platform/authz/model.fga)
-- [grafana/grafana](https://github.com/grafana/grafana/tree/main/pkg/services/authz/zanzana/schema)
 - [lxc/incus](https://github.com/lxc/incus/blob/main/internal/server/auth/driver_openfga_model.openfga)
+- [zeroroot-ai/gibson](https://github.com/zeroroot-ai/gibson/blob/main/internal/platform/authz/model.fga)
 - [mindersec/minder](https://github.com/mindersec/minder/blob/main/internal/authz/model/minder.fga)
 - [theopenlane/core](https://github.com/theopenlane/core/blob/main/fga/model/fga.mod)
 - [instill-ai/mgmt-backend](https://github.com/instill-ai/mgmt-backend/blob/main/pkg/acl/fga/fga.fga)
@@ -132,8 +135,11 @@ To try this out, you need the following tools installed:
 - [Cross-Lab-Project/crosslab](https://github.com/Cross-Lab-Project/crosslab/blob/main/services/authorization/relation_model.fga)
 - [klothoplatform/infracopilot](https://github.com/klothoplatform/infracopilot/blob/main/src/auth_service/model.fga)
 - [ZEISS/knox](https://github.com/ZEISS/knox/blob/main/schema/auth.fga)
-- [Lakekeeper](https://github.com/lakekeeper/lakekeeper/tree/main/authz/openfga/v3.2)
-- [SigNoz](https://github.com/SigNoz/signoz/blob/main/ee/authz/openfgaschema/base.fga) 
+- [Lakekeeper (OpenFGA model versions)](https://github.com/lakekeeper/lakekeeper/tree/main/authz/openfga)
+- [bex-co/bex](https://github.com/bex-co/bex/blob/main/deploy/gitops/authz/model.fga)
+- [edgehog-device-manager/edgehog](https://github.com/edgehog-device-manager/edgehog/blob/main/fga/openfga/fga.mod)
+- [cloudoperators/heureka](https://github.com/cloudoperators/heureka/blob/main/internal/openfga/model/model.fga)
+- [saga-ed/soa](https://github.com/saga-ed/soa/blob/main/packages/core/saga-authz-model/model.fga)
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
