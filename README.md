@@ -140,6 +140,7 @@ To run a sample store's tests locally, install the following tools:
 - [edgehog-device-manager/edgehog](https://github.com/edgehog-device-manager/edgehog/blob/main/fga/openfga/fga.mod)
 - [cloudoperators/heureka](https://github.com/cloudoperators/heureka/blob/main/internal/openfga/model/model.fga)
 - [saga-ed/soa](https://github.com/saga-ed/soa/blob/main/packages/core/saga-authz-model/model.fga)
+- [ThalesGroup/fred](https://github.com/ThalesGroup/fred/blob/swift/libs/fred-core/fred_core/security/rebac/schema.fga)
 
 If you are using OpenFGA in your open source project, please let us know by opening a PR to add your model to this list.
 
