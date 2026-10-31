@@ -23,10 +23,12 @@ model: |
 
   type organization
     relations
-      # Tenant membership is the roster every grant is conditioned on.
-      # Removing a user's `member` tuple revokes all of their access in the
-      # organization at once, regardless of roles or groups.
-      define member: [user, group#member]
+      # Tenant membership is the roster every grant is conditioned on. It is
+      # direct-only on purpose: groups and roles never confer tenant membership.
+      # Removing a user's `member` tuple therefore revokes all of their access in
+      # the organization at once, and a mis-nested group cannot enlarge the
+      # roster.
+      define member: [user]
 
       # Predefined organization admin, guarded by tenant membership
       define admin: [user, role#assignee] and member

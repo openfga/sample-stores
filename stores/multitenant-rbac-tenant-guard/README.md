@@ -11,9 +11,9 @@ Every permission on an organization or tenant-owned resource requires, in additi
 
 ## How the guard works
 
-- `organization#member` is the tenant roster. Every capability on an organization (`admin`, `document_manager`, …) is defined as `(<role assignees> or <inherited>) and member`, so a principal must be on the roster *and* hold a role to exercise anything.
+- `organization#member` is the tenant roster, and it accepts **direct users only** (`[user]`). Groups and roles never confer tenant membership; they only derive capabilities for principals who are already on the roster. Every capability on an organization (`admin`, `document_manager`, …) is defined as `(<role assignees> or <inherited>) and member`, so a principal must be on the roster *and* hold a role to exercise anything.
 - Resources (`document`) derive permissions only `from organization`, so the guard applies to every tenant-owned resource without repeating it per resource type.
-- Removing a user's `member` tuple revokes all of their access in that organization at once, regardless of roles or groups — a useful property for offboarding.
+- Because the roster is direct-only, removing a user's single `member` tuple revokes all of their access in that organization at once, regardless of roles or groups — a useful property for offboarding. (If the roster also accepted `group#member`, a user could remain a member through a group and this would not hold; that is why the model does not allow it.)
 - `role#organization` and `group#organization` record which tenant owns a role or group. They are **not** used in evaluation; they exist so the application can validate relationship writes (see below).
 
 ## What this model guarantees
@@ -25,6 +25,7 @@ Every permission on an organization or tenant-owned resource requires, in additi
   - `list_objects` for a user in Tenant A will never return resources belonging to Tenant B, even in the presence of invalid cross-tenant role bindings.
   - `list_users` on Tenant B's resources strictly returns Tenant B users and omits foreign principals.
 - **Support for legitimate multi-tenant users**: Users who legitimately hold memberships in multiple organizations can access resources in each organization according to their assigned roles in each tenant, without permission leaking across boundaries.
+- **Groups cannot enlarge the roster**: since `member` only accepts `user`, a mis-nested or cross-tenant group (such as the deliberate `group:acme-engineering#member → group:globex-engineering` tuple in the fixtures) can never add anyone to a tenant's membership. The type restriction makes such a tuple unwritable.
 
 ## What it does not guarantee and why
 
