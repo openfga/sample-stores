@@ -1,0 +1,455 @@
+name: multitenant-rbac-tenant-guard
+model: |
+  model
+    schema 1.1
+
+  type user
+
+  # Groups can be nested. The `organization` relation records which tenant owns
+  # the group; it is not used in permission evaluation. It exists so that the
+  # application can validate, when writing relationships, that nesting and
+  # assignments stay within one tenant (see README).
+  type group
+    relations
+      define organization: [organization]
+      define member: [user, group#member]
+
+  # Roles can be nested, and can be assigned to users and group members.
+  # `organization` is ownership metadata, as for groups.
+  type role
+    relations
+      define organization: [organization]
+      define assignee: [user, role#assignee, group#member]
+
+  type organization
+    relations
+      # Tenant membership is the roster every grant is conditioned on.
+      # Removing a user's `member` tuple revokes all of their access in the
+      # organization at once, regardless of roles or groups.
+      define member: [user, group#member]
+
+      # Predefined organization admin, guarded by tenant membership
+      define admin: [user, role#assignee] and member
+
+      # Predefined capability roles, each guarded by tenant membership.
+      # Admins inherit all capabilities.
+      define user_manager: ([role#assignee] or admin) and member
+      define billing_manager: ([role#assignee] or admin) and member
+      define document_manager: ([role#assignee] or admin) and member
+      define document_viewer: ([role#assignee] or document_manager) and member
+
+      # Organization-level permissions
+      define can_invite_user: user_manager
+      define can_delete_user: user_manager
+      define can_edit_billing: billing_manager
+      define can_create_document: document_manager
+
+  type document
+    relations
+      # Documents belong to an organization
+      define organization: [organization]
+
+      # Permissions are derived through the organization's tenant-guarded roles
+      define editor: document_manager from organization
+      define viewer: document_viewer from organization
+
+      define can_view: viewer or editor
+      define can_edit: editor
+      define can_delete: editor
+
+tuples:
+  # ==========================================
+  # Acme Organization Setup
+  # ==========================================
+
+  # Membership: Anne, Francis, Ian, Emily are Acme members
+  - user: user:anne
+    relation: member
+    object: organization:acme
+
+  - user: user:francis
+    relation: member
+    object: organization:acme
+
+  - user: user:ian
+    relation: member
+    object: organization:acme
+
+  - user: user:emily
+    relation: member
+    object: organization:acme
+
+  # Groups and group membership
+  - user: organization:acme
+    relation: organization
+    object: group:acme-it-admins
+
+  - user: user:ian
+    relation: member
+    object: group:acme-it-admins
+
+  - user: organization:acme
+    relation: organization
+    object: group:acme-data-engineering
+
+  - user: user:emily
+    relation: member
+    object: group:acme-data-engineering
+
+  - user: organization:acme
+    relation: organization
+    object: group:acme-engineering
+
+  # Nested group: data-engineering is part of engineering
+  - user: group:acme-data-engineering#member
+    relation: member
+    object: group:acme-engineering
+
+  - user: organization:acme
+    relation: organization
+    object: group:acme-finance
+
+  - user: user:francis
+    relation: member
+    object: group:acme-finance
+
+  # Roles and role assignments
+  - user: organization:acme
+    relation: organization
+    object: role:acme-admins
+
+  - user: group:acme-it-admins#member
+    relation: assignee
+    object: role:acme-admins
+
+  - user: organization:acme
+    relation: organization
+    object: role:acme-billing-manager
+
+  - user: group:acme-finance#member
+    relation: assignee
+    object: role:acme-billing-manager
+
+  - user: organization:acme
+    relation: organization
+    object: role:acme-document-management
+
+  - user: group:acme-engineering#member
+    relation: assignee
+    object: role:acme-document-management
+
+  - user: organization:acme
+    relation: organization
+    object: role:acme-document-viewer
+
+  # Bind roles and direct assignments to Acme organization relations
+  - user: user:anne
+    relation: admin
+    object: organization:acme
+
+  - user: role:acme-admins#assignee
+    relation: admin
+    object: organization:acme
+
+  - user: role:acme-billing-manager#assignee
+    relation: billing_manager
+    object: organization:acme
+
+  - user: role:acme-document-management#assignee
+    relation: document_manager
+    object: organization:acme
+
+  - user: role:acme-document-viewer#assignee
+    relation: document_viewer
+    object: organization:acme
+
+  # Acme documents
+  - user: organization:acme
+    relation: organization
+    object: document:acme-roadmap
+
+  - user: organization:acme
+    relation: organization
+    object: document:acme-budget
+
+  # ==========================================
+  # Globex Organization Setup
+  # ==========================================
+
+  # Membership: George and Gina are Globex members
+  - user: user:george
+    relation: member
+    object: organization:globex
+
+  - user: user:gina
+    relation: member
+    object: organization:globex
+
+  # Groups and roles in Globex
+  - user: organization:globex
+    relation: organization
+    object: group:globex-engineering
+
+  - user: user:gina
+    relation: member
+    object: group:globex-engineering
+
+  - user: organization:globex
+    relation: organization
+    object: role:globex-doc-manager
+
+  - user: group:globex-engineering#member
+    relation: assignee
+    object: role:globex-doc-manager
+
+  # Organization relation bindings
+  - user: user:george
+    relation: admin
+    object: organization:globex
+
+  - user: role:globex-doc-manager#assignee
+    relation: document_manager
+    object: organization:globex
+
+  # Globex documents
+  - user: organization:globex
+    relation: organization
+    object: document:globex-secret
+
+  - user: organization:globex
+    relation: organization
+    object: document:globex-financials
+
+  # ==========================================
+  # Deliberate Cross-Tenant Tuples (Invalid by policy; included to demonstrate the tenant guard)
+  # ==========================================
+
+  # Cross-tenant tuple 1: Acme's document-management role is accidentally bound to Globex's document_manager
+  - user: role:acme-document-management#assignee
+    relation: document_manager
+    object: organization:globex
+
+  # Cross-tenant tuple 2: An Acme-only user is directly assigned to Globex's doc-manager role
+  - user: user:acme-only-user
+    relation: assignee
+    object: role:globex-doc-manager
+
+  # Cross-tenant tuple 3: Acme engineering group accidentally assigned to Globex engineering group
+  - user: group:acme-engineering#member
+    relation: member
+    object: group:globex-engineering
+
+  # ==========================================
+  # Multi-Tenant User Setup (Belongs to both tenants)
+  # ==========================================
+
+  # Charlie is legitimate member of both Acme and Globex
+  - user: user:charlie
+    relation: member
+    object: organization:acme
+
+  - user: user:charlie
+    relation: member
+    object: organization:globex
+
+  # Charlie is assigned Acme viewer role in Acme, and Globex manager role in Globex
+  - user: user:charlie
+    relation: assignee
+    object: role:acme-document-viewer
+
+  - user: user:charlie
+    relation: assignee
+    object: role:globex-doc-manager
+
+tests:
+  - name: 1. Same-tenant positive permissions (Acme)
+    check:
+      # Admin Anne inherits can_edit and can_view on Acme documents
+      - user: user:anne
+        object: document:acme-roadmap
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+      # Nested group member Emily (data-eng -> engineering -> role) gets can_view and can_edit
+      - user: user:emily
+        object: document:acme-roadmap
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+
+      # IT-Admin Ian gets admin-derived permissions on Acme documents
+      - user: user:ian
+        object: document:acme-roadmap
+        assertions:
+          can_view: true
+          can_edit: true
+
+      # Finance member Francis has billing permissions but no document edit permissions
+      - user: user:francis
+        object: document:acme-roadmap
+        assertions:
+          can_view: false
+          can_edit: false
+      - user: user:francis
+        object: organization:acme
+        assertions:
+          can_edit_billing: true
+          can_create_document: false
+
+  - name: 2. Same-tenant positive permissions (Globex)
+    check:
+      # Globex admin George has full document access
+      - user: user:george
+        object: document:globex-secret
+        assertions:
+          can_view: true
+          can_edit: true
+
+      # Globex engineer Gina has doc manager permissions on Globex documents
+      - user: user:gina
+        object: document:globex-secret
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: 3. Cross-tenant negative with forced tuples (The core tenant-guard demonstration)
+    check:
+      # Acme document manager Emily is blocked on Globex documents despite cross-tenant tuple
+      - user: user:emily
+        object: document:globex-secret
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+
+      # Acme IT-admin Ian is blocked on Globex documents
+      - user: user:ian
+        object: document:globex-secret
+        assertions:
+          can_view: false
+          can_edit: false
+
+      # Acme-only user assigned to Globex role is blocked because they lack Globex membership
+      - user: user:acme-only-user
+        object: document:globex-secret
+        assertions:
+          can_view: false
+          can_edit: false
+
+  - name: 4. Admin isolation is scoped to tenant
+    check:
+      # Acme admin Anne has zero access to Globex documents or Globex organization
+      - user: user:anne
+        object: document:globex-secret
+        assertions:
+          can_view: false
+          can_edit: false
+      - user: user:anne
+        object: organization:globex
+        assertions:
+          admin: false
+          can_create_document: false
+
+      # Globex admin George has zero access to Acme documents or Acme organization
+      - user: user:george
+        object: document:acme-roadmap
+        assertions:
+          can_view: false
+          can_edit: false
+      - user: user:george
+        object: organization:acme
+        assertions:
+          admin: false
+          can_create_document: false
+
+  - name: 5. Nested groups and roles do not bypass tenant guard
+    check:
+      # Emily through nested groups across tenants cannot access Globex documents
+      - user: user:emily
+        object: document:globex-financials
+        assertions:
+          can_view: false
+          can_edit: false
+
+  - name: 6. Multi-tenant user with legitimate dual-membership
+    check:
+      # Charlie is viewer in Acme, manager in Globex
+      - user: user:charlie
+        object: document:acme-roadmap
+        assertions:
+          can_view: true
+          can_edit: false
+      - user: user:charlie
+        object: document:globex-secret
+        assertions:
+          can_view: true
+          can_edit: true
+
+  - name: 7. Reverse queries - list_objects is tenant-scoped
+    list_objects:
+      # Emily only sees Acme documents, Globex documents are not leaked
+      - user: user:emily
+        type: document
+        assertions:
+          can_view:
+            - document:acme-roadmap
+            - document:acme-budget
+          can_edit:
+            - document:acme-roadmap
+            - document:acme-budget
+
+      # Gina only sees Globex documents
+      - user: user:gina
+        type: document
+        assertions:
+          can_view:
+            - document:globex-secret
+            - document:globex-financials
+          can_edit:
+            - document:globex-secret
+            - document:globex-financials
+
+      # Acme-only user sees nothing despite cross-tenant role assignment
+      - user: user:acme-only-user
+        type: document
+        assertions:
+          can_view: []
+          can_edit: []
+
+  - name: 8. Reverse queries - list_users does not leak foreign tenant principals
+    list_users:
+      # Acme document only lists Acme users, no Globex users
+      - object: document:acme-roadmap
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:anne
+              - user:ian
+              - user:emily
+              - user:charlie
+          can_edit:
+            users:
+              - user:anne
+              - user:ian
+              - user:emily
+
+      # Globex document only lists Globex users, completely excluding Emily, Ian, and acme-only-user
+      - object: document:globex-secret
+        user_filter:
+          - type: user
+        assertions:
+          can_view:
+            users:
+              - user:george
+              - user:gina
+              - user:charlie
+          can_edit:
+            users:
+              - user:george
+              - user:gina
+              - user:charlie
